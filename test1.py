@@ -4,7 +4,7 @@ from sqlite3 import Error
 from board import SCL, SDA
 import busio
 from db_connect import create_connection, write_to_db
-from email import send_email
+from emailer import send_email
  
 from adafruit_seesaw.seesaw import Seesaw
  
@@ -22,7 +22,7 @@ def cel_to_far(cel):
 while True:
     conn = create_connection(DB)
     # read moisture level through capacitive touch pad
-    touch = ss.moisture_read()
+    moisture = ss.moisture_read()
  
     # read temperature from the temperature sensor
     temp = int(cel_to_far(ss.get_temp()))
@@ -31,7 +31,7 @@ while True:
     
     current_time = time.strftime(TIME_FORMAT)
     
-    reading = (date, current_time, temp, touch)
+    reading = (date, current_time, temp, moisture)
     
     reading_id = write_to_db(conn, reading)
     
@@ -39,6 +39,7 @@ while True:
     
     conn.close()
     
-    send_email()
+    if(moisture < 400):
+        send_email(moisture)
 
     time.sleep(5)
