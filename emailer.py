@@ -2,7 +2,7 @@ import smtplib
 
 port = 465  # For SSL
 smtp_server_name = "smtp.gmail.com"
-password = "Letsgo420"
+password = "thisisapassword"
 this_email = "royplantmonitor@gmail.com"
 email_to = "danielwroy90@gmail.com"
 
