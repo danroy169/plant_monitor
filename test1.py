@@ -39,7 +39,7 @@ while True:
 
     conn.close()
 
-    if(moisture < 400):
+    if(moisture < 300):
         send_email(moisture)
 
     time.sleep(5)
