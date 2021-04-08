@@ -13,7 +13,7 @@ async function main(){
 
   const returnValue = await bus.i2cRead(SENSOR_I2C_ADDRESS, 4, Buffer.alloc(4));
 
-  console.log(returnValue);
+  console.log(returnValue.buffer.toJSON()); // { bytesRead: 4, buffer: <Buffer 0f ba 27 8f> }
 }
 main();
 

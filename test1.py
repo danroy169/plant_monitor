@@ -36,6 +36,7 @@ while True:
     # reading_id = write_to_db(conn, reading)
 
     print(date, current_time, temp, moisture)
+    print(SS.get_version()) # 263858063
 
     # conn.close()
 
