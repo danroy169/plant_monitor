@@ -21,7 +21,7 @@ def cel_to_far(cel):
 
 
 while True:
-    conn = create_connection(DB)
+    # conn = create_connection(DB)
 
     moisture = SS.moisture_read()
 
@@ -31,15 +31,15 @@ while True:
 
     current_time = time.strftime(TIME_FORMAT)
 
-    reading = (date, current_time, temp, moisture)
+    # reading = (date, current_time, temp, moisture)
 
-    reading_id = write_to_db(conn, reading)
+    # reading_id = write_to_db(conn, reading)
 
-    print("Last row id: " + str(reading_id))
+    print(date, current_time, temp, moisture)
 
-    conn.close()
+    # conn.close()
 
-    if(moisture < 300):
-        send_email(moisture)
+    # if(moisture < 300):
+    #     send_email(moisture)
 
     time.sleep(5)
