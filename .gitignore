@@ -3,3 +3,5 @@
 node_modules
 moisture-i2c-js/node_modules
 
+
+.vscode/settings.json

@@ -1,6 +1,6 @@
 const i2c = require('i2c-bus');
 const sleep = require("sleep");
-
+const MQTT = require("async-mqtt");
 
 
 const SENSOR_I2C_ADDRESS = 0x36;
@@ -8,25 +8,25 @@ const I2C_BUS_NUMBER = 1;
 const TOUCH_BASE = 0x0F;
 const TOUCH_CHANNEL_OFFSET = 0x10;
 
+const client = MQTT.connect("mqtt:localhost:8883");
+
 let reading = {};
 
-const MQTT = require("async-mqtt");
-
-const client = MQTT.connect("mqtt:localhost:1883");
-
-
-
-const doStuff = async () => {
+const publishMoisture = async () => {
   console.log("Starting");
   try {
 
     await get_moisture();
 
+    dateTime = new Date();
+
+    reading.date = dateTime.toLocaleDateString();
+
+    reading.time = dateTime.toLocaleTimeString();
+
     const payload = JSON.stringify(reading);
 
-    console.log(payload);
-
-    await client.publish("wow/so/cool", payload);
+    await client.publish("moisture", payload);
 
     await client.end();
 
@@ -40,7 +40,7 @@ const doStuff = async () => {
   }
 }
 
-client.on("connect", doStuff);
+client.on("connect", publishMoisture);
 
 async function get_moisture() {
 
@@ -54,13 +54,11 @@ async function get_moisture() {
 
   const returnValue = await bus.i2cRead(SENSOR_I2C_ADDRESS, 2, readBufferCache);
 
-  reading.moisture = convertBufferSourceToMoisture(returnValue.buffer).toString();
+  reading.moisture = convertBufferSourceToMoisture(returnValue.buffer);
 
   console.log(reading);
 
 }
-
-
 
 
 function convertBufferSourceToMoisture(buf) {
