@@ -17,6 +17,7 @@ def on_message(client, userdata, message):
 mqttc = mqtt.Client()
 
 mqttc.on_message = on_message
+
 mqttc.connect(HOST, PORT)
 mqttc.subscribe(TOPIC)
 
