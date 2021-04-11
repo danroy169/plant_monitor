@@ -10,19 +10,22 @@ const TOUCH_CHANNEL_OFFSET = 0x10;
 
 const client = MQTT.connect("mqtt:localhost:8883");
 
-let reading = {};
+
 
 const publishMoisture = async () => {
   console.log("Starting");
+
+  const time = new Date().toLocaleTimeString()
+  const date = new Date().toLocaleDateString()
+
   try {
+    const reading = {
+      moisture: await get_moisture(),
+      date,
+      time
+    }
 
-    await get_moisture();
-
-    dateTime = new Date();
-
-    reading.date = dateTime.toLocaleDateString();
-
-    reading.time = dateTime.toLocaleTimeString();
+    console.log(reading);
 
     const payload = JSON.stringify(reading);
 
@@ -42,32 +45,7 @@ const publishMoisture = async () => {
 
 client.on("connect", publishMoisture);
 
-async function get_moisture() {
 
-  const readBufferCache = Buffer.alloc(2);
-
-  const bus = await i2c.openPromisified(I2C_BUS_NUMBER);
-
-  await bus.i2cWrite(SENSOR_I2C_ADDRESS, 2, Buffer.from([TOUCH_BASE, TOUCH_CHANNEL_OFFSET]));
-
-  sleep.msleep(5);
-
-  const returnValue = await bus.i2cRead(SENSOR_I2C_ADDRESS, 2, readBufferCache);
-
-  reading.moisture = convertBufferSourceToMoisture(returnValue.buffer);
-
-  console.log(reading);
-
-}
-
-
-function convertBufferSourceToMoisture(buf) {
-  const dv = ArrayBuffer.isView(buf) ?
-    new DataView(buf.buffer, buf.byteOffset, buf.byteLength) :
-    new DataView(buf)
-
-  return dv.getUint16(0, false);
-}
 
 
 
