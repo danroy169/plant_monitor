@@ -6,7 +6,6 @@ const URL = "mqtt:localhost:8883";
 
 const client = connect(URL);
 
-
 const publishMoisture = async () => {
 
     try {
