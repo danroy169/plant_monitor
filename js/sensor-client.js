@@ -1,13 +1,40 @@
 
 import { connect } from "async-mqtt";
 import { getMoisture } from "/home/pi/Projects/Plant Monitor/js/read-sensor.js";
+import sleep from "sleep";
 
 const URL = "mqtt:localhost:8883";
 
 const client = connect(URL);
 
+client.on("connect", () => {
+    console.log("connected")
+});
 
-const publishMoisture = async () => {
+client.on("packetsend", packet => {
+    if(packet.topic) {console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`)}
+})
+
+client.subscribe("config/moisture/time-interval")
+
+
+
+async function main(client, timeInterval) {
+    while (true) {
+        await publishMoisture(client);
+
+        client.on("message", (topic, message) => {
+            if(topic === "config/moisture/time-interval") {
+                console.log("config message recieved");
+                timeInterval = parseInt(message);
+            }
+        })
+
+        sleep.sleep(timeInterval);
+    }
+}
+
+const publishMoisture = async (client) => {
 
     try {
 
@@ -21,13 +48,11 @@ const publishMoisture = async () => {
             time
         }
 
-        console.log(reading);
-
         const payload = JSON.stringify(reading);
 
         await client.publish("moisture", payload);
 
-        await client.end();
+        // await client.end();
 
     } catch (e) {
 
@@ -37,4 +62,4 @@ const publishMoisture = async () => {
     }
 }
 
-client.on("connect", publishMoisture);
+await main(client, 5);

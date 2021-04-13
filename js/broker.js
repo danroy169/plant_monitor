@@ -21,11 +21,11 @@ broker.on('clientDisconnect', () => {
 })
 
 broker.on("subscribe", (sub, client) => {
-    console.log("subscribed")
+    console.log(`${client.id} subscribed to ${sub[0].topic}`)
 })
 
 broker.on("publish", (packet, client) => {
-    console.log(`message from recieved, topic: ${packet.topic}`)
+    console.log(`packet recieved. topic: ${packet.topic}`)
     if (packet.topic === "moisture") {
         var stringBuf = packet.payload.toString('utf-8');
         var obj = JSON.parse(stringBuf);
