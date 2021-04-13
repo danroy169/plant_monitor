@@ -24,7 +24,7 @@ broker.on("subscribe", (sub, client) => {
 })
 
 broker.on("publish", (packet, client) => {
-    console.log(`packet recieved. topic: ${packet.topic}`)
+    console.log(`publish packet recieved. topic: ${packet.topic}`)
     if (packet.topic === "moisture") {
         var stringBuf = packet.payload.toString('utf-8');
         var obj = JSON.parse(stringBuf);

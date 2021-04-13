@@ -17,8 +17,6 @@ client.on("packetsend", packet => {
 
 client.subscribe("config/moisture/time-interval")
 
-
-
 async function main(client, timeInterval) {
     while (true) {
         await publishMoisture(client);
@@ -29,7 +27,6 @@ async function main(client, timeInterval) {
                 timeInterval = parseInt(message);
             }
         })
-
         sleep.sleep(timeInterval);
     }
 }
