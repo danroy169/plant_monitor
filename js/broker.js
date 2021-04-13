@@ -1,4 +1,3 @@
-// const aedes = require('aedes')()
 import Aedes from "aedes"
 import net from "net"
 
