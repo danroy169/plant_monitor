@@ -1,0 +1,73 @@
+// sensor reading result
+{
+    sensorID: string,
+    reading: {
+        time: datetime? string?
+        type: string,
+        data: int
+    }
+}
+
+// sensor reading request
+{
+    sensorID: string
+}
+
+// sensor state request
+{
+    sensorID: string
+}
+
+// sensor state result
+{
+    sensorID: string,
+    state: int (0 - 1 ?)
+}
+
+// change config request
+{
+    target: string,
+    config: {
+        type: string,
+        data: int (maybe string?)
+    }
+}
+
+// change config result
+{
+    target: string,
+    result: (string/int/bool?)
+}
+
+// threshold violation
+{
+    sensorID: string,
+    type: string,
+    threshold: int,
+    reading: int
+}
+
+// send email request
+{
+    sensorID: string,
+    type: string,
+    threshold: int,
+    reading: int
+}
+
+// send email result
+{
+    success: bool? string? int?
+}
+
+// data lookup request
+{
+    ...
+}
+
+// data lookup result
+{
+    ...
+}
+
+
