@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Sensor Reading",
+    "description": "A request to a sensor to get a reading",
+    "type": "object",
+    "properties": {
+        "sensorID": {
+            "description": "The unique identifier for a sensor",
+            "type": "string"
+        },
+        "type": {
+            "description": "The type of data to read from the sensor",
+            "type": "string"
+        }
+    },
+    "required": ["sensorID", "type"]
+}

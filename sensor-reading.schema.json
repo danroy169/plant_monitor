@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Sensor Reading",
+    "description": "A reading from a sensor",
+    "type": "object",
+    "properties": {
+        "sensorID": {
+            "description": "The unique identifier for a sensor",
+            "type": "string"
+        },
+        "time": {
+            "description": "ISO 8601 format time stamp",
+            "type": "string"
+        },
+        "type": {
+            "description": "defines the type of reading",
+            "type": "string",
+            "enum": ["moisture", "temp", "humidity"],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": { "type": { "const": "moisture" } }
+                    },
+                    "then": {
+                        "properties" : { "moistureLevel" : { "type": "integer"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": { "type": { "const": "temp" } }
+                    },
+                    "then": {
+                        "properties" : { "fahrenheit" : { "type": "integer"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": { "type": { "const": "humidity" } }
+                    },
+                    "then": {
+                        "properties" : { "percent" : { "type": "integer"}}
+                    }
+                }
+            ]
+        },
+        "currentPollInterval": {
+            "description": "Time interval in which the sensor reads and sends data",
+            "type": "integer"
+        }
+    },
+    "required": ["sensorID", "time", "type", "currentPollInterval"]
+}

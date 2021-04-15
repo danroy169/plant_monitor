@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Sensor Reading",
+    "description": "A configuration message sent to a sensor or service",
+    "type": "object",
+    "properties": {
+        "target": {
+            "description": "The unique identifier for a sensor or service",
+            "type": "string"
+        },
+        "setting": {
+            "description": "The configuration setting to set",
+            "type": "string"
+        },
+        "data": {
+            "description": "The value to set the configuration to",
+            "type": "integer"
+        }
+    },
+    "required": ["target", "setting", "data"]
+}

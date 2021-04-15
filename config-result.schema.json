@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Config Result",
+    "description": "A message sent after an attempt at configuration",
+    "type": "object",
+    "properties": {
+        "target": {
+            "description": "The unique identifier for a sensor or service",
+            "type": "string"
+        },
+        "result": {
+            "description": "The result of the configuration attempt",
+            "type": "string",
+            "enum": ["SUCCESS", "FAIL"]
+        }
+    },
+    "required": ["target", "result"]
+}

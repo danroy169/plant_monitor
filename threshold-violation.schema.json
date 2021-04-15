@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Threshold Violation",
+    "description": "A message sent to indicating that a threshold has been crossed",
+    "type": "object",
+    "properties": {
+        "sensorID": {
+            "description": "The unique identifier for a sensor",
+            "type": "string"
+        },
+        "violationType": {
+            "description": "Indicates what metric had the threshold violation",
+            "type": "string",
+            "enum": ["moisture", "temp", "humidity"]
+        },
+        "threshold": {
+            "description": "The value of the threshold crossed",
+            "type": "integer"
+        },
+        "currentLevel": {
+            "description": "The value that caused the violation",
+            "type": "integer"
+        }
+    },
+    "required": ["sensorID", "violationType", "threshold", "currentLevel"]
+}

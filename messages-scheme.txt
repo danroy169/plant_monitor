@@ -1,42 +1,32 @@
 // sensor reading result
 {
     sensorID: string,
-    reading: {
-        time: datetime? string?
-        type: string,
-        data: int
-    }
+    time:  string,
+    type: enum,
+    data: int,
+    current-pull-interval: int
+
 }
 
 // sensor reading request
 {
-    sensorID: string
-}
-
-// sensor state request
-{
-    sensorID: string
-}
-
-// sensor state result
-{
     sensorID: string,
-    state: int (0 - 1 ?)
+    type: string
 }
+
 
 // change config request
 {
     target: string,
-    config: {
-        type: string,
-        data: int (maybe string?)
-    }
+    type: string,
+    data: int (maybe string?)
 }
 
-// change config result
+// config result
 {
     target: string,
-    result: (string/int/bool?)
+    result: string ("SUCCESS", "FAIL"),
+    why: string (only on fail)
 }
 
 // threshold violation
@@ -57,7 +47,7 @@
 
 // send email result
 {
-    success: bool? string? int?
+    result: string ("SUCCESS", "FAIL")
 }
 
 // data lookup request
