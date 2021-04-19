@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Data Lookup Response",
+    "description": "A message sent in response to lookup request, containing data asked for",
+    "type": "object",
+    "properties": {
+        "metric": {
+            "description": "The metric that was requested",
+            "type": "string",
+            "enum": ["moisture1", "moisture2", "temp", "humidity"]
+        },
+        "result": {
+            "description": "An array of reading objects",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "moistureLevel": {"type": "integer"},
+                    "fahrenheit": {"type": "integer"},
+                    "percentage": {"type": "integer"},
+                    "time": {"type": "string"}
+                },
+                "required": ["time"]
+            },
+            "uniqueItems": true
+        },
+        "time": {
+            "description": "ISO 8601 format time stamp",
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "required": ["metric", "result", "time"]
+}

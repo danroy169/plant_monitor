@@ -10,9 +10,13 @@
         },
         "result": {
             "description": "The result of the configuration attempt",
+            "type": "boolean"
+        },
+        "time": {
+            "description": "ISO 8601 format time stamp",
             "type": "string",
-            "enum": ["SUCCESS", "FAIL"]
+            "format": "date-time"
         }
     },
-    "required": ["target", "result"]
+    "required": ["target", "result", "time"]
 }

@@ -15,7 +15,12 @@
         "data": {
             "description": "The value to set the configuration to",
             "type": "integer"
+        },
+        "time": {
+            "description": "ISO 8601 format time stamp",
+            "type": "string",
+            "format": "date-time"
         }
     },
-    "required": ["target", "setting", "data"]
+    "required": ["target", "setting", "data", "time"]
 }

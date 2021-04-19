@@ -20,7 +20,12 @@
         "currentLevel": {
             "description": "The value that caused the violation",
             "type": "integer"
+        },
+        "time": {
+            "description": "ISO 8601 format time stamp",
+            "type": "string",
+            "format": "date-time"
         }
     },
-    "required": ["sensorID", "violationType", "threshold", "currentLevel"]
+    "required": ["sensorID", "violationType", "threshold", "currentLevel", "time"]
 }

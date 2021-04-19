@@ -11,7 +11,12 @@
         "type": {
             "description": "The type of data to read from the sensor",
             "type": "string"
+        },
+        "time": {
+            "description": "ISO 8601 format time stamp",
+            "type": "string",
+            "format": "date-time"
         }
     },
-    "required": ["sensorID", "type"]
+    "required": ["sensorID", "type", "time"]
 }
