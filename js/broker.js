@@ -1,5 +1,6 @@
 import Aedes from "aedes"
 import net from "net"
+import validateJSON from "/home/pi/Projects/Plant Monitor/js/validator.js"
 
 const PORT = 8883
 
@@ -29,5 +30,6 @@ broker.on("publish", (packet, client) => {
         var stringBuf = packet.payload.toString('utf-8');
         var obj = JSON.parse(stringBuf);
         console.log(obj);
+        if(!validateJSON(obj)) {console.log("invalid message!")}
     }
 })

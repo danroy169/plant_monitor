@@ -17,32 +17,36 @@ client.on("packetsend", packet => {
 
 client.subscribe("config/moisture/time-interval")
 
-async function main(client, timeInterval) {
+async function main(client, pollInterval) {
     while (true) {
-        await publishMoisture(client);
+        await publishMoisture(client, pollInterval);
 
         client.on("message", (topic, message) => {
             if(topic === "config/moisture/time-interval") {
                 console.log("config message recieved");
-                timeInterval = parseInt(message);
+                pollInterval = parseInt(message);
             }
         })
-        sleep.sleep(timeInterval);
+        sleep.sleep(pollInterval);
     }
 }
 
-const publishMoisture = async (client) => {
+const publishMoisture = async (client, pollInterval) => {
 
     try {
 
-        const time = new Date().toLocaleTimeString()
-        const date = new Date().toLocaleDateString()
-        const moisture = await getMoisture();
+        const sensorID = "moisture1"
+        const time = new Date().toISOString();
+        const type = "moisture"
+        const moistureLevel = await getMoisture();
+        const currentPollInterval = pollInterval;
 
         const reading = {
-            moisture,
-            date,
-            time
+            sensorID,
+            time,
+            type,
+            moistureLevel,
+            currentPollInterval
         }
 
         const payload = JSON.stringify(reading);

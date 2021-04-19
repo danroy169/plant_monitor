@@ -27,5 +27,5 @@
             "format": "date-time"
         }
     },
-    "required": ["sensorID", "type", "threshold", "reading", "time"]
+    "required": ["sensorID",  "violationType", "threshold", "reading", "time"]
 }
