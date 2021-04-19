@@ -30,6 +30,8 @@ broker.on("publish", (packet, client) => {
         var stringBuf = packet.payload.toString('utf-8');
         var obj = JSON.parse(stringBuf);
         console.log(obj);
+        
         if(!validateJSON(obj)) {console.log("invalid message!")}
+        else {console.log("valid message!")}
     }
 })

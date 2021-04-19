@@ -7,7 +7,7 @@ export default function validateJSON(obj){
     const v = new Validator();
     let result = false;
     schemas.forEach(s => {
-        if(v.validate(obj, s).valid) {result = true};
+        if(v.validate(obj, s).valid) {result = true;};
     })
     return result;
 }

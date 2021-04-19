@@ -15,18 +15,14 @@ client.on("packetsend", packet => {
     if(packet.topic) {console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`)}
 })
 
-client.subscribe("config/moisture/time-interval")
+
+
+client.subscribe("config/request")
 
 async function main(client, pollInterval) {
     while (true) {
         await publishMoisture(client, pollInterval);
 
-        client.on("message", (topic, message) => {
-            if(topic === "config/moisture/time-interval") {
-                console.log("config message recieved");
-                pollInterval = parseInt(message);
-            }
-        })
         sleep.sleep(pollInterval);
     }
 }
