@@ -3,33 +3,33 @@ import { connect } from "async-mqtt";
 //import { getMoisture } from "./read-sensor.js";
 import sleep from "sleep";
 
+const URL = "mqtt:localhost:8883";
+
+const client = connect(URL);
+
+client.on("connect", () => {
+    console.log("connected")
+});
+
+client.on("packetsend", packet => {
+    if (packet.topic) { console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`) }
+})
 
 
-async function main(pollInterval) {
+
+async function main(client, pollInterval) {
 
     while (true) {
-        await publishMoisture(pollInterval);
+        await publishMoisture(client, pollInterval);
 
         sleep.sleep(pollInterval);
     }
 }
 
-const publishMoisture = async (pollInterval) => {
+const publishMoisture = async (client, pollInterval) => {
 
     try {
 
-        const URL = "mqtt:localhost:8883";
-
-        const client = connect(URL);
-    
-        client.on("connect", () => {
-            console.log("connected")
-        });
-    
-        client.on("packetsend", packet => {
-            if (packet.topic) { console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`) }
-        })
-    
         const sensorID = "moisture1"
         const time = new Date().toISOString();
         const type = "moisture"
@@ -46,9 +46,9 @@ const publishMoisture = async (pollInterval) => {
 
         const payload = JSON.stringify(reading);
 
-        await client.publish("moisture", payload);
+        await client.publish("sensor-response", payload);
 
-        await client.end();
+        //await client.end();
 
     } catch (e) {
 
@@ -58,4 +58,4 @@ const publishMoisture = async (pollInterval) => {
     }
 }
 
-await main(5);
+await main(client, 5);
