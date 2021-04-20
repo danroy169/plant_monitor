@@ -19,6 +19,7 @@ client.on("packetsend", packet => {
     { console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`) }
 })
 
+
 async function publishMoisture() {
 
     const sensorID = "moisture1"
