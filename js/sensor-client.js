@@ -1,40 +1,39 @@
 
 import { connect } from "async-mqtt";
-import { getMoisture } from "/home/pi/Projects/Plant Monitor/js/read-sensor.js";
+//import { getMoisture } from "./read-sensor.js";
 import sleep from "sleep";
 
-const URL = "mqtt:localhost:8883";
-
-const client = connect(URL);
-
-client.on("connect", () => {
-    console.log("connected")
-});
-
-client.on("packetsend", packet => {
-    if(packet.topic) {console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`)}
-})
 
 
+async function main(pollInterval) {
 
-client.subscribe("config/request")
-
-async function main(client, pollInterval) {
     while (true) {
-        await publishMoisture(client, pollInterval);
+        await publishMoisture(pollInterval);
 
         sleep.sleep(pollInterval);
     }
 }
 
-const publishMoisture = async (client, pollInterval) => {
+const publishMoisture = async (pollInterval) => {
 
     try {
 
+        const URL = "mqtt:localhost:8883";
+
+        const client = connect(URL);
+    
+        client.on("connect", () => {
+            console.log("connected")
+        });
+    
+        client.on("packetsend", packet => {
+            if (packet.topic) { console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`) }
+        })
+    
         const sensorID = "moisture1"
         const time = new Date().toISOString();
         const type = "moisture"
-        const moistureLevel = await getMoisture();
+        const moistureLevel = 340 //await getMoisture();
         const currentPollInterval = pollInterval;
 
         const reading = {
@@ -49,7 +48,7 @@ const publishMoisture = async (client, pollInterval) => {
 
         await client.publish("moisture", payload);
 
-        // await client.end();
+        await client.end();
 
     } catch (e) {
 
@@ -59,4 +58,4 @@ const publishMoisture = async (client, pollInterval) => {
     }
 }
 
-await main(client, 5);
+await main(5);

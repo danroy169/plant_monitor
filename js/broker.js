@@ -1,6 +1,6 @@
 import Aedes from "aedes"
 import net from "net"
-import validateJSON from "/home/pi/Projects/Plant Monitor/js/validator.js"
+import validateJSON from "./validator.js"
 
 const PORT = 8883
 
@@ -24,7 +24,7 @@ broker.on("subscribe", (sub, client) => {
     console.log(`${client.id} subscribed to ${sub[0].topic}`)
 })
 
-broker.on("publish", (packet, client) => {
+broker.on("publish", (packet) => {
     console.log(`publish packet recieved. topic: ${packet.topic}`)
     if (packet.topic === "moisture") {
         var stringBuf = packet.payload.toString('utf-8');

@@ -1,5 +1,5 @@
 import {Validator} from "jsonschema";
-import {schemas} from "/home/pi/Projects/Plant Monitor/js/all-schemas.js";
+import {schemas} from "./all-schemas.js";
 
 
 
@@ -71,4 +71,4 @@ const test = [{
 //     console.log(validateJSON(t))
 // })
 
-//console.log(validateJSON({"this": "is not valid"}))
+// console.log(validateJSON({"this": "is not valid"}))
