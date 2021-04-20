@@ -4,7 +4,19 @@ import { connect } from "async-mqtt"
 
 
 const URL = "mqtt:localhost:8883"
+
+const MOISTURE = "moisture"
+const TEMP = "temp"
+const HUMIDITY = "humidity"
+
+const MOISTURE_SENSOR_1 = "moisture1"
+
 const SECONDS_TO_MILLI = 1000
+
+const SENSOR_REQUEST = "sensor-request"
+const CONFIG_REQUEST = "config-request"
+const SENSOR_RESPONSE = "sensor-response"
+const CONFIG_RESPONSE = "config-response"
 
 let pollIntervalSeconds = 5
 
@@ -12,6 +24,7 @@ const client = connect(URL);
 
 client.on("connect", () => {
     console.log("connected")
+    client.subscribe([SENSOR_REQUEST, CONFIG_REQUEST])
     setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
 });
 
@@ -22,9 +35,9 @@ client.on("packetsend", packet => {
 
 async function publishMoisture() {
 
-    const sensorID = "moisture1"
+    const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
-    const type = "moisture"
+    const type = MOISTURE
     const moistureLevel = 340 //await getMoisture();
     const currentPollInterval = pollIntervalSeconds
 
@@ -38,6 +51,6 @@ async function publishMoisture() {
 
     const payload = JSON.stringify(reading)
 
-    await client.publish("sensor-response", payload)
+    await client.publish(SENSOR_RESPONSE, payload)
 
 }
