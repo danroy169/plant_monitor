@@ -22,7 +22,7 @@ async function publishMoisture() {
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
-    const moistureLevel = 340 //await getMoisture();
+    const moistureLevel = 200 //await getMoisture();
     const currentPollInterval = pollIntervalSeconds
 
     const reading = {

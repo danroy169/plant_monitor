@@ -126,7 +126,7 @@ const emailRequest = {
             "description": "The threshold level crossed",
             "type": "integer"
         },
-        "reading": {
+        "currentLevel": {
             "description": "The current level of the metric that caused threshold violation",
             "type": "integer"
         },

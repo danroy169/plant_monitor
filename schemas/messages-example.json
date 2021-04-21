@@ -48,7 +48,7 @@
     "sensorID": "temp-humid",
     "violationType": "humidity",
     "threshold": 75,
-    "reading": 80,
+    "currentLevel": 80,
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 

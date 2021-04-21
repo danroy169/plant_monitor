@@ -3,9 +3,12 @@ import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMI
 
 const client = connect(URL);
 
-let moistureReadings = []
-let tempReadings = []
-let humidReadings = []
+const dataStore = {
+    moistureReadings: [],
+    tempReadings: [],
+    humidReadings: []
+}
+
 
 client.on("connect", () => {
     console.log("connected")
@@ -15,9 +18,9 @@ client.on("connect", () => {
 client.on("message", (topic, message, packet) => {
     let obj = JSON.parse(message.toString())
 
-    if(obj.type === MOISTURE)  {moistureReadings.push(obj)}
-    if(obj.type === TEMP)  {tempReadings.push(obj)}
-    if(obj.type === HUMIDITY)  {humidReadings.push(obj)}
+    if(obj.type === MOISTURE)  {dataStore.moistureReadings.push(obj)}
+    if(obj.type === TEMP)  {dataStore.tempReadings.push(obj)}
+    if(obj.type === HUMIDITY)  {dataStore.humidReadings.push(obj)}
 
-    console.log(moistureReadings)
+    console.log(dataStore.moistureReadings)
 })

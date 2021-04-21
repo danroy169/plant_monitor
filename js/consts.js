@@ -11,7 +11,7 @@ const THRESHOLD_VIOLATION = "threshold-violation"
 const URL = "mqtt:localhost:8883"
 const PORT = 8883;
 
-const MESSAGES = ["config-request", "config-response", "data-request", "data-response", "email-request", "email-response", "sensor-request", "sensor-response", "threshold-violation"];
+const TOPICS = ["config-request", "config-response", "data-request", "data-response", "email-request", "email-response", "sensor-request", "sensor-response", "threshold-violation"];
 
 const MOISTURE = "moisture"
 const TEMP = "temp"
@@ -23,5 +23,5 @@ const SECONDS_TO_MILLI = 1000
 
 
 export {SENSOR_REQUEST, SENSOR_RESPONSE, CONFIG_REQUEST, CONFIG_RESPONSE, DATA_REQUEST, DATA_RESPONSE, 
-        EMAIL_REQUEST, EMAIL_RESPONSE, THRESHOLD_VIOLATION, URL, PORT, MESSAGES, MOISTURE, TEMP, HUMIDITY,
+        EMAIL_REQUEST, EMAIL_RESPONSE, THRESHOLD_VIOLATION, URL, PORT, TOPICS, MOISTURE, TEMP, HUMIDITY,
         MOISTURE_SENSOR_1, SECONDS_TO_MILLI}

@@ -10,3 +10,5 @@ client.on("connect", () => {
 });
 
 
+client.on("message", (topic, message, packet) => { if(topic === THRESHOLD_VIOLATION) { console.log("threshold violation recieved!"); client.publish(EMAIL_REQUEST, message.toString()) } })
+

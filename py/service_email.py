@@ -5,14 +5,14 @@ from send_email import send_email
 
 PORT = 8883
 HOST = "localhost"
-TOPIC = "moisture"
+TOPIC = "email-request"
 
 def on_message(client, userdata, message):
     obj = json.loads(message.payload)
     print(obj)
-    moisture = obj["moisture"]
-    if (moisture < 300):
-        send_email(moisture)
+    # moisture = obj["moisture"]
+    # if (moisture < 300):
+    #     send_email(moisture)
 
 mqttc = mqtt.Client()
 
