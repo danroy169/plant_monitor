@@ -1,9 +1,10 @@
 import Aedes from "aedes"
 import net from "net"
 import validateJSON from "./validator.js"
+import { PORT, MESSAGES } from "./consts.js"
 
-const PORT = 8883;
-const MESSAGES = ["config-request", "config-response", "data-request", "data-response", "email-request", "email-response", "sensor-request", "sensor-response", "threshold-violation"];
+// const PORT = 8883;
+// const MESSAGES = ["config-request", "config-response", "data-request", "data-response", "email-request", "email-response", "sensor-request", "sensor-response", "threshold-violation"];
 
 const broker = new Aedes();
 const server = net.createServer(broker.handle)
@@ -22,7 +23,11 @@ broker.on('clientDisconnect', () => {
 })
 
 broker.on("subscribe", (sub, client) => {
-    console.log(`${client.id} subscribed to ${sub[0].topic}\n`)
+    sub.forEach(obj => {
+        console.log(`${client.id} subscribed to ${obj.topic}\n`);
+    })
+    // console.log(`${client.id} subscribed to ${element[0].topic}\n`)
+    
 })
 
 broker.on("publish", (packet) => {

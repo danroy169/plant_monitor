@@ -1,22 +1,7 @@
 
 import { connect } from "async-mqtt"
 //import { getMoisture } from "./read-sensor.js"
-
-
-const URL = "mqtt:localhost:8883"
-
-const MOISTURE = "moisture"
-const TEMP = "temp"
-const HUMIDITY = "humidity"
-
-const MOISTURE_SENSOR_1 = "moisture1"
-
-const SECONDS_TO_MILLI = 1000
-
-const SENSOR_REQUEST = "sensor-request"
-const CONFIG_REQUEST = "config-request"
-const SENSOR_RESPONSE = "sensor-response"
-const CONFIG_RESPONSE = "config-response"
+import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE } from "./consts.js"
 
 let pollIntervalSeconds = 5
 
@@ -31,7 +16,6 @@ client.on("connect", () => {
 client.on("packetsend", packet => {
     { console.log(`Packet sent. \nTopic: ${packet.topic} \nPayload: ${packet.payload}\n`) }
 })
-
 
 async function publishMoisture() {
 
@@ -52,5 +36,4 @@ async function publishMoisture() {
     const payload = JSON.stringify(reading)
 
     await client.publish(SENSOR_RESPONSE, payload)
-
 }
