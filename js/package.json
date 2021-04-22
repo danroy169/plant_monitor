@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node broker.js & node service-sensor.js & node service-gateway.js & node service-metric.js & node service-notification & node service-threshold.js"
   },
   "keywords": [],
   "author": "",

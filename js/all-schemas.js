@@ -10,11 +10,12 @@ const configRequest = {
         },
         "setting": {
             "description": "The configuration setting to set",
-            "type": "string"
+            "type": "string",
+            "enum": ["pollInterval"]
         },
         "data": {
             "description": "The value to set the configuration to",
-            "type": "integer"
+            "type": "integer",
         },
         "time": {
             "description": "ISO 8601 format time stamp",

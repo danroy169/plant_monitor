@@ -14,9 +14,13 @@ def on_message(client, userdata, message):
     # if (moisture < 300):
     #     send_email(moisture)
 
-mqttc = mqtt.Client()
+
+
+mqttc = mqtt.Client("Emailer")
 
 mqttc.on_message = on_message
+
+
 
 mqttc.connect(HOST, PORT)
 mqttc.subscribe(TOPIC)
