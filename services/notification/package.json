@@ -1,0 +1,16 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "description": "notificatino service",
+  "main": "./src/service-notification.js",
+  "type": "module",
+  "exports": {"import": "./src/service-notificaiton.js"},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "dependencies": {
+    "async-mqtt": "^2.6.1"
+  }
+}

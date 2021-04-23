@@ -1,0 +1,18 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "gateway service",
+  "type": "module",
+  "exports": {
+    "import": "./src/service-gateway.js"
+  },
+  "main": "./src/service-gateway.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "dependencies": {
+    "async-mqtt": "^2.6.1"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "sensor",
+  "version": "1.0.0",
+  "description": "sensor service",
+  "type": "module",
+  "exports": {"import": "./src/service-sensor.js"},
+  "main": "./src/service-sensor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/service-sensor.js"
+  },
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "dependencies": {
+    "async-mqtt": "^2.6.1",
+    "i2c-bus": "^5.2.1",
+    "sleep": "^6.3.0"
+  }
+}

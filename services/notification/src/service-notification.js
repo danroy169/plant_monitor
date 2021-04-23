@@ -1,6 +1,6 @@
 import { connect } from "async-mqtt"
-// import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "./consts.js"
-import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "../../../src/consts.js"
+//import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 
 const client = connect(URL);

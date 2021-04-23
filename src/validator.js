@@ -26,11 +26,11 @@ export default function validateJSON(obj){
 //     "time": "2012-01-26T13:51:50.417-07:00",
 // },
 // {
-//     "target": "moisture1",
-//     "setting": "pollInterval",
-//     "data": 30,
-//     "time": "2012-01-26T13:51:50.417-07:00"
-// },
+//     "target": "service-sensor",
+//      "setting": "pollInterval",
+//      "data": 30,
+//      "time": "2012-01-26T13:51:50.417-07:00"
+//   },
 // {
 //     "target": "moisture1",
 //     "result": true,

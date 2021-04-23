@@ -1,15 +1,15 @@
 import { connect } from "async-mqtt"
-// import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "./consts.js"
-import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "../../../src/consts.js"
+// import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
-let moisture_low = 300
-let moisture_high = 1200
+let moistureLow = 300
+let moistureHigh = 1200
 
-let temp_low = 60
-let temp_high = 85
+let tempLow = 60
+let tempHigh = 85
 
-let humid_low = 30
-let humid_high = 70
+let humidLow = 30
+let humidHigh = 70
 
 const client = connect(URL);
 
@@ -52,18 +52,18 @@ function convertToThresholdViolation(obj, threshold){
 function isAThresholdViolation(obj){
 
     if(obj.type === MOISTURE){
-        if (obj.moistureLevel > moisture_high) {return moisture_high}
-        if (obj.moistureLevel < moisture_low) {return moisture_low}
+        if (obj.moistureLevel > moistureHigh) {return moistureHigh}
+        if (obj.moistureLevel < moistureLow) {return moistureLow}
     } 
 
     if(obj.type === TEMP){
-        if(obj.fahrenheit > temp_high) {return temp_high}
-        if(obj.fahrenheit > temp_high || obj.fahrenheit < temp_low){return temp_low}
+        if(obj.fahrenheit > tempHigh) {return tempHigh}
+        if(obj.fahrenheit > tempHigh || obj.fahrenheit < tempLow){return tempLow}
     }
 
     if(obj.type === HUMIDITY){
-        if(obj.percent > humid_high) {return humid_high}
-        if(obj.percent < humid_low) {return humid_low}
+        if(obj.percent > humidHigh) {return humidHigh}
+        if(obj.percent < humidLow) {return humidLow}
     } 
 
     return false;

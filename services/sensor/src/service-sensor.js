@@ -1,16 +1,14 @@
 
 import { connect } from "async-mqtt"
 //import { getMoisture } from "./read-sensor.js"
-// import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE } from "./consts.js"
-import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, POLL_INTERVAL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, SENSOR_SERVICE } from "../../../src/consts.js"
+// import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, POLL_INTERVAL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 let pollIntervalSeconds = 5
 
 const client = connect(URL);
 
-client.on("connect", () => {
-    init()
-});
+client.on("connect", init);
 
 async function init(){
     console.log("sensor service connected")
@@ -22,13 +20,14 @@ async function init(){
     client.on("message", (topic, payload, packet) => {
         const messageObject = JSON.parse(payload.toString());
 
-        if (topic === CONFIG_REQUEST) {
-            console.log("config message recieved")
-            clearInterval(intervalID);
-            pollIntervalSeconds = messageObject.data
-            intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
-        }
+        if (topic === CONFIG_REQUEST && messageObject.target === SENSOR_SERVICE) { setPollInterval(intervalID, messageObject.data) }
     })
+}
+
+function setPollInterval(intervalID, newInterval){
+    clearInterval(intervalID)
+    pollIntervalSeconds = newInterval
+    intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
 }
 
 async function publishMoisture() {

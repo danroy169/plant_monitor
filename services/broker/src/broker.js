@@ -1,12 +1,12 @@
 import Aedes from "aedes"
 import net from "net"
-// windows
-// import validateJSON from "./validator.js"
-// import { PORT, TOPICS } from "./consts.js"
 
-// pi
-import validateJSON from "/home/pi/Projects/Plant Monitor/js/validator.js"
-import { PORT, TOPICS } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import validateJSON from "../../../src/validator.js"
+import { PORT, TOPICS } from "../../../src/consts.js"
+
+
+// import validateJSON from "/home/pi/Projects/Plant Monitor/js/validator.js"
+// import { PORT, TOPICS } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 const broker = new Aedes();
 const server = net.createServer(broker.handle)

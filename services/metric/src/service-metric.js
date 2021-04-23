@@ -1,6 +1,6 @@
 import { connect } from "async-mqtt"
-// import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from "./consts.js"
-import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from "../../../src/consts.js"
+//import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 const client = connect(URL);
 

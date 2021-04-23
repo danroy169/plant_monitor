@@ -1,0 +1,17 @@
+{
+  "name": "plant-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd ../services/broker & npm run start && cd ../sensor & npm run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsonschema": "^1.4.0"
+  }
+}

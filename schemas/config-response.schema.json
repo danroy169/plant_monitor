@@ -5,8 +5,9 @@
     "type": "object",
     "properties": {
         "target": {
-            "description": "The unique identifier for a sensor or service",
-            "type": "string"
+            "description": "The unique identifier for the service",
+            "type": "string",
+            "enum": ["service-threshold", "service-sensor"]
         },
         "result": {
             "description": "The result of the configuration attempt",

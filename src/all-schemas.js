@@ -5,17 +5,20 @@ const configRequest = {
     "type": "object",
     "properties": {
         "target": {
-            "description": "The unique identifier for a sensor or service",
-            "type": "string"
+            "description": "The unique identifier for the service that's being sent the message",
+            "type": "string",
+            "enum": [
+                "service-threshold",
+                "service-sensor"
+            ]
         },
         "setting": {
             "description": "The configuration setting to set",
-            "type": "string",
-            "enum": ["pollInterval"]
+            "type": "string"
         },
         "data": {
             "description": "The value to set the configuration to",
-            "type": "integer",
+            "type": "integer"
         },
         "time": {
             "description": "ISO 8601 format time stamp",
@@ -23,6 +26,49 @@ const configRequest = {
             "format": "date-time"
         }
     },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "target": {
+                        "const": "service-threshold"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "setting": {
+                        "enum": [
+                            "moisture-low",
+                            "moisture-high",
+                            "temp-low",
+                            "temp-high",
+                            "humid-low",
+                            "humid-high"
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "target": {
+                        "const": "service-sensor"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "setting": {
+                        "enum": [
+                            "pollInterval"
+                        ]
+                    }
+                }
+            }
+        }
+    ],
     "required": ["target", "setting", "data", "time"]
 };
 
@@ -33,8 +79,9 @@ const configResponse = {
     "type": "object",
     "properties": {
         "target": {
-            "description": "The unique identifier for a sensor or service",
-            "type": "string"
+            "description": "The unique identifier for the service",
+            "type": "string",
+            "enum": ["service-threshold", "service-sensor"]
         },
         "result": {
             "description": "The result of the configuration attempt",
@@ -90,10 +137,10 @@ const dataResponse = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "moistureLevel": {"type": "integer"},
-                    "fahrenheit": {"type": "integer"},
-                    "percentage": {"type": "integer"},
-                    "time": {"type": "string"}
+                    "moistureLevel": { "type": "integer" },
+                    "fahrenheit": { "type": "integer" },
+                    "percentage": { "type": "integer" },
+                    "time": { "type": "string" }
                 },
                 "required": ["time"]
             },
@@ -137,7 +184,7 @@ const emailRequest = {
             "format": "date-time"
         }
     },
-    "required": ["sensorID",  "violationType", "threshold", "reading", "time"]
+    "required": ["sensorID", "violationType", "threshold", "reading", "time"]
 };
 
 const emailResponse = {
@@ -213,7 +260,7 @@ const sensorResponse = {
                 "properties": { "type": { "const": "moisture" } }
             },
             "then": {
-                "properties" : { "moistureLevel" : { "type": "integer"}},
+                "properties": { "moistureLevel": { "type": "integer" } },
                 "required": ["moistureLevel"]
             }
         },
@@ -222,7 +269,7 @@ const sensorResponse = {
                 "properties": { "type": { "const": "temp" } }
             },
             "then": {
-                "properties" : { "fahrenheit" : { "type": "integer"}},
+                "properties": { "fahrenheit": { "type": "integer" } },
                 "required": ["fahrenheit"]
             }
         },
@@ -231,7 +278,7 @@ const sensorResponse = {
                 "properties": { "type": { "const": "humidity" } }
             },
             "then": {
-                "properties" : { "percent" : { "type": "integer"}},
+                "properties": { "percent": { "type": "integer" } },
                 "required": ["percent"]
             }
         }
@@ -271,5 +318,5 @@ const thresholdViolation = {
     "required": ["sensorID", "violationType", "threshold", "currentLevel", "time"]
 };
 
-export const schemas = [configRequest, configResponse, dataRequest, dataResponse, 
+export const schemas = [configRequest, configResponse, dataRequest, dataResponse,
     emailRequest, emailResponse, sensorRequest, sensorResponse, thresholdViolation];

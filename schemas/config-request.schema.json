@@ -1,12 +1,16 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "title": "Sensor Reading",
+    "title": "Config Request",
     "description": "A configuration message sent to a sensor or service",
     "type": "object",
     "properties": {
         "target": {
-            "description": "The unique identifier for a sensor or service",
-            "type": "string"
+            "description": "The unique identifier for the service that's being sent the message",
+            "type": "string",
+            "enum": [
+                "service-threshold",
+                "service-sensor"
+            ]
         },
         "setting": {
             "description": "The configuration setting to set",
@@ -22,5 +26,53 @@
             "format": "date-time"
         }
     },
-    "required": ["target", "setting", "data", "time"]
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "target": {
+                        "const": "service-threshold"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "setting": {
+                        "enum": [
+                            "moisture-low",
+                            "moisture-high",
+                            "temp-low",
+                            "temp-high",
+                            "humid-low",
+                            "humid-high"
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "target": {
+                        "const": "service-sensor"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "setting": {
+                        "enum": [
+                            "pollInterval"
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "required": [
+        "target",
+        "setting",
+        "data",
+        "time"
+    ]
 }
