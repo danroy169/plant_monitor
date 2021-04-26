@@ -10,21 +10,26 @@ TOPIC = "email-request"
 def on_message(client, userdata, message):
     obj = json.loads(message.payload)
     print(obj)
-    # moisture = obj["moisture"]
-    # if (moisture < 300):
-    #     send_email(moisture)
+    # send_email(obj["currentLevel"])
 
-
+def on_connect(client, userdata, flags, rc):
+    print("Emailer connected")
 
 mqttc = mqtt.Client("Emailer")
 
-mqttc.on_message = on_message
-
-
-
 mqttc.connect(HOST, PORT)
+
 mqttc.subscribe(TOPIC)
 
+mqttc.on_message = on_message
+
+mqttc.on_connect = on_connect
+
 mqttc.loop_forever()
+
+
+
+
+    
 
 

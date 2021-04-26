@@ -6,7 +6,7 @@ Features include a email notification system, and a interactive web UI. The web 
 allows the user to set configurations.
 
 Microservices include:
-    - MQTT Broker
+      MQTT Broker
     - Emailer
     - Gateway
     - Metric

@@ -2,6 +2,8 @@ import { connect } from "async-mqtt"
 import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "../../../src/consts.js"
 // import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
+const subscribesTo = [CONFIG_REQUEST, SENSOR_RESPONSE]
+
 let moistureLow = 300
 let moistureHigh = 1200
 
@@ -13,24 +15,32 @@ let humidHigh = 70
 
 const client = connect(URL);
 
-client.on("connect", () => {
+client.on("connect", init);
+
+async function init() {
     console.log("threshold service connected")
-    client.subscribe([CONFIG_REQUEST, SENSOR_RESPONSE])
-});
 
-// client.on("message", (topic, message, packet) => {
-//     if(topic === SENSOR_RESPONSE) {
-//         const obj = JSON.parse(message.toString())
+    await client.subscribe(subscribesTo)
 
-//         if(isAThresholdViolation(obj)) {
-//             console.log("Threshold violation detected!")
-//             const threshold = isAThresholdViolation(obj)
-//             const thresholdViolationMessage = convertToThresholdViolation(obj, threshold);
+    client.on("message", (topic, payload, packet) => {
+        if(subscribesTo.includes(topic)) { console.log("Threshold service recieved", topic, "message")}
 
-//             client.publish(THRESHOLD_VIOLATION, thresholdViolationMessage)
-//         }
-//     }
-// })
+        if(topic === SENSOR_RESPONSE) {onSensorResponse(payload)}
+    })
+}
+
+async function onSensorResponse(payload){
+    const obj = JSON.parse(payload.toString())
+
+    if(isAThresholdViolation(obj)) {
+        console.log("Threshold violation detected!")
+
+        const threshold = isAThresholdViolation(obj)
+        const thresholdViolationMessage = convertToThresholdViolation(obj, threshold);
+
+        await client.publish(THRESHOLD_VIOLATION, thresholdViolationMessage)
+    }
+}
 
 function convertToThresholdViolation(obj, threshold){
     

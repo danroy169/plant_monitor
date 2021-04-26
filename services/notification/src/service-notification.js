@@ -5,11 +5,21 @@ import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, UR
 
 const client = connect(URL);
 
-client.on("connect", () => {
+const subscribesTo = [THRESHOLD_VIOLATION, EMAIL_RESPONSE, CONFIG_RESPONSE]
+
+client.on("connect", init);
+
+
+
+async function init(){
     console.log("notification service connected")
-    client.subscribe([THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_RESPONSE])
-});
 
+    await client.subscribe(subscribesTo)
 
-// client.on("message", (topic, message, packet) => { if(topic === THRESHOLD_VIOLATION) { console.log("threshold violation recieved!"); client.publish(EMAIL_REQUEST, message.toString()) } })
+    client.on("message", (topic, message, packet) => {
+        if(subscribesTo.includes(topic)) {console.log("Notification service recieved", topic, "message")}
+
+        if(topic === THRESHOLD_VIOLATION) {client.publish(EMAIL_REQUEST, message); console.log("EMAIL REQUEST SENT")}
+    })
+}
 

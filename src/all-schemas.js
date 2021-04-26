@@ -184,7 +184,7 @@ const emailRequest = {
             "format": "date-time"
         }
     },
-    "required": ["sensorID", "violationType", "threshold", "reading", "time"]
+    "required": ["sensorID", "violationType", "threshold", "time"]
 };
 
 const emailResponse = {

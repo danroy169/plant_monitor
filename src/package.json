@@ -6,12 +6,13 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd ../services/broker & npm run start && cd ../sensor & npm run start"
+    "start": "concurrently --names 'BROKER,SENSOR,GATEWAY,METRIC,NOTIFICATION,THRESHOLD,EMAILER' --prefix-colors 'red,cyan,yellow,green,blue,magenta,white' \"node ../services/broker/src/broker.js\" \"node ../services/sensor/src/service-sensor.js\" \"node ../services/gateway/src/service-gateway.js\" \"node ../services/metric/src/service-metric.js\" \"node ../services/notification/src/service-notification.js\" \"node ../services/threshold/src/service-threshold.js\" \"python ../services/emailer/src/service_email.py\" "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^6.0.2",
     "jsonschema": "^1.4.0"
   }
 }

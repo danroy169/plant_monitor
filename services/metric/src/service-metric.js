@@ -4,6 +4,8 @@ import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMI
 
 const client = connect(URL);
 
+const subscribesTo = [SENSOR_RESPONSE, DATA_REQUEST]
+
 const dataStore = {
     moistureReadings: [],
     tempReadings: [],
@@ -11,17 +13,23 @@ const dataStore = {
 }
 
 
-client.on("connect", () => {
+client.on("connect", init);
+
+async function init(){
     console.log("metric service connected")
-    client.subscribe([DATA_REQUEST, SENSOR_RESPONSE])
-});
 
-// client.on("message", (topic, message, packet) => {
-//     let obj = JSON.parse(message.toString())
+    await client.subscribe(subscribesTo)
 
-//     if(obj.type === MOISTURE)  {dataStore.moistureReadings.push(obj)}
-//     if(obj.type === TEMP)  {dataStore.tempReadings.push(obj)}
-//     if(obj.type === HUMIDITY)  {dataStore.humidReadings.push(obj)}
+    client.on("message", (topic, message, packet) => {
+        if(subscribesTo.includes(topic)) {console.log("Metric service recieved", topic, "message")}
 
-//     console.log(dataStore.moistureReadings)
-// })
+        let obj = JSON.parse(message.toString())
+    
+        if(obj.type === MOISTURE)  {dataStore.moistureReadings.push(obj)}
+        if(obj.type === TEMP)  {dataStore.tempReadings.push(obj)}
+        if(obj.type === HUMIDITY)  {dataStore.humidReadings.push(obj)}
+    
+    })
+
+}
+
