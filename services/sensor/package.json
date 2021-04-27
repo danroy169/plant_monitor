@@ -13,7 +13,16 @@
     "lint": "eslint ."
   },
   "eslintConfig": {
-    "extends": "../../.esLint.json"
+    "extends": [
+      "../../.esLint.json",
+      "plugin:node/recommended-module"
+    ],
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "node/no-unpublished-import": "off"
+    }
   },
   "dependencies": {
     "async-mqtt": "^2.6.1",
@@ -21,6 +30,7 @@
     "sleep": "^6.3.0"
   },
   "devDependencies": {
-    "eslint": "^7.25.0"
+    "eslint": "^7.25.0",
+    "eslint-plugin-node": "^11.1.0"
   }
 }

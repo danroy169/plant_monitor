@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unsupported-features/es-syntax */
 import i2c from 'i2c-bus'
 import sleep from 'sleep'
 
