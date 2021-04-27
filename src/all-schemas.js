@@ -208,17 +208,19 @@ const emailResponse = {
 
 const sensorRequest = {
     '$schema': 'http://json-schema.org/draft-07/schema',
-    'title': 'Sensor Reading',
+    'title': 'Sensor Request',
     'description': 'A request to a sensor to get a reading',
     'type': 'object',
     'properties': {
         'sensorID': {
             'description': 'The unique identifier for a sensor',
-            'type': 'string'
+            'type': 'string',
+            'enum': ['moisture1', 'moisture2', 'temp-humidity']
         },
         'type': {
             'description': 'The type of data to read from the sensor',
-            'type': 'string'
+            'type': 'string',
+            'enum': ['moisture', 'temp', 'humidity']
         },
         'time': {
             'description': 'ISO 8601 format time stamp',
@@ -231,13 +233,14 @@ const sensorRequest = {
 
 const sensorResponse = {
     '$schema': 'http://json-schema.org/draft-07/schema',
-    'title': 'Sensor Reading',
+    'title': 'Sensor Response',
     'description': 'A reading from a sensor',
     'type': 'object',
     'properties': {
         'sensorID': {
             'description': 'The unique identifier for a sensor',
-            'type': 'string'
+            'type': 'string',
+            'enum': ['moisture1', 'moisture2', 'temp-humidity']
         },
         'time': {
             'description': 'ISO 8601 format time stamp',

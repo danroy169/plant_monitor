@@ -24,6 +24,7 @@ async function init() {
         const messageObject = JSON.parse(payload.toString())
 
         if (topic === CONFIG_REQUEST && messageObject.target === SENSOR_SERVICE) { setPollInterval(intervalID, messageObject.data) }
+        if(topic === SENSOR_REQUEST) { onSensorRequest(messageObject) }
     })
 }
 
@@ -34,12 +35,11 @@ async function setPollInterval(intervalID, newInterval) {
 
     intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
 
-    if (newInterval === pollIntervalSeconds) { await publishConfigResponse(true) }
-    else { await publishConfigResponse(false) }
+    if (newInterval === pollIntervalSeconds) { publishConfigResponse(true) }
+    else { publishConfigResponse(false) }
 }
 
 async function publishMoisture() {
-
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
@@ -69,4 +69,8 @@ async function publishConfigResponse(result) {
     const payload = JSON.stringify(message)
 
     await client.publish(CONFIG_RESPONSE, payload)
+}
+
+async function onSensorRequest(message){
+    if(message.type === MOISTURE) { publishMoisture() }
 }
