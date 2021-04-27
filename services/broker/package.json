@@ -15,5 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "aedes": "^0.46.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
   }
 }

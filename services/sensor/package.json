@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "sensor service",
   "type": "module",
-  "exports": {"import": "./src/service-sensor.js"},
+  "exports": {
+    "import": "./src/service-sensor.js"
+  },
   "main": "./src/service-sensor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,5 +17,8 @@
     "async-mqtt": "^2.6.1",
     "i2c-bus": "^5.2.1",
     "sleep": "^6.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
   }
 }

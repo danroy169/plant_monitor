@@ -16,7 +16,7 @@ async function init(){
 
     await client.subscribe(subscribesTo)
 
-    client.on("message", (topic, message, packet) => {
+    client.on("message", (topic, message) => {
         if(subscribesTo.includes(topic)) {console.log("Notification service recieved", topic, "message")}
 
         if(topic === THRESHOLD_VIOLATION) {client.publish(EMAIL_REQUEST, message); console.log("EMAIL REQUEST SENT")}

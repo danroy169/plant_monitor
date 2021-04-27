@@ -1,5 +1,5 @@
 import { connect } from "async-mqtt"
-import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "../../../src/consts.js"
+import { THRESHOLD_VIOLATION, CONFIG_REQUEST, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, } from "../../../src/consts.js"
 // import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 const subscribesTo = [CONFIG_REQUEST, SENSOR_RESPONSE]
@@ -22,7 +22,7 @@ async function init() {
 
     await client.subscribe(subscribesTo)
 
-    client.on("message", (topic, payload, packet) => {
+    client.on("message", (topic, payload) => {
         if(subscribesTo.includes(topic)) { console.log("Threshold service recieved", topic, "message")}
 
         if(topic === SENSOR_RESPONSE) {onSensorResponse(payload)}
@@ -42,6 +42,27 @@ async function onSensorResponse(payload){
     }
 }
 
+
+function isAThresholdViolation(obj){
+
+    if(obj.type === MOISTURE){
+        if (obj.moistureLevel > moistureHigh) {return moistureHigh}
+        if (obj.moistureLevel < moistureLow) {return moistureLow}
+    } 
+
+    if(obj.type === TEMP){
+        if(obj.fahrenheit > tempHigh) {return tempHigh}
+        if(obj.fahrenheit < tempLow){return tempLow}
+    }
+
+    if(obj.type === HUMIDITY){
+        if(obj.percent > humidHigh) {return humidHigh}
+        if(obj.percent < humidLow) {return humidLow}
+    } 
+
+    return false;
+}
+
 function convertToThresholdViolation(obj, threshold){
     
     const thresholdViolationMessage = {
@@ -57,24 +78,4 @@ function convertToThresholdViolation(obj, threshold){
     thresholdViolationMessage.time = obj.time
 
     return JSON.stringify(thresholdViolationMessage)
-}
-
-function isAThresholdViolation(obj){
-
-    if(obj.type === MOISTURE){
-        if (obj.moistureLevel > moistureHigh) {return moistureHigh}
-        if (obj.moistureLevel < moistureLow) {return moistureLow}
-    } 
-
-    if(obj.type === TEMP){
-        if(obj.fahrenheit > tempHigh) {return tempHigh}
-        if(obj.fahrenheit > tempHigh || obj.fahrenheit < tempLow){return tempLow}
-    }
-
-    if(obj.type === HUMIDITY){
-        if(obj.percent > humidHigh) {return humidHigh}
-        if(obj.percent < humidLow) {return humidLow}
-    } 
-
-    return false;
 }
