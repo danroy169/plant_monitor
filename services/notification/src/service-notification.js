@@ -3,11 +3,11 @@ import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, UR
 //import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 
-const client = connect(URL);
+const client = connect(URL)
 
 const subscribesTo = [THRESHOLD_VIOLATION, EMAIL_RESPONSE, CONFIG_RESPONSE]
 
-client.on('connect', init);
+client.on('connect', init)
 
 
 

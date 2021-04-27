@@ -13,9 +13,9 @@ let tempHigh = 85
 let humidLow = 30
 let humidHigh = 70
 
-const client = connect(URL);
+const client = connect(URL)
 
-client.on('connect', init);
+client.on('connect', init)
 
 async function init() {
     console.log('threshold service connected')
@@ -36,7 +36,7 @@ async function onSensorResponse(payload){
         console.log('Threshold violation detected!')
 
         const threshold = isAThresholdViolation(obj)
-        const thresholdViolationMessage = convertToThresholdViolation(obj, threshold);
+        const thresholdViolationMessage = convertToThresholdViolation(obj, threshold)
 
         await client.publish(THRESHOLD_VIOLATION, thresholdViolationMessage)
     }
@@ -60,7 +60,7 @@ function isAThresholdViolation(obj){
         if(obj.percent < humidLow) {return humidLow}
     } 
 
-    return false;
+    return false
 }
 
 function convertToThresholdViolation(obj, threshold){

@@ -5,11 +5,11 @@ import { URL, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CON
 
 let pollIntervalSeconds = 5
 
-const client = connect(URL);
+const client = connect(URL)
 
 const subscribesTo = [SENSOR_REQUEST, CONFIG_REQUEST]
 
-client.on('connect', init);
+client.on('connect', init)
 
 async function init() {
     console.log('sensor service connected')
@@ -21,7 +21,7 @@ async function init() {
     client.on('message', (topic, payload) => {
         if (subscribesTo.includes(topic)) { console.log('Sensor service recieved', topic, 'message') }
 
-        const messageObject = JSON.parse(payload.toString());
+        const messageObject = JSON.parse(payload.toString())
 
         if (topic === CONFIG_REQUEST && messageObject.target === SENSOR_SERVICE) { setPollInterval(intervalID, messageObject.data) }
     })

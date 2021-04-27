@@ -1,15 +1,15 @@
-import {Validator} from "jsonschema";
-import {schemas} from "./all-schemas.js";
+import {Validator} from 'jsonschema'
+import {schemas} from './all-schemas.js'
 
 
 
 export default function validateJSON(obj){
-    const v = new Validator();
-    let result = false;
+    const v = new Validator()
+    let result = false
     schemas.forEach(s => {
-        if(v.validate(obj, s).valid) {result = true;};
+        if(v.validate(obj, s).valid) {result = true}
     })
-    return result;
+    return result
 }
 
 // const test = [{

@@ -1,6 +1,8 @@
 {
   "name": "sensor",
   "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
   "description": "sensor service",
   "type": "module",
   "exports": {
@@ -8,11 +10,11 @@
   },
   "main": "./src/service-sensor.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/service-sensor.js"
+    "lint": "eslint ."
   },
-  "author": "Mr.Roy",
-  "license": "ISC",
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
   "dependencies": {
     "async-mqtt": "^2.6.1",
     "i2c-bus": "^5.2.1",

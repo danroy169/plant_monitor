@@ -1,6 +1,8 @@
 {
   "name": "notification",
   "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
   "description": "notificatino service",
   "main": "./src/service-notification.js",
   "type": "module",
@@ -8,10 +10,11 @@
     "import": "./src/service-notificaiton.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ."
   },
-  "author": "Mr.Roy",
-  "license": "ISC",
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
   "dependencies": {
     "async-mqtt": "^2.6.1"
   },

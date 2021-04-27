@@ -1,25 +1,25 @@
-const SENSOR_RESPONSE = "sensor-response"
-const SENSOR_REQUEST = "sensor-request"
-const CONFIG_RESPONSE = "config-response"
-const CONFIG_REQUEST = "config-request"
-const DATA_RESPONSE = "data-response"
-const DATA_REQUEST = "data-request"
-const EMAIL_RESPONSE = "email-response"
-const EMAIL_REQUEST = "email-request"
-const THRESHOLD_VIOLATION = "threshold-violation"
-const POLL_INTERVAL = "pollInterval"
-const SENSOR_SERVICE = "service-sensor"
+const SENSOR_RESPONSE = 'sensor-response'
+const SENSOR_REQUEST = 'sensor-request'
+const CONFIG_RESPONSE = 'config-response'
+const CONFIG_REQUEST = 'config-request'
+const DATA_RESPONSE = 'data-response'
+const DATA_REQUEST = 'data-request'
+const EMAIL_RESPONSE = 'email-response'
+const EMAIL_REQUEST = 'email-request'
+const THRESHOLD_VIOLATION = 'threshold-violation'
+const POLL_INTERVAL = 'pollInterval'
+const SENSOR_SERVICE = 'service-sensor'
 
-const URL = "mqtt:localhost:8883"
-const PORT = 8883;
+const URL = 'mqtt:localhost:8883'
+const PORT = 8883
 
-const TOPICS = ["config-request", "config-response", "data-request", "data-response", "email-request", "email-response", "sensor-request", "sensor-response", "threshold-violation"];
+const TOPICS = ['config-request', 'config-response', 'data-request', 'data-response', 'email-request', 'email-response', 'sensor-request', 'sensor-response', 'threshold-violation']
 
-const MOISTURE = "moisture"
-const TEMP = "temp"
-const HUMIDITY = "humidity"
+const MOISTURE = 'moisture'
+const TEMP = 'temp'
+const HUMIDITY = 'humidity'
 
-const MOISTURE_SENSOR_1 = "moisture1"
+const MOISTURE_SENSOR_1 = 'moisture1'
 
 const SECONDS_TO_MILLI = 1000
 

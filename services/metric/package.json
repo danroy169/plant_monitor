@@ -1,14 +1,17 @@
 {
   "name": "metric",
   "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
   "description": "metric service",
   "main": "./src/service-metric.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ."
   },
-  "author": "Mr.Roy",
-  "license": "ISC",
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
   "dependencies": {
     "async-mqtt": "^2.6.1"
   },
