@@ -7,8 +7,13 @@ import { Worker } from 'worker_threads'
 // const notification = new Worker('../services/notification/src/service-notification.js')
 // const threshold = new Worker('../services/threshold/src/service-threshold.js')
 
-const worker1 = new Worker('./worker.mjs', {workerData: {interval: 1000}})
+const worker1 = new Worker('./service-sensor.mjs', {workerData: {interval: 3}})
+
+
 
 setTimeout(() => {
-    worker1.postMessage({interval: 100})
-}, 5000)
+    worker1.postMessage({interval: 1})
+}, 8000)
+
+
+
