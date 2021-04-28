@@ -17,9 +17,6 @@
       "../../.esLint.json",
       "plugin:node/recommended-module"
     ],
-    "parserOptions": {
-      "sourceType": "module"
-    },
     "rules": {
       "node/no-unpublished-import": "off"
     }
