@@ -5,7 +5,6 @@ import { THRESHOLD_VIOLATION, CONFIG_REQUEST, SENSOR_RESPONSE, MOISTURE, TEMP, H
 const subscribesTo = [CONFIG_REQUEST, SENSOR_RESPONSE]
 
 let moistureLow = 300
-let moistureHigh = 1200
 
 let tempLow = 60
 let tempHigh = 85
@@ -45,14 +44,11 @@ async function onSensorResponse(payload){
 
 function isAThresholdViolation(obj){
 
-    if(obj.type === MOISTURE){
-        if (obj.moistureLevel > moistureHigh) {return moistureHigh}
-        if (obj.moistureLevel < moistureLow) {return moistureLow}
-    } 
+    if(obj.type === MOISTURE && obj.moistureLevel < moistureLow) {return moistureLow} 
 
     if(obj.type === TEMP){
         if(obj.fahrenheit > tempHigh) {return tempHigh}
-        if(obj.fahrenheit < tempLow){return tempLow}
+        if(obj.fahrenheit < tempLow) {return tempLow}
     }
 
     if(obj.type === HUMIDITY){
