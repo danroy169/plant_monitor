@@ -14,12 +14,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "../../.esLint.json",
-      "plugin:node/recommended-module"
-    ],
-    "rules": {
-      "node/no-unpublished-import": "off"
-    }
+      "../../.esLint.json"
+    ]
   },
   "dependencies": {
     "async-mqtt": "^2.6.1",
