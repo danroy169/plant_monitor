@@ -5,8 +5,9 @@
   "version": "1.0.0",
   "description": "worker version of plant monitor",
   "type": "module",
-  "main": "test.mjs",
+  "main": "app.js",
   "scripts": {
+    "start": "node ./src/app.js",
     "lint": "eslint ."
   },
   "eslintConfig": {

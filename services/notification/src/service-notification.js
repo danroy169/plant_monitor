@@ -1,25 +1,21 @@
-import { connect } from 'async-mqtt'
-import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from '../../../src/consts.js'
+import { THRESHOLD_VIOLATION, MESSAGE, EMAIL_REQUEST } from '../../../src/consts.js'
 //import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { parentPort } from 'worker_threads'
+import isValidMessage  from '../../../src/validator.js'
+
+parentPort.on(MESSAGE, msg => {
+    if(msg.topic === THRESHOLD_VIOLATION) {
+        console.log('Notification service recieved threshold violation message\n')
+
+        postEmailRequest(msg)
+    }
+})
 
 
-const client = connect(URL)
 
-const subscribesTo = [THRESHOLD_VIOLATION, EMAIL_RESPONSE, CONFIG_RESPONSE]
+function postEmailRequest(msg) {
+    const emailRequestMessage = msg
+    emailRequestMessage.topic = EMAIL_REQUEST
 
-client.on('connect', init)
-
-
-
-async function init(){
-    console.log('notification service connected')
-
-    await client.subscribe(subscribesTo)
-
-    client.on('message', (topic, message) => {
-        if(subscribesTo.includes(topic)) {console.log('Notification service recieved', topic, 'message')}
-
-        if(topic === THRESHOLD_VIOLATION) {client.publish(EMAIL_REQUEST, message); console.log('EMAIL REQUEST SENT')}
-    })
+    if(isValidMessage(emailRequestMessage)) { parentPort.postMessage(emailRequestMessage); console.log('Email request message sent\n') }
 }
-

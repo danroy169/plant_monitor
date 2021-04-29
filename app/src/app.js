@@ -1,6 +1,7 @@
 import { Worker } from 'worker_threads'
 import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE } from '../../src/consts.js'
 
+
 // const broker = new Worker('../services/broker/src/broker.js')
 // const sensor = new Worker('../services/sensor/src/service-sensor.js')
 // const gateway = new Worker('../services/gateway/src/service-gateway.js')
@@ -8,7 +9,7 @@ import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE } from '../../src
 // const notification = new Worker('../services/notification/src/service-notification.js')
 // const threshold = new Worker('../services/threshold/src/service-threshold.js')
 
-const sensorWorker = new Worker('./service-sensor.mjs', { workerData: { interval: 3 } })
+const sensorWorker = new Worker('../../services/sensor/src/service-sensor.js', { workerData: { interval: 3 } })
 
 const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', {
     workerData: {
@@ -20,17 +21,20 @@ const thresholdWorker = new Worker('../../services/threshold/src/service-thresho
     }
 })
 
+const notificationWorker = new Worker('../../services/notification/src/service-notification.js')
+
 sensorWorker.on(ONLINE, () => { console.log('Sensor online') })
 
 thresholdWorker.on(ONLINE, () => { console.log('Threshold online') })
 
-sensorWorker.on(MESSAGE, msg => {
-    if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg) }
-})
+notificationWorker.on(ONLINE, () => { console.log('Notification online') })
 
-thresholdWorker.on(MESSAGE, msg => {
-    if (msg.topic === THRESHOLD_VIOLATION) { console.log(msg) }
-})
+sensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg) } } )
+
+thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
+
+// notificationWorker.on(MESSAGE, msg => { console.log(msg) } )
+
 
 
 

@@ -1,5 +1,6 @@
 import { parentPort, workerData } from 'worker_threads'
 import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE } from '../../../src/consts.js'
+import isValidMessage  from '../../../src/validator.js'
 // import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 let moistureLow = workerData.moistureLow
@@ -11,18 +12,18 @@ let humidLow = workerData.humidLow
 let humidHigh = workerData.humidHigh
 
 parentPort.on('message', msg => {
-    if(msg.topic === SENSOR_RESPONSE) {console.log('threshold service recieved sensor response message\n');onSensorResponse(msg)}
+    if(msg.topic === SENSOR_RESPONSE) {console.log('threshold service recieved sensor response message\n'); onSensorResponse(msg)}
 })
 
 function onSensorResponse(msg){
 
     if(isAThresholdViolation(msg)) {
-        console.log('Threshold violation detected!')
+        console.log('Threshold violation detected!\n')
 
         const threshold = isAThresholdViolation(msg)
         const thresholdViolationMessage = convertToThresholdViolation(msg, threshold)
 
-        parentPort.postMessage(thresholdViolationMessage)
+        if(isValidMessage(thresholdViolationMessage)) { parentPort.postMessage(thresholdViolationMessage) }
     }
 }
 

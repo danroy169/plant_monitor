@@ -3,7 +3,7 @@ import {schemas} from './all-schemas.js'
 
 
 
-export default function validateJSON(obj){
+export default function isValidMessage(obj){
     const v = new Validator()
     let result = false
     schemas.forEach(s => {
