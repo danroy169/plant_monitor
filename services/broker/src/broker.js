@@ -1,8 +1,8 @@
 import Aedes from 'aedes'
 import net from 'net'
 
-import validateJSON from '../../../src/validator.js'
-import { PORT, TOPICS } from '../../../src/consts.js'
+import validateJSON from '../../../util/validator.js'
+import { PORT, TOPICS } from '../../../util/consts.js'
 
 
 // import validateJSON from "/home/pi/Projects/Plant Monitor/js/validator.js"

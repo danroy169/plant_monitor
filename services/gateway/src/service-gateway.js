@@ -1,5 +1,5 @@
 import { connect } from 'async-mqtt'
-import { DATA_RESPONSE, SENSOR_RESPONSE, CONFIG_RESPONSE, URL, SENSOR_REQUEST, CONFIG_REQUEST } from '../../../src/consts.js'
+import { DATA_RESPONSE, SENSOR_RESPONSE, CONFIG_RESPONSE, URL, SENSOR_REQUEST, CONFIG_REQUEST } from '../../../util/consts.js'
 // import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, SENSOR_REQUEST, CONFIG_REQUEST, CONFIG_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 const subscribesTo = [SENSOR_RESPONSE, CONFIG_RESPONSE, DATA_RESPONSE]

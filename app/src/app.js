@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads'
-import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE } from '../../src/consts.js'
+import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE } from '../../util/consts.js'
 
 
 // const broker = new Worker('../services/broker/src/broker.js')

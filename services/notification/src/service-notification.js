@@ -1,7 +1,7 @@
-import { THRESHOLD_VIOLATION, MESSAGE, EMAIL_REQUEST } from '../../../src/consts.js'
+import { THRESHOLD_VIOLATION, MESSAGE, EMAIL_REQUEST } from '../../../util/consts.js'
 //import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 import { parentPort } from 'worker_threads'
-import isValidMessage  from '../../../src/validator.js'
+import isValidMessage  from '../../../util/validator.js'
 
 parentPort.on(MESSAGE, msg => {
     if(msg.topic === THRESHOLD_VIOLATION) {

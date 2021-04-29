@@ -1,6 +1,6 @@
 import { parentPort, workerData } from 'worker_threads'
-import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE } from '../../../src/consts.js'
-import isValidMessage  from '../../../src/validator.js'
+import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE } from '../../../util/consts.js'
+import isValidMessage  from '../../../util/validator.js'
 // import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 let moistureLow = workerData.moistureLow
