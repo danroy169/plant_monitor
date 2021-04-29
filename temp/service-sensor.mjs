@@ -12,11 +12,9 @@ let intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_M
 
 
 parentPort.on('message', msg => {
-    console.log('message recieved', msg)
+    console.log('worker1 message recieved', msg)
     if (msg.interval) { setPollInterval(intervalID, msg.interval) }
 })
-
-parentPort.postMessage('message from worker')
 
 function setPollInterval(intervalID, newInterval) {
     clearInterval(intervalID)
@@ -42,7 +40,7 @@ function publishMoisture() {
     }
 
     parentPort.postMessage(reading)
-    console.log(reading)
+    //console.log(reading)
 }
 
 // async function publishConfigResponse(result) {
