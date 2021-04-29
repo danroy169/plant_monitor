@@ -4,6 +4,11 @@ const configRequest = {
     'description': 'A configuration message sent to a sensor or service',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['config-request']
+        },
         'target': {
             'description': 'The unique identifier for the service that\'s being sent the message',
             'type': 'string',
@@ -78,6 +83,11 @@ const configResponse = {
     'description': 'A message sent after an attempt at configuration',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['config-response']
+        },
         'target': {
             'description': 'The unique identifier for the service',
             'type': 'string',
@@ -102,6 +112,11 @@ const dataRequest = {
     'description': 'A message sent to metric service requesting historical reading data',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['data-request']
+        },
         'metric': {
             'description': 'The metric being requested',
             'type': 'string',
@@ -126,6 +141,11 @@ const dataResponse = {
     'description': 'A message sent in response to lookup request, containing data asked for',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['data-response']
+        },
         'metric': {
             'description': 'The metric that was requested',
             'type': 'string',
@@ -161,6 +181,11 @@ const emailRequest = {
     'description': 'A message sent to email service requesting an email be sent',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['email-request']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string'
@@ -193,6 +218,11 @@ const emailResponse = {
     'description': 'A message sent from email service indicating pass/fail',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['email-response']
+        },
         'result': {
             'description': 'The result of send email attempt',
             'type': 'boolean'
@@ -212,6 +242,11 @@ const sensorRequest = {
     'description': 'A request to a sensor to get a reading',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['sensor-request']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string',
@@ -237,6 +272,11 @@ const sensorResponse = {
     'description': 'A reading from a sensor',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['sensor-response']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string',
@@ -295,6 +335,11 @@ const thresholdViolation = {
     'description': 'A message sent to indicating that a threshold has been crossed',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['threshold-violation']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string'

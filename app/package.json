@@ -1,0 +1,16 @@
+{
+  "name": "plant-monitor",
+  "author": "Daniel Roy",
+  "license": "ISC",
+  "version": "1.0.0",
+  "description": "worker version of plant monitor",
+  "type": "module",
+  "main": "test.mjs",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": "../.esLint.json"
+  }
+ 
+}

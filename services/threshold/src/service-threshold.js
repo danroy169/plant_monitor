@@ -1,43 +1,28 @@
-import { connect } from 'async-mqtt'
-import { THRESHOLD_VIOLATION, CONFIG_REQUEST, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, } from '../../../src/consts.js'
+import { parentPort, workerData } from 'worker_threads'
+import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE } from '../../../src/consts.js'
 // import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
-const subscribesTo = [CONFIG_REQUEST, SENSOR_RESPONSE]
+let moistureLow = workerData.moistureLow
 
-let moistureLow = 300
+let tempLow = workerData.tempLow
+let tempHigh = workerData.tempHigh
 
-let tempLow = 60
-let tempHigh = 85
+let humidLow = workerData.humidLow
+let humidHigh = workerData.humidHigh
 
-let humidLow = 30
-let humidHigh = 70
+parentPort.on('message', msg => {
+    if(msg.topic === SENSOR_RESPONSE) {console.log('threshold service recieved sensor response message\n');onSensorResponse(msg)}
+})
 
-const client = connect(URL)
+function onSensorResponse(msg){
 
-client.on('connect', init)
-
-async function init() {
-    console.log('threshold service connected')
-
-    await client.subscribe(subscribesTo)
-
-    client.on('message', (topic, payload) => {
-        if(subscribesTo.includes(topic)) { console.log('Threshold service recieved', topic, 'message')}
-
-        if(topic === SENSOR_RESPONSE) {onSensorResponse(payload)}
-    })
-}
-
-async function onSensorResponse(payload){
-    const obj = JSON.parse(payload.toString())
-
-    if(isAThresholdViolation(obj)) {
+    if(isAThresholdViolation(msg)) {
         console.log('Threshold violation detected!')
 
-        const threshold = isAThresholdViolation(obj)
-        const thresholdViolationMessage = convertToThresholdViolation(obj, threshold)
+        const threshold = isAThresholdViolation(msg)
+        const thresholdViolationMessage = convertToThresholdViolation(msg, threshold)
 
-        await client.publish(THRESHOLD_VIOLATION, thresholdViolationMessage)
+        parentPort.postMessage(thresholdViolationMessage)
     }
 }
 
@@ -62,9 +47,10 @@ function isAThresholdViolation(obj){
 function convertToThresholdViolation(obj, threshold){
     
     const thresholdViolationMessage = {
+        topic: THRESHOLD_VIOLATION,
         sensorID: obj.sensorID,
         violationType: obj.type,
-        threshold: threshold,
+        threshold: threshold
     }
 
     if(obj.type === MOISTURE) {thresholdViolationMessage.currentLevel = obj.moistureLevel}
@@ -73,5 +59,5 @@ function convertToThresholdViolation(obj, threshold){
 
     thresholdViolationMessage.time = obj.time
 
-    return JSON.stringify(thresholdViolationMessage)
+    return thresholdViolationMessage
 }

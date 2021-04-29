@@ -1,8 +1,8 @@
 //import { getMoisture } from "./read-sensor.js"
-import { URL, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, SENSOR_SERVICE } from '../src/consts.js'
+import { MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_RESPONSE } from '../../src/consts.js'
 // import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, POLL_INTERVAL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
-import { Worker, parentPort, workerData } from 'worker_threads'
+import { parentPort, workerData } from 'worker_threads'
 
 
 let pollIntervalSeconds = workerData.interval
@@ -25,6 +25,7 @@ function setPollInterval(intervalID, newInterval) {
 }
 
 function publishMoisture() {
+    const topic = SENSOR_RESPONSE
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
@@ -32,6 +33,7 @@ function publishMoisture() {
     const currentPollInterval = pollIntervalSeconds
 
     const reading = {
+        topic,
         sensorID,
         time,
         type,
@@ -43,18 +45,3 @@ function publishMoisture() {
     //console.log(reading)
 }
 
-// async function publishConfigResponse(result) {
-//     const message = {
-//         target: SENSOR_SERVICE,
-//         result,
-//         time: new Date().toISOString()
-//     }
-
-//     const payload = JSON.stringify(message)
-
-//     await client.publish(CONFIG_RESPONSE, payload)
-// }
-
-// async function onSensorRequest(message){
-//     if(message.type === MOISTURE) { publishMoisture() }
-// }
