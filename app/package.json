@@ -12,5 +12,4 @@
   "eslintConfig": {
     "extends": "../.esLint.json"
   }
- 
 }
