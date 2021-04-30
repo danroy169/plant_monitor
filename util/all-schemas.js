@@ -157,12 +157,16 @@ const dataResponse = {
             'items': {
                 'type': 'object',
                 'properties': {
+                    'topic': {'type': 'string'},
+                    'sensorID': {'type': 'string'},
+                    'type': {'type': 'string'},
+                    'currentPollInterval': {'type': 'integer'},
                     'moistureLevel': { 'type': 'integer' },
                     'fahrenheit': { 'type': 'integer' },
                     'percentage': { 'type': 'integer' },
-                    'time': { 'type': 'string' }
+                    'time': { 'type': 'string', 'format': 'date-time'}
                 },
-                'required': ['time']
+                'required': ['time', 'topic', 'sensorID', 'type', 'currentPollInterval']
             },
             'uniqueItems': true
         },
