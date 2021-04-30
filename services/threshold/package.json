@@ -1,0 +1,21 @@
+{
+  "name": "threshold",
+  "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "description": "threshold service",
+  "main": "./src/service-threshold.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
+  "dependencies": {
+    "async-mqtt": "^2.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "description": "notificatino service",
+  "main": "./src/service-notification.js",
+  "type": "module",
+  "exports": {
+    "import": "./src/service-notificaiton.js"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
+  "dependencies": {
+    "async-mqtt": "^2.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}

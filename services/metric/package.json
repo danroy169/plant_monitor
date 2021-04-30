@@ -1,0 +1,21 @@
+{
+  "name": "metric",
+  "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "description": "metric service",
+  "main": "./src/service-metric.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
+  "dependencies": {
+    "async-mqtt": "^2.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}

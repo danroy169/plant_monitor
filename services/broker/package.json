@@ -1,0 +1,24 @@
+{
+  "name": "broker",
+  "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "description": "mqtt broker",
+  "type": "module",
+  "exports": {
+    "import": "./src/broker.js"
+  },
+  "main": "./src/broker.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
+  "dependencies": {
+    "aedes": "^0.46.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}

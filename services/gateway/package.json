@@ -1,0 +1,24 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "description": "gateway service",
+  "type": "module",
+  "exports": {
+    "import": "./src/service-gateway.js"
+  },
+  "main": "./src/service-gateway.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
+  "dependencies": {
+    "async-mqtt": "^2.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}

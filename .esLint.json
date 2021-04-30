@@ -1,0 +1,22 @@
+{
+    "root": true,
+    "extends": "eslint:recommended",
+    "env": {
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "rules": {
+        "semi": [
+            "error",
+            "never"
+        ],
+        "quotes": [
+            "warn",
+            "single"
+        ],
+        "no-console": "off"
+    }
+}
