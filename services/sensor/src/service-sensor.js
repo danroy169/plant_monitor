@@ -1,5 +1,5 @@
 //import { getMoisture } from "./read-sensor.js"
-import { MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_RESPONSE } from '../../../util/consts.js'
+import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR_SERVICE } from '../../../util/consts.js'
 // import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, POLL_INTERVAL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 import isValidMessage  from '../../../util/validator.js'
 
@@ -13,7 +13,11 @@ let intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_M
 
 
 parentPort.on('message', msg => {
-    console.log('worker1 message recieved', msg)
+    console.log('Sensor Service message recieved. Topic:', msg.topic)
+
+    if(msg.topic === SENSOR_REQUEST) { publishMoisture() }
+
+    if(msg.topic === CONFIG_REQUEST && msg.target === SENSOR_SERVICE) { setPollInterval(intervalID, msg.data) }
 })
 
 function setPollInterval(intervalID, newInterval) {

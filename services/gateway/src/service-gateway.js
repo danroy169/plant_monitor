@@ -1,13 +1,12 @@
-import { connect } from 'async-mqtt'
-import { DATA_RESPONSE, SENSOR_RESPONSE, CONFIG_RESPONSE, URL, SENSOR_REQUEST, CONFIG_REQUEST } from '../../../util/consts.js'
+import { parentPort } from 'worker_threads'
+import { DATA_RESPONSE, SENSOR_RESPONSE, CONFIG_RESPONSE, SENSOR_REQUEST, CONFIG_REQUEST, MESSAGE, SENSOR_SERVICE } from '../../../util/consts.js'
 // import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, SENSOR_REQUEST, CONFIG_REQUEST, CONFIG_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
-const subscribesTo = [SENSOR_RESPONSE, CONFIG_RESPONSE, DATA_RESPONSE]
 
-const client = connect(URL)
 
 const configRequest = {
-    target: 'service-sensor',
+    topic: CONFIG_REQUEST,
+    target: SENSOR_SERVICE,
     setting: 'pollInterval',
     data: 1,
     time: new Date().toISOString()
@@ -19,20 +18,7 @@ const sensorRequest = {
     time: new Date().toISOString()
 }
 
-client.on('connect', init)
+parentPort.on(MESSAGE, msg => { console.log('Gateway Service recieved', msg.topic, 'message\n') })
 
-async function init(){
-    console.log('gateway service connected')
+setTimeout(() => {parentPort.postMessage(configRequest)}, 8000)
 
-    await client.subscribe(subscribesTo)
-
-    client.on('message', (topic) => {if(subscribesTo.includes(topic)) { console.log('Gateway recieved', topic, 'message') } })
-
-    setTimeout(() => {
-        client.publish(SENSOR_REQUEST, JSON.stringify(sensorRequest))
-    }, 10000)
-
-    setTimeout(() => {
-        client.publish(CONFIG_REQUEST, JSON.stringify(configRequest))
-    }, 15000)
-}

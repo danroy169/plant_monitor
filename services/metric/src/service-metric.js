@@ -29,3 +29,4 @@ function storeData(msg) {
         if (msg.type === HUMIDITY) { dataStore.humidReadings.push(msg) }
     }
 }
+

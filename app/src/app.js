@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads'
-import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE } from '../../util/consts.js'
+import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, SENSOR_SERVICE } from '../../util/consts.js'
 
 
 // const broker = new Worker('../services/broker/src/broker.js')
@@ -25,6 +25,10 @@ const notificationWorker = new Worker('../../services/notification/src/service-n
 
 const metricWorker = new Worker('../../services/metric/src/service-metric.js')
 
+const gatewayWorker = new Worker('../../services/gateway/src/service-gateway.js')
+
+
+
 sensorWorker.on(ONLINE, () => { console.log('Sensor online') })
 
 thresholdWorker.on(ONLINE, () => { console.log('Threshold online') })
@@ -33,9 +37,16 @@ notificationWorker.on(ONLINE, () => { console.log('Notification online') })
 
 metricWorker.on(ONLINE, () => { console.log('Metric service online') })
 
-sensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg) } } )
+gatewayWorker.on(ONLINE, () => { console.log('Gateway service online') })
+
+
+
+sensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg); gatewayWorker.postMessage(msg) } } )
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
+
+gatewayWorker.on(MESSAGE, msg => { if (msg.topic === CONFIG_REQUEST && msg.target === SENSOR_SERVICE) { sensorWorker.postMessage(msg) } })
+
 
 // notificationWorker.on(MESSAGE, msg => { console.log(msg) } )
 
