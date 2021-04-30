@@ -16,9 +16,7 @@ server.listen(PORT, function () {
     console.log('server started and listening on port ', PORT)
 })
 
-// broker.on('client', (client) => {
-//     console.log(`${client.id} connected\n`);
-// })
+
 
 broker.on('clientDisconnect', () => {
     console.log('client disconnected\n')
@@ -35,10 +33,7 @@ broker.on('publish', (packet) => {
     if (TOPICS.includes(packet.topic)) {
         var stringBuf = packet.payload.toString('utf-8')
         var obj = JSON.parse(stringBuf)
-        console.log(obj)
-        console.log()
-        
+  
         if(!validateJSON(obj)) {console.log('invalid message!\n')}
-        else {console.log('valid message!\n')}
     }
 })

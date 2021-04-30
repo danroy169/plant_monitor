@@ -13,7 +13,7 @@ const sensorWorker = new Worker('../../services/sensor/src/service-sensor.js', {
 
 const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', {
     workerData: {
-        moistureLow: 100,
+        moistureLow: 300,
         tempLow: 60,
         tempHigh: 85,
         humidLow: 30,
@@ -27,6 +27,8 @@ const metricWorker = new Worker('../../services/metric/src/service-metric.js')
 
 const gatewayWorker = new Worker('../../services/gateway/src/service-gateway.js')
 
+const brokerWorker = new Worker('../../services/broker/src/broker.js')
+
 
 
 sensorWorker.on(ONLINE, () => { console.log('Sensor online') })
@@ -38,6 +40,8 @@ notificationWorker.on(ONLINE, () => { console.log('Notification online') })
 metricWorker.on(ONLINE, () => { console.log('Metric service online') })
 
 gatewayWorker.on(ONLINE, () => { console.log('Gateway service online') })
+
+brokerWorker.on(ONLINE, () => { console.log('Broker online')})
 
 
 
