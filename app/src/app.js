@@ -13,7 +13,7 @@ const sensorWorker = new Worker('../../services/sensor/src/service-sensor.js', {
 
 const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', {
     workerData: {
-        moistureLow: 300,
+        moistureLow: 100,
         tempLow: 60,
         tempHigh: 85,
         humidLow: 30,
@@ -23,13 +23,17 @@ const thresholdWorker = new Worker('../../services/threshold/src/service-thresho
 
 const notificationWorker = new Worker('../../services/notification/src/service-notification.js')
 
+const metricWorker = new Worker('../../services/metric/src/service-metric.js')
+
 sensorWorker.on(ONLINE, () => { console.log('Sensor online') })
 
 thresholdWorker.on(ONLINE, () => { console.log('Threshold online') })
 
 notificationWorker.on(ONLINE, () => { console.log('Notification online') })
 
-sensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg) } } )
+metricWorker.on(ONLINE, () => { console.log('Metric service online') })
+
+sensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg) } } )
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 
