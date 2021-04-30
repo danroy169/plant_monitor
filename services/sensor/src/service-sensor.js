@@ -1,4 +1,4 @@
-import { getMoisture } from "./read-sensor.js"
+import { getMoisture } from "./read-moisture-sensor.js"
 import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR_SERVICE } from '../../../util/consts.js'
 // import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, POLL_INTERVAL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 import isValidMessage  from '../../../util/validator.js'
