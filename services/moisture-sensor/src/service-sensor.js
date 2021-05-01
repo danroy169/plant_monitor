@@ -1,6 +1,5 @@
-import { getMoisture } from "./read-moisture-sensor.js"
-import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR_SERVICE } from '../../../util/consts.js'
-// import { URL, MOISTURE, TEMP, HUMIDITY, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, CONFIG_REQUEST, SENSOR_RESPONSE, CONFIG_RESPONSE, POLL_INTERVAL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { getMoisture } from './read-moisture-sensor.js'
+import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, MOISTURE_SENSOR_SERVICE } from '../../../util/consts.js'
 import isValidMessage  from '../../../util/validator.js'
 
 import { parentPort, workerData } from 'worker_threads'
@@ -17,7 +16,7 @@ parentPort.on('message', msg => {
 
     if(msg.topic === SENSOR_REQUEST) { publishMoisture() }
 
-    if(msg.topic === CONFIG_REQUEST && msg.target === SENSOR_SERVICE) { setPollInterval(intervalID, msg.data) }
+    if(msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { setPollInterval(intervalID, msg.data) }
 })
 
 function setPollInterval(intervalID, newInterval) {
@@ -33,7 +32,7 @@ async function publishMoisture() {
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
-    const moistureLevel = await getMoisture();
+    const moistureLevel = await getMoisture()
     const currentPollInterval = pollIntervalSeconds
 
     const reading = {

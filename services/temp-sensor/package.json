@@ -1,0 +1,21 @@
+{
+  "name": "temp-humidity-sensor",
+  "version": "1.0.0",
+  "description": "Gets temp/humidity reading from am2302 sensor",
+  "main": "test.js",
+  "type": "module",
+  "dependencies": {
+    "eslint": "^7.25.0",
+    "node-dht-sensor": "^0.4.3"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "../../.esLint.json"
+    ]
+  },
+  "author": "Daniel Roy",
+  "license": "ISC"
+}

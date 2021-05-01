@@ -14,7 +14,8 @@ const configRequest = {
             'type': 'string',
             'enum': [
                 'service-threshold',
-                'service-sensor'
+                'service-sensor',
+                'service-temp-sensor'
             ]
         },
         'setting': {
