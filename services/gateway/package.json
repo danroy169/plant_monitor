@@ -16,7 +16,8 @@
     "extends": "../../.esLint.json"
   },
   "dependencies": {
-    "async-mqtt": "^2.6.1"
+    "async-mqtt": "^2.6.1",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "eslint": "^7.25.0"
