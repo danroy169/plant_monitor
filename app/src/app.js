@@ -1,27 +1,12 @@
 import { Worker } from 'worker_threads'
-import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, TEMP_SENSOR_SERVICE } from '../../util/consts.js'
+import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, TEMP_SENSOR_SERVICE, THRESHOLDS, MOISTURE_SENSOR_SERVICE, THRESHOLD_SERVICE } from '../../util/consts.js'
 
-
-// const broker = new Worker('../services/broker/src/broker.js')
-// const sensor = new Worker('../services/sensor/src/service-sensor.js')
-// const gateway = new Worker('../services/gateway/src/service-gateway.js')
-// const metric = new Worker('../services/metric/src/service-metric.js')
-// const notification = new Worker('../services/notification/src/service-notification.js')
-// const threshold = new Worker('../services/threshold/src/service-threshold.js')
 
 const moistureSensorWorker = new Worker('../../services/moisture-sensor/src/service-sensor.js', { workerData: { interval: 3 } })
 
 const tempHumidSensorWorker = new Worker('../../services/temp-sensor/src/service-temp-sensor.js', { workerData: { interval: 3 } })
 
-const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', {
-    workerData: {
-        moistureLow: 300,
-        tempLow: 60,
-        tempHigh: 85,
-        humidLow: 30,
-        humidHigh: 70
-    }
-})
+const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', { workerData: THRESHOLDS })
 
 const notificationWorker = new Worker('../../services/notification/src/service-notification.js')
 
@@ -55,7 +40,11 @@ tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) {t
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 
-gatewayWorker.on(MESSAGE, msg => { if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) } })
+gatewayWorker.on(MESSAGE, msg => { 
+    if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) } 
+    if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) } 
+    if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
+})
 
 
 // notificationWorker.on(MESSAGE, msg => { console.log(msg) } )

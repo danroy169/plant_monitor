@@ -46,7 +46,6 @@ const configRequest = {
                     'setting': {
                         'enum': [
                             'moisture-low',
-                            'moisture-high',
                             'temp-low',
                             'temp-high',
                             'humid-low',

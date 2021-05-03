@@ -1,5 +1,5 @@
 import { parentPort, workerData } from 'worker_threads'
-import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE } from '../../../util/consts.js'
+import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE, CONFIG_REQUEST, MOISTURE_LOW, TEMP_LOW, TEMP_HIGH, HUMID_LOW, HUMID_HIGH } from '../../../util/consts.js'
 import isValidMessage  from '../../../util/validator.js'
 // import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
@@ -13,10 +13,21 @@ let humidHigh = workerData.humidHigh
 
 parentPort.on('message', msg => {
     if(msg.topic === SENSOR_RESPONSE) {console.log('threshold service recieved sensor response message\n'); onSensorResponse(msg)}
+    if(msg.topic === CONFIG_REQUEST) {console.log('threshold service recieved config-request message\n'); onConfigRequest(msg)}
 })
 
-function onSensorResponse(msg){
+function onConfigRequest(msg){
+    if(msg.setting === MOISTURE_LOW) { moistureLow = msg.data }
 
+    if(msg.setting === TEMP_LOW) { tempLow = msg.data }
+    if(msg.setting === TEMP_HIGH) { tempHigh = msg.data }
+
+    if(msg.setting === HUMID_LOW) { humidLow = msg.data }
+    if(msg.setting === HUMID_HIGH) { humidHigh = msg.data }
+}
+
+
+function onSensorResponse(msg){
     if(isAThresholdViolation(msg)) {
         console.log('Threshold violation detected!\n')
 

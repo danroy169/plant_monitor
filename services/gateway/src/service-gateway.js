@@ -1,14 +1,14 @@
 import { parentPort } from 'worker_threads'
-import { CONFIG_REQUEST, MESSAGE, TEMP_SENSOR_SERVICE } from '../../../util/consts.js'
+import { CONFIG_REQUEST, MESSAGE, MOISTURE_LOW, THRESHOLD_SERVICE } from '../../../util/consts.js'
 // import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, SENSOR_REQUEST, CONFIG_REQUEST, CONFIG_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 
 
 const configRequest = {
     topic: CONFIG_REQUEST,
-    target: TEMP_SENSOR_SERVICE,
-    setting: 'pollInterval',
-    data: 1,
+    target: THRESHOLD_SERVICE,
+    setting: MOISTURE_LOW,
+    data: 400,
     time: new Date().toISOString()
 }
 
