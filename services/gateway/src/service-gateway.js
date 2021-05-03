@@ -1,5 +1,6 @@
 import { parentPort } from 'worker_threads'
 import { CONFIG_REQUEST, MESSAGE, MOISTURE_LOW, THRESHOLD_SERVICE } from '../../../util/consts.js'
+import isValidMessage from '../../../util/validator.js'
 // import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, SENSOR_REQUEST, CONFIG_REQUEST, CONFIG_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 
 
@@ -15,5 +16,5 @@ const configRequest = {
 
 parentPort.on(MESSAGE, msg => { console.log('Gateway Service recieved', msg.topic, 'message\n') })
 
-setTimeout(() => {parentPort.postMessage(configRequest)}, 8000)
+setTimeout(() => { if(isValidMessage(configRequest)) { parentPort.postMessage(configRequest) } }, 8000)
 

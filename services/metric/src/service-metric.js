@@ -11,9 +11,7 @@ const dataStore = {
 }
 
 
-parentPort.on(MESSAGE, msg => {
-    if (msg.topic === SENSOR_RESPONSE) { console.log('Metric service recieved sensor response message\n'); storeData(msg)}
-})
+parentPort.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { console.log('Metric service recieved sensor response message\n'); storeData(msg) } })
 
 
 function storeData(msg) {
