@@ -7,4 +7,4 @@ async function getReadings() {
     console.log(readings)
 }
 
-getReadings()
+await getReadings()

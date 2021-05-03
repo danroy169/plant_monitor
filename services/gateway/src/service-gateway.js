@@ -1,7 +1,7 @@
 import { parentPort } from 'worker_threads'
 import { DATA_REQUEST, DATA_RESPONSE, HUMIDITY, MESSAGE, MOISTURE_SENSOR_1, TEMP } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
-import  express  from 'express'
+import express from 'express'
 
 const port = 3000
 const app = express()
