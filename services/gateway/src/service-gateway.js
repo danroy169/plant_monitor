@@ -43,6 +43,11 @@ app.get('/api/latest-readings', (req, res) => {
     if(isValidMessage(humidDataRequest)) { parentPort.postMessage(humidDataRequest) }
     if(isValidMessage(moisture1DataRequest)) { parentPort.postMessage(moisture1DataRequest) }
 
+    res.set({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    })
+    
     res.json(latestReadings)
 })
 
