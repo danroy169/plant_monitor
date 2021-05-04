@@ -11,8 +11,8 @@ let humidLow = workerData.humidLow
 let humidHigh = workerData.humidHigh
 
 parentPort.on('message', msg => {
-    if(msg.topic === SENSOR_RESPONSE) { console.log('threshold service recieved sensor response message\n'); onSensorResponse(msg) }
-    if(msg.topic === CONFIG_REQUEST) { console.log('threshold service recieved config-request message\n'); onConfigRequest(msg) }
+    if(msg.topic === SENSOR_RESPONSE) { console.log('threshold service recieved', msg.topic, 'message\n'); onSensorResponse(msg) }
+    if(msg.topic === CONFIG_REQUEST) { console.log('threshold service recieved', msg.topic, 'message\n'); onConfigRequest(msg) }
 })
 
 function onConfigRequest(msg){
