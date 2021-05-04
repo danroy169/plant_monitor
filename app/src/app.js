@@ -28,23 +28,23 @@ metricWorker.on(ONLINE, () => { console.log('Metric service online') })
 
 gatewayWorker.on(ONLINE, () => { console.log('Gateway service online') })
 
-brokerWorker.on(ONLINE, () => { console.log('Broker online')})
+brokerWorker.on(ONLINE, () => { console.log('Broker online') })
 
-tempHumidSensorWorker.on(ONLINE, () => { console.log('Temp/Humid Sensor online')})
+tempHumidSensorWorker.on(ONLINE, () => { console.log('Temp/Humid Sensor online') })
 
 
 
 moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg); gatewayWorker.postMessage(msg); console.log(msg) } } )
 
-tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) {thresholdWorker.postMessage(msg); metricWorker.postMessage(msg); gatewayWorker.postMessage(msg); console.log(msg) } })
+tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg); gatewayWorker.postMessage(msg); console.log(msg) } })
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 
 metricWorker.on(MESSAGE, msg => { gatewayWorker.postMessage(msg) })
 
 gatewayWorker.on(MESSAGE, msg => { 
-    if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) } 
-    if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) } 
+    if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) }
+    if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) }
     if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
     if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
 })
