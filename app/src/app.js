@@ -2,7 +2,7 @@ import { Worker } from 'worker_threads'
 import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, TEMP_SENSOR_SERVICE, THRESHOLDS, MOISTURE_SENSOR_SERVICE, THRESHOLD_SERVICE, DATA_REQUEST } from '../../util/consts.js'
 
 
-const moistureSensorWorker = new Worker('../../services/moisture-sensor/src/service-sensor.js', { workerData: { interval: 3 } })
+const moistureSensorWorker = new Worker('../../services/moisture-sensor/src/service-moisture-sensor.js', { workerData: { interval: 3 } })
 
 const tempHumidSensorWorker = new Worker('../../services/temp-sensor/src/service-temp-sensor.js', { workerData: { interval: 3 } })
 
@@ -40,19 +40,12 @@ tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) {t
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 
+metricWorker.on(MESSAGE, msg => { gatewayWorker.postMessage(msg) })
+
 gatewayWorker.on(MESSAGE, msg => { 
     if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) } 
     if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) } 
     if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
     if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
 })
-
-metricWorker.on(MESSAGE, msg => { gatewayWorker.postMessage(msg) })
-
-
-// notificationWorker.on(MESSAGE, msg => { console.log(msg) } )
-
-
-
-
 
