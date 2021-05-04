@@ -1,13 +1,7 @@
-const moistureReading = document.getElementById("moisture")
-const tempReading = document.getElementById("temp")
-const humidReading = document.getElementById("humid")
-
-const moistureTime = document.getElementById('moistureTime')
-const tempTime = document.getElementById('tempTime')
-const humidTime = document.getElementById('humidTime')
+console.log('start')
 
 async function getReadings() {
-    const response = await fetch('http://localhost:3000/api/latest-readings', {mode: 'cors'})
+    const response = await fetch('http://localhost:3000/api/latest-readings', { mode: 'cors' })
 
     const readings = await response.json()
 
@@ -16,7 +10,15 @@ async function getReadings() {
     return readings
 }
 
-async function init(){
+async function init() {
+    const moistureReading = document.getElementById("moisture")
+    const tempReading = document.getElementById("temp")
+    const humidReading = document.getElementById("humid")
+
+    const moistureTime = document.getElementById('moistureTime')
+    const tempTime = document.getElementById('tempTime')
+    const humidTime = document.getElementById('humidTime')
+
     const readings = await getReadings()
 
     moistureReading.innerText = readings.moisture1.result[0].moistureLevel
@@ -32,4 +34,10 @@ async function init(){
     humidTime.innerText = new Date(readings.humidity.result[0].time).toLocaleTimeString()
 }
 
-init()
+if(document.readyState === 'loading') { 
+    console.log('loading')
+    window.addEventListener('DOMContentLoaded', event => init())
+}
+else { 
+    init()
+}

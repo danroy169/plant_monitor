@@ -29,12 +29,12 @@ const moisture1DataRequest = {
 
 let latestReadings = {}
 
-parentPort.on(MESSAGE, msg => { 
+parentPort.on(MESSAGE, msg => {
     console.log('Gateway Service recieved', msg.topic, 'message\n')
 
-    if(msg.topic === DATA_RESPONSE && msg.metric === HUMIDITY) { latestReadings.humidity = msg } 
-    if(msg.topic === DATA_RESPONSE && msg.metric === TEMP) { latestReadings.temp = msg } 
-    if(msg.topic === DATA_RESPONSE && msg.metric === MOISTURE_SENSOR_1) { latestReadings.moisture1 = msg } 
+    if(msg.topic === DATA_RESPONSE && msg.metric === HUMIDITY) { latestReadings.humidity = msg }
+    if(msg.topic === DATA_RESPONSE && msg.metric === TEMP) { latestReadings.temp = msg }
+    if(msg.topic === DATA_RESPONSE && msg.metric === MOISTURE_SENSOR_1) { latestReadings.moisture1 = msg }
 
 })
 

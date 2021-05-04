@@ -34,9 +34,11 @@ tempHumidSensorWorker.on(ONLINE, () => { console.log('Temp/Humid Sensor online')
 
 
 
-moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg); gatewayWorker.postMessage(msg); console.log(msg) } } )
+moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker]); console.log(msg) } } )
 
-tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { thresholdWorker.postMessage(msg); metricWorker.postMessage(msg); gatewayWorker.postMessage(msg); console.log(msg) } })
+tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker]); console.log(msg) } })
+
+// If only one reciever of message, just stick with built in method, or use postMessages(msg, workersArray) ?
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 
@@ -49,3 +51,6 @@ gatewayWorker.on(MESSAGE, msg => {
     if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
 })
 
+function postMessages(msg, workersArray){
+    workersArray.forEach(worker => worker.postMessage(msg))
+}
