@@ -1,7 +1,6 @@
 import { parentPort, workerData } from 'worker_threads'
 import { THRESHOLD_VIOLATION, MOISTURE, TEMP, HUMIDITY, SENSOR_RESPONSE, CONFIG_REQUEST, MOISTURE_LOW, TEMP_LOW, TEMP_HIGH, HUMID_LOW, HUMID_HIGH } from '../../../util/consts.js'
-import isValidMessage  from '../../../util/validator.js'
-// import { THRESHOLD_VIOLATION, CONFIG_REQUEST, CONFIG_RESPONSE, SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, URL, EMAIL_REQUEST } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import isValidMessage from '../../../util/validator.js'
 
 let moistureLow = workerData.moistureLow
 
@@ -12,8 +11,8 @@ let humidLow = workerData.humidLow
 let humidHigh = workerData.humidHigh
 
 parentPort.on('message', msg => {
-    if(msg.topic === SENSOR_RESPONSE) {console.log('threshold service recieved sensor response message\n'); onSensorResponse(msg)}
-    if(msg.topic === CONFIG_REQUEST) {console.log('threshold service recieved config-request message\n'); onConfigRequest(msg)}
+    if(msg.topic === SENSOR_RESPONSE) { console.log('threshold service recieved sensor response message\n'); onSensorResponse(msg) }
+    if(msg.topic === CONFIG_REQUEST) { console.log('threshold service recieved config-request message\n'); onConfigRequest(msg) }
 })
 
 function onConfigRequest(msg){
@@ -41,16 +40,16 @@ function onSensorResponse(msg){
 
 function isAThresholdViolation(obj){
 
-    if(obj.type === MOISTURE && obj.moistureLevel < moistureLow) {return moistureLow} 
+    if(obj.type === MOISTURE && obj.moistureLevel < moistureLow) { return moistureLow } 
 
     if(obj.type === TEMP){
-        if(obj.fahrenheit > tempHigh) {return tempHigh}
-        if(obj.fahrenheit < tempLow) {return tempLow}
+        if(obj.fahrenheit > tempHigh) { return tempHigh }
+        if(obj.fahrenheit < tempLow) { return tempLow }
     }
 
     if(obj.type === HUMIDITY){
-        if(obj.percent > humidHigh) {return humidHigh}
-        if(obj.percent < humidLow) {return humidLow}
+        if(obj.percent > humidHigh) { return humidHigh }
+        if(obj.percent < humidLow) { return humidLow }
     } 
 
     return false
@@ -65,9 +64,9 @@ function convertToThresholdViolation(obj, threshold){
         threshold: threshold
     }
 
-    if(obj.type === MOISTURE) {thresholdViolationMessage.currentLevel = obj.moistureLevel}
-    if(obj.type === TEMP) {thresholdViolationMessage.currentLevel = obj.fahrenheit}
-    if(obj.type === HUMIDITY) {thresholdViolationMessage.currentLevel = obj.percent}
+    if(obj.type === MOISTURE) { thresholdViolationMessage.currentLevel = obj.moistureLevel }
+    if(obj.type === TEMP) { thresholdViolationMessage.currentLevel = obj.fahrenheit }
+    if(obj.type === HUMIDITY) { thresholdViolationMessage.currentLevel = obj.percent }
 
     thresholdViolationMessage.time = obj.time
 

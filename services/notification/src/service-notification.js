@@ -1,14 +1,11 @@
 import { THRESHOLD_VIOLATION, MESSAGE, EMAIL_REQUEST, URL, EMAIL_RESPONSE } from '../../../util/consts.js'
 import { connect } from 'async-mqtt'
-//import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
 import { parentPort } from 'worker_threads'
-import isValidMessage  from '../../../util/validator.js'
+import isValidMessage from '../../../util/validator.js'
 
 const client = connect(URL)
 
 client.subscribe(EMAIL_RESPONSE)
-
-
 
 parentPort.on(MESSAGE, msg => {
     if(msg.topic === THRESHOLD_VIOLATION) {
@@ -17,8 +14,6 @@ parentPort.on(MESSAGE, msg => {
         postEmailRequest(msg)
     }
 })
-
-
 
 function postEmailRequest(msg) {
     const emailRequestMessage = msg

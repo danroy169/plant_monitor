@@ -1,7 +1,7 @@
 import { parentPort } from 'worker_threads'
 import { SENSOR_RESPONSE, MOISTURE, TEMP, HUMIDITY, MESSAGE, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP_HUMIDITY_SENSOR, DATA_REQUEST, DATA_RESPONSE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
-//import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+
 
 
 const dataStore = {
@@ -37,10 +37,10 @@ function storeData(msg) {
 function onDataRequest(msg){
     let result
 
-    if(msg.metric === MOISTURE_SENSOR_1) { result = dataStore.moisture1Readings.splice(dataStore.moisture1Readings.length - msg.numberOfReadings)}
-    if(msg.metric === MOISTURE_SENSOR_2) { result = dataStore.moisture2Readings.splice(dataStore.moisture2Readings.length - msg.numberOfReadings)}
-    if(msg.metric === TEMP) { result = dataStore.tempReadings.splice(dataStore.tempReadings.length - msg.numberOfReadings)}
-    if(msg.metric === HUMIDITY) { result = dataStore.humidReadings.splice(dataStore.humidReadings.length - msg.numberOfReadings)}
+    if(msg.metric === MOISTURE_SENSOR_1) { result = dataStore.moisture1Readings.splice(dataStore.moisture1Readings.length - msg.numberOfReadings) }
+    if(msg.metric === MOISTURE_SENSOR_2) { result = dataStore.moisture2Readings.splice(dataStore.moisture2Readings.length - msg.numberOfReadings) }
+    if(msg.metric === TEMP) { result = dataStore.tempReadings.splice(dataStore.tempReadings.length - msg.numberOfReadings) }
+    if(msg.metric === HUMIDITY) { result = dataStore.humidReadings.splice(dataStore.humidReadings.length - msg.numberOfReadings) }
 
     const dataResponseMessage = {
         topic: DATA_RESPONSE,

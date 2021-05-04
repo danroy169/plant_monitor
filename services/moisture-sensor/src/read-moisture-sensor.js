@@ -1,7 +1,6 @@
 import i2c from 'i2c-bus'
 import sleep from 'sleep'
 
-
 const SENSOR_I2C_ADDRESS = 0x36
 const I2C_BUS_NUMBER = 1
 const TOUCH_BASE = 0x0F
