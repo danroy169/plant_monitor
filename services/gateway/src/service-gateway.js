@@ -38,7 +38,7 @@ parentPort.on(MESSAGE, msg => {
 
 })
 
-app.get('/api/latest-readings', (req, res) => {
+app.get('/', (req, res) => {
     if(isValidMessage(tempDataRequest)) { parentPort.postMessage(tempDataRequest) } 
     if(isValidMessage(humidDataRequest)) { parentPort.postMessage(humidDataRequest) }
     if(isValidMessage(moisture1DataRequest)) { parentPort.postMessage(moisture1DataRequest) }

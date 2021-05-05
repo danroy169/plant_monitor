@@ -1,4 +1,6 @@
 import express from 'express'
+import { parentPort } from 'worker_threads'
+import { MESSAGE } from '../../../util/consts.js'
 
 const app = express()
 
@@ -21,14 +23,16 @@ app.get('/sse', (req, res) => {
 
     var id = 0
 
-    setInterval(() => {
+    parentPort.on(MESSAGE, msg => {
+        console.log('SSE Service recieved', msg.topic, 'message\n')
+        
         console.log('sending event')
         id += 1
         res.write('id: ' + id + '\n')
-        res.write('event: ' + 'test' + '\n')
-        res.write('data: ' + JSON.stringify({data: 'hello world'}) + '\n')
+        res.write('event: ' + 'message' + '\n')
+        res.write('data: ' + JSON.stringify(msg) + '\n')
         res.write('\n')
-    }, 1000*5)
+    })
 
 })
 

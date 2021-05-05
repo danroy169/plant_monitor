@@ -16,6 +16,7 @@ const gatewayWorker = new Worker('../../services/gateway/src/service-gateway.js'
 
 const brokerWorker = new Worker('../../services/broker/src/broker.js')
 
+const sseWorker = new Worker('../../services/sse-gateway/src/service-sse-gateway.js')
 
 
 moistureSensorWorker.on(ONLINE, () => { console.log('Sensor online') })
@@ -32,11 +33,13 @@ brokerWorker.on(ONLINE, () => { console.log('Broker online') })
 
 tempHumidSensorWorker.on(ONLINE, () => { console.log('Temp/Humid Sensor online') })
 
+sseWorker.on(ONLINE, () => { console.log('SSE Online') })
 
 
-moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker]); console.log(msg) } } )
 
-tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker]); console.log(msg) } })
+moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } } )
+
+tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } })
 
 // If only one reciever of message, just stick with built in method, or use postMessages(msg, workersArray) ?
 

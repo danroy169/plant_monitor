@@ -1,5 +1,3 @@
-console.log('start')
-
 async function getReadings() {
     const response = await fetch('http://localhost:3000/api/latest-readings', { mode: 'cors' })
 
@@ -11,12 +9,24 @@ async function getReadings() {
 }
 
 async function setupSSE() {
+    const moistureReading = document.getElementById("moisture")
+    const tempReading = document.getElementById("temp")
+    const humidReading = document.getElementById("humid")
+
+    const moistureTime = document.getElementById('moistureTime')
+    const tempTime = document.getElementById('tempTime')
+    const humidTime = document.getElementById('humidTime')
+
     const evtSource = new EventSource("http://localhost:3030/sse");
 
-    console.log(evtSource)
-
     evtSource.onmessage = event => {
-        console.log(event)
+        let message = JSON.parse(event.data)
+
+        console.log(message)
+
+        if(message.fahrenheit) { tempReading.innerText = message.fahrenheit; tempTime.innerText = new Date(message.time).toLocaleTimeString()}
+        if(message.percent) { humidReading.innerText = message.percent; humidTime.innerText = new Date(message.time).toLocaleTimeString()}
+        if(message.moistureLevel) { moistureReading.innerText = message.moistureLevel; moistureTime.innerText = new Date(message.time).toLocaleTimeString()}
     }
 
     evtSource.onopen = event => {
@@ -25,13 +35,13 @@ async function setupSSE() {
 }
 
 async function init() {
-    const moistureReading = document.getElementById("moisture")
-    const tempReading = document.getElementById("temp")
-    const humidReading = document.getElementById("humid")
+    // const moistureReading = document.getElementById("moisture")
+    // const tempReading = document.getElementById("temp")
+    // const humidReading = document.getElementById("humid")
 
-    const moistureTime = document.getElementById('moistureTime')
-    const tempTime = document.getElementById('tempTime')
-    const humidTime = document.getElementById('humidTime')
+    // const moistureTime = document.getElementById('moistureTime')
+    // const tempTime = document.getElementById('tempTime')
+    // const humidTime = document.getElementById('humidTime')
 
     //const readings = await getReadings()
 
