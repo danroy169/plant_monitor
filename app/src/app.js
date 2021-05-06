@@ -49,6 +49,7 @@ gatewayWorker.on(MESSAGE, msg => {
     if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) }
     if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) }
     if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
+    
     if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
 })
 
