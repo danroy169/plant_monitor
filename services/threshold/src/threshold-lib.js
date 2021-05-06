@@ -12,15 +12,16 @@ export function onConfigRequest(msg, workerData){
 }
 
 
-export function onSensorResponse(msg, parentPort, workerData){
+export function onSensorResponse(msg, workerData){
     if(isAThresholdViolation(msg, workerData)) {
         console.log('Threshold violation detected!\n')
 
         const threshold = isAThresholdViolation(msg, workerData)
         const thresholdViolationMessage = convertToThresholdViolation(msg, threshold)
 
-        if(isValidMessage(thresholdViolationMessage)) { parentPort.postMessage(thresholdViolationMessage) }
+        if(isValidMessage(thresholdViolationMessage)) { return thresholdViolationMessage }
     }
+    return false
 }
 
 
