@@ -1,7 +1,6 @@
-import { getMoisture } from './read-moisture-sensor.js'
+// import { getMoisture } from './read-moisture-sensor.js'
 import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE } from '../../../util/consts.js'
-import isValidMessage  from '../../../util/validator.js'
-
+import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
 
 
@@ -32,7 +31,7 @@ async function publishMoisture() {
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
-    const moistureLevel = await getMoisture()
+    const moistureLevel = 350 //await getMoisture()
     const currentPollInterval = pollIntervalSeconds
 
     const reading = {
@@ -44,8 +43,7 @@ async function publishMoisture() {
         currentPollInterval
     }
 
-    if(isValidMessage(reading)) {parentPort.postMessage(reading)}
-    
-    //console.log(reading)
+    if(isValidMessage(reading)) { parentPort.postMessage(reading) }
+
 }
 

@@ -29,16 +29,16 @@ const moisture1DataRequest = {
 
 let latestReadings = {}
 
-parentPort.on(MESSAGE, msg => { 
+parentPort.on(MESSAGE, msg => {
     console.log('Gateway Service recieved', msg.topic, 'message\n')
 
-    if(msg.topic === DATA_RESPONSE && msg.metric === HUMIDITY) { latestReadings.humidity = msg } 
-    if(msg.topic === DATA_RESPONSE && msg.metric === TEMP) { latestReadings.temp = msg } 
-    if(msg.topic === DATA_RESPONSE && msg.metric === MOISTURE_SENSOR_1) { latestReadings.moisture1 = msg } 
+    if(msg.topic === DATA_RESPONSE && msg.metric === HUMIDITY) { latestReadings.humidity = msg }
+    if(msg.topic === DATA_RESPONSE && msg.metric === TEMP) { latestReadings.temp = msg }
+    if(msg.topic === DATA_RESPONSE && msg.metric === MOISTURE_SENSOR_1) { latestReadings.moisture1 = msg }
 
 })
 
-app.get('/api/latest-readings', (req, res) => {
+app.get('/', (req, res) => {
     if(isValidMessage(tempDataRequest)) { parentPort.postMessage(tempDataRequest) } 
     if(isValidMessage(humidDataRequest)) { parentPort.postMessage(humidDataRequest) }
     if(isValidMessage(moisture1DataRequest)) { parentPort.postMessage(moisture1DataRequest) }
@@ -52,9 +52,7 @@ app.get('/api/latest-readings', (req, res) => {
 })
 
 
-app.listen(port, () => {
-    console.log('Example app listening at http://localhost:' + port)
-})
+app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
 
 
 

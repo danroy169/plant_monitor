@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js" type="module"></script>
+    <script src="script.js" type="module" async defer></script>
     <title>Plant Monitor</title>
 </head>
 <body>
+    <header>
+        <h1>Plant Monitor</h1>
+    </header>
+    <h3>Latest Readings</h3>
     <div>
-        <p  id="moisture"></p>
+        Moisture: <span id="moisture"></span> @ <span id="moistureTime"></span>
     </div>
     <div>
-        <p id="temp"></p>
+        Temp: <span id="temp"></span> @ <span id="tempTime"></span>
     </div>
     <div>
-        <p id="humid"></p>
+        Humidity: <span id="humid"></span> @ <span id="humidTime"></span>
     </div>
 </body>
 </html>
