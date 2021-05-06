@@ -1,8 +1,8 @@
 async function setupSSE() {
-    const evtSource = new EventSource("http://localhost:3030/sse");
+    const evtSource = new EventSource('http://localhost:3030/sse');
 
     const elements = {
-        moistureReading: document.getElementById("moisture"),
+        moistureReading: document.getElementById('moisture'),
         moistureTime: document.getElementById('moistureTime'),
         tempReading: document.getElementById('temp'),
         tempTime: document.getElementById('tempTime'),
@@ -29,17 +29,17 @@ function onMessage(event, elements){
 
     if(message.fahrenheit) { 
         elements.tempReading.innerText = message.fahrenheit
-        elements.tempTime.innerText = new Date(message.time).toLocaleTimeString() 
+        elements.tempTime.innerText = new Date(message.time).toLocaleTimeString()
     }
 
     if(message.percent) { 
         elements.humidReading.innerText = message.percent
-        humidTime.innerText = new Date(message.time).toLocaleTimeString() 
+        elements.humidTime.innerText = new Date(message.time).toLocaleTimeString()
     }
 
     if(message.moistureLevel) { 
         elements.moistureReading.innerText = message.moistureLevel
-        elements.moistureTime.innerText = new Date(message.time).toLocaleTimeString() 
+        elements.moistureTime.innerText = new Date(message.time).toLocaleTimeString()
     }
 
 }
