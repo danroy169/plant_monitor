@@ -97,7 +97,41 @@ describe('onAPIDataRequest(options)', () => {
             amount: 1
         }
 
-        expect(onAPIDataRequest(options)).to.throw('Missing metricID parameter')
+        expect(function () { onAPIDataRequest(options) }).to.throw('Missing metricID parameter')
+    })
+
+    it('should throw an error when given an options object without an amount property', () => {
+        const options = {
+            metricID: TEMP
+        }
+
+        expect(function () { onAPIDataRequest(options) }).to.throw('Missing amount parameter')
+    })
+
+    it('should throw an error when given an argument with an invalid metricID property', () => {
+        const options = {
+            metricID: 'this should fail',
+            amount: 1
+        }
+
+        expect(function () { onAPIDataRequest(options) }).to.throw('Invalid request')
+    })
+
+    it('should throw an error when given an argument with an invalid amount property', () => {
+        const options = {
+            metricID: TEMP,
+            amount: 'this should fail'
+        }
+
+        expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
     })
     
+    it('should throw an error when given an argument with an float amount property', () => {
+        const options = {
+            metricID: TEMP,
+            amount: 1.5
+        }
+
+        expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
+    })
 })

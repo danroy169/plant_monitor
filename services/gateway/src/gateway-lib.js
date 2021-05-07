@@ -1,11 +1,11 @@
-import { DATA_REQUEST, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../../../util/consts.js'
+import { ALL, DATA_REQUEST, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 
-
-
-
 export function onAPIDataRequest(options){
+
     if(!options.metricID) { throw new Error('Missing metricID parameter') }
+    if(!options.amount) { throw new Error('Missing amount parameter') }
+    if(!Number.isInteger(options.amount) && options.amount !== ALL) { throw new Error('Invalid amount parameter') }
 
     const dataRequest = {
         topic: DATA_REQUEST,
