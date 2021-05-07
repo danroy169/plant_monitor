@@ -5,19 +5,25 @@
   "license": "ISC",
   "description": "gateway service",
   "type": "module",
+  "directories": {
+    "test": "test"
+  },
   "exports": {
     "import": "./src/service-gateway.js"
   },
   "main": "./src/service-gateway.js",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "eslintConfig": {
     "extends": "../../.esLint.json"
   },
   "dependencies": {
     "async-mqtt": "^2.6.1",
+    "chai": "^4.3.4",
     "express": "^4.17.1",
+    "mocha": "^8.4.0",
     "ws": "^7.4.5"
   },
   "devDependencies": {

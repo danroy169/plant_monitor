@@ -1,15 +1,19 @@
 import { DATA_REQUEST, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 
-const dataRequest = {
-    topic: DATA_REQUEST,
-    metric: '',
-    numberOfReadings: '',
-    time: new Date().toISOString()
-}
+
 
 
 export function onAPIDataRequest(options){
+    if(!options.metricID) { throw new Error('Missing metricID parameter') }
+
+    const dataRequest = {
+        topic: DATA_REQUEST,
+        metric: '',
+        numberOfReadings: '',
+        time: new Date().toISOString()
+    }
+
     dataRequest.numberOfReadings = options.amount
 
     if(options.metricID === MOISTURE_SENSOR_1){
