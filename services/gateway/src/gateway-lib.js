@@ -9,36 +9,37 @@ const dataRequest = {
 }
 
 
-export function onAPIDataRequest(req){
-    dataRequest.numberOfReadings = req.params.amount
+export function onAPIDataRequest(options){
+    dataRequest.numberOfReadings = options.amount
 
-    if(req.params.metricID === MOISTURE_SENSOR_1){
+    if(options.metricID === MOISTURE_SENSOR_1){
 
         dataRequest.metric = MOISTURE_SENSOR_1
 
         if(isValidMessage(dataRequest)) { return dataRequest }
     }
 
-    if(req.params.metricID === MOISTURE_SENSOR_2){
+    if(options.metricID === MOISTURE_SENSOR_2){
 
         dataRequest.metric = MOISTURE_SENSOR_2
 
         if(isValidMessage(dataRequest)) { return dataRequest }
     }
 
-    if(req.params.metricID === TEMP){
+    if(options.metricID === TEMP){
 
         dataRequest.metric = TEMP
 
         if(isValidMessage(dataRequest)) { return dataRequest }
     }
 
-    if(req.params.metricID === HUMIDITY){
+    if(options.metricID === HUMIDITY){
 
         dataRequest.metric = HUMIDITY
 
         if(isValidMessage(dataRequest)) { return dataRequest }
     }
 
-    return false
+    // mixed returns = gross
+    throw new Error('Invalid request')
 }

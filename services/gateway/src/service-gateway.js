@@ -12,13 +12,28 @@ parentPort.on(MESSAGE, msg => {
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
-    const dataRequestMessage = onAPIDataRequest(req)
+    parentPort.postMessage(onAPIDataRequest({
+        metricID: req.params.metricID,
+        amount: req.params.amount
+    }))
 
-    if(dataRequestMessage) { parentPort.postMessage(dataRequestMessage) }
-
-    parentPort.on(MESSAGE, msg => { if(msg.topic === DATA_RESPONSE) { return res.json(msg) } })
+    // parentPort.on(MESSAGE, msg => { if(msg.topic === DATA_RESPONSE) { return res.json(msg) } })
 
 })
+
+app.use((req, res, next) => {
+    res.status(404)
+
+    next(new Error('No handler found'))
+})
+
+app.use((err, req, res, next) => {
+    if(res.statusCode === 200) { res.status(500) }
+
+    res.json({ message: err.message })
+})
+
+
 
 
 app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
