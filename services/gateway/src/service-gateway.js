@@ -1,5 +1,5 @@
 import { parentPort } from 'worker_threads'
-import { DATA_REQUEST, DATA_RESPONSE, MESSAGE, MOISTURE_SENSOR_1 } from '../../../util/consts.js'
+import { DATA_REQUEST, DATA_RESPONSE, HUMIDITY, MESSAGE, MOISTURE_SENSOR_1, TEMP } from '../../../util/consts.js'
 import express from 'express'
 
 const port = 3000
@@ -17,10 +17,6 @@ parentPort.on(MESSAGE, msg => {
     console.log('Gateway Service recieved', msg.topic, 'message\n')
 })
 
-app.get('/', (req, res) => {
-   res.send('Is this even necesary now?')
-})
-
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
     dataRequest.numberOfReadings = req.params.amount
@@ -30,10 +26,24 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
         dataRequest.metric = MOISTURE_SENSOR_1
 
         parentPort.postMessage(dataRequest)
-
-        parentPort.on(MESSAGE, msg => { if(msg.topic === DATA_RESPONSE) { return res.status(200).json(msg) } })
-
     }
+
+    if(req.params.metricID === TEMP){
+
+        dataRequest.metric = TEMP
+
+        parentPort.postMessage(dataRequest)
+    }
+
+    if(req.params.metricID === HUMIDITY){
+
+        dataRequest.metric = HUMIDITY
+
+        parentPort.postMessage(dataRequest)
+    }
+
+    parentPort.on(MESSAGE, msg => { if(msg.topic === DATA_RESPONSE) { return res.json(msg) } })
+
 })
 
 

@@ -1,4 +1,4 @@
-import { TEMP, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, DATA_RESPONSE } from '../../../util/consts.js'
+import { TEMP, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, DATA_RESPONSE, ALL } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 
 export function storeData(msg, dataStore) {
@@ -16,14 +16,14 @@ export function storeData(msg, dataStore) {
 export function onDataRequest(msg, dataStore) {
     let result
 
-    if (msg.metric === MOISTURE_SENSOR_1) { 
-        if(msg.numberOfReadings === 'all') { msg.numberOfReadings = dataStore.moisture1Readings.length }
-        
-        result = dataStore.moisture1Readings.splice(dataStore.moisture1Readings.length - msg.numberOfReadings) 
-    }
+    if(msg.numberOfReadings === ALL) { msg.numberOfReadings = convertAllToLength(msg, dataStore) }
+
+    if (msg.metric === MOISTURE_SENSOR_1) { result = dataStore.moisture1Readings.splice(dataStore.moisture1Readings.length - msg.numberOfReadings) }
 
     if (msg.metric === MOISTURE_SENSOR_2) { result = dataStore.moisture2Readings.splice(dataStore.moisture2Readings.length - msg.numberOfReadings) }
+
     if (msg.metric === TEMP) { result = dataStore.tempReadings.splice(dataStore.tempReadings.length - msg.numberOfReadings) }
+
     if (msg.metric === HUMIDITY) { result = dataStore.humidReadings.splice(dataStore.humidReadings.length - msg.numberOfReadings) }
 
     const dataResponseMessage = {
@@ -36,4 +36,14 @@ export function onDataRequest(msg, dataStore) {
     if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     
     return false
+}
+
+function convertAllToLength(msg, dataStore) {
+    if (msg.metric === MOISTURE_SENSOR_1) { return dataStore.moisture1Readings.length }
+
+    if (msg.metric === MOISTURE_SENSOR_2) { return dataStore.moisture2Readings.length }
+
+    if (msg.metric === TEMP) { return dataStore.tempReadings.length }
+
+    if (msg.metric === HUMIDITY) { return dataStore.humidReadings.length }
 }
