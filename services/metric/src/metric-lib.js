@@ -5,7 +5,7 @@ export function storeData(msg, dataStore) {
 
     if (msg.sensorID === MOISTURE_SENSOR_1) { dataStore.moisture1Readings.push(msg) }
 
-    if (msg.sensorID === MOISTURE_SENSOR_2) { dataStore.moisture1Readings.push(msg) }
+    if (msg.sensorID === MOISTURE_SENSOR_2) { dataStore.moisture2Readings.push(msg) }
 
     if (msg.type === TEMP) { dataStore.tempReadings.push(msg) }
 
@@ -32,13 +32,13 @@ export function onDataRequest(msg, dataStore) {
         result,
         time: new Date().toISOString()
     }
-
+    
     if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     
     return false
 }
 
-function convertAllToLength(msg, dataStore) {
+export function convertAllToLength(msg, dataStore) {
     if (msg.metric === MOISTURE_SENSOR_1) { return dataStore.moisture1Readings.length }
 
     if (msg.metric === MOISTURE_SENSOR_2) { return dataStore.moisture2Readings.length }
