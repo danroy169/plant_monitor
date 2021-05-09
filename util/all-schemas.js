@@ -124,7 +124,6 @@ const dataRequest = {
         },
         'numberOfReadings': {
             'description': 'The number of reading objects requested',
-            'type': 'integer'
         },
         'time': {
             'description': 'ISO 8601 format time stamp',

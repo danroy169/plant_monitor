@@ -37,11 +37,9 @@ sseWorker.on(ONLINE, () => { console.log('SSE Online') })
 
 
 
-moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } } )
+moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } } )
 
-tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { postMessages(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } })
-
-// If only one reciever of message, just stick with built in method, or use postMessages(msg, workersArray) ?
+tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } })
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 
@@ -51,9 +49,10 @@ gatewayWorker.on(MESSAGE, msg => {
     if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) }
     if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) }
     if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
+    
     if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
 })
 
-function postMessages(msg, workersArray){
+function broadcastMessage(msg, workersArray){
     workersArray.forEach(worker => worker.postMessage(msg))
 }
