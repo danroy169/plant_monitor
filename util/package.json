@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently --names 'BROKER,SENSOR,GATEWAY,METRIC,NOTIFICATION,THRESHOLD,EMAILER' --prefix-colors 'red,cyan,yellow,green,blue,magenta,white' \"node ../services/broker/src/broker.js\" \"node ../services/sensor/src/service-sensor.js\" \"node ../services/gateway/src/service-gateway.js\" \"node ../services/metric/src/service-metric.js\" \"node ../services/notification/src/service-notification.js\" \"node ../services/threshold/src/service-threshold.js\" \"python ../services/emailer/src/service_email.py\" ",
+    "test": "mocha",
     "lint": "eslint ."
   },
   "keywords": [],
@@ -15,8 +15,10 @@
     "extends": "../.esLint.json"
   },
   "dependencies": {
+    "chai": "^4.3.4",
     "concurrently": "^6.0.2",
-    "jsonschema": "^1.4.0"
+    "jsonschema": "^1.4.0",
+    "mocha": "^8.4.0"
   },
   "devDependencies": {
     "eslint": "^7.25.0"
