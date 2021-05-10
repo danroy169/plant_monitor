@@ -10,13 +10,16 @@
     "import": "./src/service-notificaiton.js"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "eslintConfig": {
     "extends": "../../.esLint.json"
   },
   "dependencies": {
-    "async-mqtt": "^2.6.1"
+    "async-mqtt": "^2.6.1",
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0"
   },
   "devDependencies": {
     "eslint": "^7.25.0"

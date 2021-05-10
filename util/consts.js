@@ -37,7 +37,7 @@ const TEMP_HUMIDITY_SENSOR = 'temp-humidity'
 const SECONDS_TO_MILLI = 1000
 
 const THRESHOLDS = {
-    moistureLow: 300,
+    moistureLow: 350,
     tempLow: 60,
     tempHigh: 85,
     humidLow: 30,

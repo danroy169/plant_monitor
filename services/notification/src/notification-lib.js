@@ -6,7 +6,6 @@ export default function getEmailRequestMessage(msg) {
     emailRequestMessage.topic = EMAIL_REQUEST
 
     if(isValidMessage(emailRequestMessage)) { 
-        console.log('Email Request Sent\n')
         return JSON.stringify(emailRequestMessage) 
     }
 }
