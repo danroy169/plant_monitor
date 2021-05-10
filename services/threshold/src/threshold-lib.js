@@ -14,10 +14,10 @@ export function onConfigRequest(msg, workerData){
 
 export function onSensorResponse(msg, workerData){
     if(isAThresholdViolation(msg, workerData)) {
-        console.log('Threshold violation detected!\n')
+        //console.log('Threshold violation detected!\n')
 
         const threshold = isAThresholdViolation(msg, workerData)
-        const thresholdViolationMessage = convertToThresholdViolation(msg, threshold)
+        const thresholdViolationMessage = convertToThresholdViolationMessage(msg, threshold)
 
         if(isValidMessage(thresholdViolationMessage)) { return thresholdViolationMessage }
     }
@@ -25,37 +25,37 @@ export function onSensorResponse(msg, workerData){
 }
 
 
-function isAThresholdViolation(obj, workerData){
+export function isAThresholdViolation(msg, workerData){
 
-    if(obj.type === MOISTURE && obj.moistureLevel < workerData.moistureLow) { return workerData.moistureLow } 
+    if(msg.type === MOISTURE && msg.moistureLevel < workerData.moistureLow) { return workerData.moistureLow } 
 
-    if(obj.type === TEMP){
-        if(obj.fahrenheit > workerData.tempHigh) { return workerData.tempHigh }
-        if(obj.fahrenheit < workerData.tempLow) { return workerData.tempLow }
+    if(msg.type === TEMP){
+        if(msg.fahrenheit > workerData.tempHigh) { return workerData.tempHigh }
+        if(msg.fahrenheit < workerData.tempLow) { return workerData.tempLow }
     }
 
-    if(obj.type === HUMIDITY){
-        if(obj.percent > workerData.humidHigh) { return workerData.humidHigh }
-        if(obj.percent < workerData.humidLow) { return workerData.humidLow }
+    if(msg.type === HUMIDITY){
+        if(msg.percent > workerData.humidHigh) { return workerData.humidHigh }
+        if(msg.percent < workerData.humidLow) { return workerData.humidLow }
     } 
 
     return false
 }
 
-function convertToThresholdViolation(obj, threshold){
+export function convertToThresholdViolationMessage(msg, threshold){
     
     const thresholdViolationMessage = {
         topic: THRESHOLD_VIOLATION,
-        sensorID: obj.sensorID,
-        violationType: obj.type,
+        sensorID: msg.sensorID,
+        violationType: msg.type,
         threshold: threshold
     }
 
-    if(obj.type === MOISTURE) { thresholdViolationMessage.currentLevel = obj.moistureLevel }
-    if(obj.type === TEMP) { thresholdViolationMessage.currentLevel = obj.fahrenheit }
-    if(obj.type === HUMIDITY) { thresholdViolationMessage.currentLevel = obj.percent }
+    if(msg.type === MOISTURE) { thresholdViolationMessage.currentLevel = msg.moistureLevel }
+    if(msg.type === TEMP) { thresholdViolationMessage.currentLevel = msg.fahrenheit }
+    if(msg.type === HUMIDITY) { thresholdViolationMessage.currentLevel = msg.percent }
 
-    thresholdViolationMessage.time = obj.time
-
-    return thresholdViolationMessage
+    thresholdViolationMessage.time = msg.time
+    
+    if(isValidMessage(thresholdViolationMessage)) { return thresholdViolationMessage }
 }
