@@ -19,7 +19,7 @@ const brokerWorker = new Worker('../../services/broker/src/broker.js')
 const sseWorker = new Worker('../../services/sse-gateway/src/service-sse-gateway.js')
 
 
-moistureSensorWorker.on(ONLINE, () => { console.log('Sensor online') })
+moistureSensorWorker.on(ONLINE, () => { console.log('Moisture Sensor online') })
 
 thresholdWorker.on(ONLINE, () => { console.log('Threshold online') })
 

@@ -1,9 +1,12 @@
 import isValidMessage from '../../../util/validator.js'
 import { EMAIL_REQUEST } from '../../../util/consts.js'
 
-export default function postEmailRequest(msg, client) {
+export default function getEmailRequestMessage(msg) {
     const emailRequestMessage = msg
     emailRequestMessage.topic = EMAIL_REQUEST
 
-    if(isValidMessage(emailRequestMessage)) { client.publish(EMAIL_REQUEST, JSON.stringify(emailRequestMessage)); console.log('Email request message sent\n') }
+    if(isValidMessage(emailRequestMessage)) { 
+        console.log('Email Request Sent\n')
+        return JSON.stringify(emailRequestMessage) 
+    }
 }
