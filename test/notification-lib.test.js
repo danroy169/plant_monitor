@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { EMAIL_REQUEST } from '../../../util/consts.js'
-import isValidMessage from '../../../util/validator.js'
-import getEmailRequestMessage from '../src/notification-lib.js'
+import { EMAIL_REQUEST } from '../util/consts.js'
+import isValidMessage from '../util/validator.js'
+import getEmailRequestMessage from '../services/notification/src/notification-lib.js'
 
 describe('getEmailRequestMessage(msg)', () => {
 

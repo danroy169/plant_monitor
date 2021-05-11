@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { SENSOR_RESPONSE, TEMP, TEMP_HUMIDITY_SENSOR } from '../consts.js'
-import isAValidMessage from '../validator.js'
+import { SENSOR_RESPONSE, TEMP, TEMP_HUMIDITY_SENSOR } from '../util/consts.js'
+import isAValidMessage from '../util/validator.js'
 
 describe('isAValidMessage(msg)', () => {
     

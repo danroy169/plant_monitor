@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { HUMIDITY, HUMID_HIGH, HUMID_LOW, MOISTURE, MOISTURE_LOW, MOISTURE_SENSOR_1, SENSOR_RESPONSE, TEMP, TEMP_HIGH, TEMP_HUMIDITY_SENSOR, TEMP_LOW } from '../../../util/consts.js'
-import isValidMessage from '../../../util/validator.js'
-import { onConfigRequest, onSensorResponse, isAThresholdViolation, convertToThresholdViolationMessage } from '../src/threshold-lib.js'
+import { HUMIDITY, HUMID_HIGH, HUMID_LOW, MOISTURE, MOISTURE_LOW, MOISTURE_SENSOR_1, SENSOR_RESPONSE, TEMP, TEMP_HIGH, TEMP_HUMIDITY_SENSOR, TEMP_LOW } from '../util/consts.js'
+import isValidMessage from '../util/validator.js'
+import { onConfigRequest, onSensorResponse, isAThresholdViolation, convertToThresholdViolationMessage } from '../services/threshold/src/threshold-lib.js'
 
 describe('onConfigRequest(msg, workerData)', () => {
 

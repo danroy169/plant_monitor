@@ -15,10 +15,7 @@
     "extends": "../.esLint.json"
   },
   "dependencies": {
-    "chai": "^4.3.4",
-    "concurrently": "^6.0.2",
-    "jsonschema": "^1.4.0",
-    "mocha": "^8.4.0"
+    "jsonschema": "^1.4.0"
   },
   "devDependencies": {
     "eslint": "^7.25.0"

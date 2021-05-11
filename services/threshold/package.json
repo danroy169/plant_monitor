@@ -14,9 +14,7 @@
     "extends": "../../.esLint.json"
   },
   "dependencies": {
-    "async-mqtt": "^2.6.1",
-    "chai": "^4.3.4",
-    "mocha": "^8.4.0"
+    "async-mqtt": "^2.6.1"
   },
   "devDependencies": {
     "eslint": "^7.25.0"

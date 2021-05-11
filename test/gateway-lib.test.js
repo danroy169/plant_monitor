@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { onAPIDataRequest } from '../src/gateway-lib.js'
-import isValidMessage from '../../../util/validator.js'
-import { ALL, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../../../util/consts.js'
+import { onAPIDataRequest } from '../services/gateway/src/gateway-lib.js'
+import isValidMessage from '../util/validator.js'
+import { ALL, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 
 describe('onAPIDataRequest(options)', () => {
 

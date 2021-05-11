@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../../../util/consts.js'
-import isValidMessage from '../../../util/validator.js'
-import { storeData, onDataRequest, convertAllToLength } from '../src/metric-lib.js'
+import { HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
+import isValidMessage from '../util/validator.js'
+import { storeData, onDataRequest, convertAllToLength } from '../services/metric/src/metric-lib.js'
 
 describe('storeData(msg, dataStore)', () => {
     it('should push a moisture1 reading into the proper array in the dataStore', () => {
