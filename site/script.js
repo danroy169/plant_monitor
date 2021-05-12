@@ -16,8 +16,36 @@ async function setupSSE() {
 
     evtSource.onmessage = event => { onMessage(event, elements) }
 }
+async function getMetrics(metricID, amount){
+    const request = await fetch('http://localhost:3000/api/metric/' + metricID + '/amount/' + amount, {mode: 'cors'})
+    
+    const response = await request.json()
 
-async function init() { await setupSSE() }
+    return response
+}
+
+async function displayMoisture1(){
+    const readings = await getMetrics('moisture1', 'all')
+
+    const div = document.getElementById('moistureDiv')
+
+    const list = document.createElement('ul')
+
+    div.appendChild(list)
+
+    readings.result.forEach(obj => {
+        let li = document.createElement('li')
+        li.innerText = obj.moistureLevel
+        list.appendChild(li)
+    })
+}
+
+
+async function init() { 
+    await setupSSE() 
+    const button = document.getElementById('getAllMoistureReadings')
+    button.addEventListener('click', displayMoisture1)
+}
 
 if(document.readyState === 'loading') { 
     console.log('loading')
@@ -50,3 +78,4 @@ function onMessage(event, elements){
         elements.moisture2Time.innerText = new Date(message.time).toLocaleTimeString()
     }
 }
+

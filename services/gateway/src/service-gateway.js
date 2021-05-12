@@ -18,6 +18,10 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
     }))
 
     // parentPort.on(MESSAGE, msg => { if(msg.topic === DATA_RESPONSE) { return res.json(msg) } })
+    // res.set({
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Access-Control-Allow-Credentials': true
+    // })
 
 })
 
@@ -28,7 +32,7 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    if(res.statusCode === 200) { res.status(500) }
+    if (res.statusCode === 200) { res.status(500) }
 
     res.json({ message: err.message })
 })
