@@ -7,33 +7,54 @@ const port = 3000
 const app = express()
 
 const resolveCache = {}
+let myID = 0
 
 parentPort.on(MESSAGE, msg => {
     console.log('Gateway Service recieved', msg.topic, 'message\n')
 
-    if(msg.topic === DATA_RESPONSE){
-        const resolve = resolveCache[id]
-        resolve(msg)
+    if (msg.topic === DATA_RESPONSE) {
+        resolveCache[myID] = msg
     }
 
 })
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
+    const lastID = myID
+
+    myID += 1
+
     parentPort.postMessage(onAPIDataRequest({
         metricID: req.params.metricID,
-        amount: req.params.amount
+        amount: req.params.amount,
+        id: lastID
     }))
+
+    let captureResolve = undefined
+
+    const p = new Promise((resolve, reject) => {
+        captureResolve = resolveCache[lastID]
+
+        if (captureResolve != undefined) { resolve(captureResolve) }
+        else { reject('wtf') }
+    })
+
+    p.then(result => {
+        res.set({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+        })
+
+        res.json(result) 
+    })
+    .catch(e => {
+        res.status(404)
+    })
 
 })
 
 
-// res.set({
-//     'Access-Control-Allow-Origin': '*',
-//     'Access-Control-Allow-Credentials': true
-// })
 
-// return res.json(msg) 
 
 
 app.use((req, res, next) => {

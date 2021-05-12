@@ -5,17 +5,15 @@ export function onAPIDataRequest(options){
 
     if(!options.metricID) { throw new Error('Missing metricID parameter') }
     if(!options.amount) { throw new Error('Missing amount parameter') }
-    if(!Number.isInteger(options.amount) && options.amount !== ALL) { throw new Error('Invalid amount parameter') }
+    if(options.amount !== ALL) { options.amount = Number.parseInt(options.amount) }
 
     const dataRequest = {
         topic: DATA_REQUEST,
         metric: '',
-        numberOfReadings: '',
+        numberOfReadings: options.amount,
         time: new Date().toISOString(),
         id: options.id
     }
-
-    dataRequest.numberOfReadings = options.amount
 
     if(options.metricID === MOISTURE_SENSOR_1){
 
