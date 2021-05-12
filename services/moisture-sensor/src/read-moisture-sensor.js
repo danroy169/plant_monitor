@@ -20,7 +20,6 @@ export async function getMoisture(i2cAddress, busNumber) {
  
 }
 
-
 function convertBufferSourceToMoisture(buf) {
 	const dv = ArrayBuffer.isView(buf) ?
 		new DataView(buf.buffer, buf.byteOffset, buf.byteLength) :
@@ -28,5 +27,6 @@ function convertBufferSourceToMoisture(buf) {
 
 	return dv.getUint16(0, false)
 }
+
 
 
