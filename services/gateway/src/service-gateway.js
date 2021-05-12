@@ -6,8 +6,16 @@ import { onAPIDataRequest } from './gateway-lib.js'
 const port = 3000
 const app = express()
 
+const resolveCache = {}
+
 parentPort.on(MESSAGE, msg => {
     console.log('Gateway Service recieved', msg.topic, 'message\n')
+
+    if(msg.topic === DATA_RESPONSE){
+        const resolve = resolveCache[id]
+        resolve(msg)
+    }
+
 })
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
@@ -17,19 +25,16 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
         amount: req.params.amount
     }))
 
-    parentPort.on(MESSAGE, msg => { 
-
-        if(msg.topic === DATA_RESPONSE) { 
-
-            res.set({
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': true
-            })
-
-            return res.json(msg) 
-        } 
-    })
 })
+
+
+// res.set({
+//     'Access-Control-Allow-Origin': '*',
+//     'Access-Control-Allow-Credentials': true
+// })
+
+// return res.json(msg) 
+
 
 app.use((req, res, next) => {
     res.status(404)
