@@ -43,10 +43,10 @@ const SENSOR2_I2C_ADDRESS = 0x37
 const SENSOR2_I2C_BUS_NUMBER = 2
 
 const THRESHOLDS = {
-    moistureLow: 350,
+    moistureLow: 275,
     tempLow: 60,
     tempHigh: 85,
-    humidLow: 30,
+    humidLow: 20,
     humidHigh: 75
 }
 
