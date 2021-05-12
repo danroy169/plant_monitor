@@ -129,9 +129,12 @@ const dataRequest = {
             'description': 'ISO 8601 format time stamp',
             'type': 'string',
             'format': 'date-time'
+        },
+        'id': {
+            'type': 'integer'
         }
     },
-    'required': ['metric', 'numberOfReadings', 'time']
+    'required': ['metric', 'numberOfReadings', 'time', 'id']
 }
 
 const dataResponse = {
@@ -173,9 +176,12 @@ const dataResponse = {
             'description': 'ISO 8601 format time stamp',
             'type': 'string',
             'format': 'date-time'
+        },
+        'id': {
+            'type': 'integer'
         }
     },
-    'required': ['metric', 'result', 'time']
+    'required': ['metric', 'result', 'time', 'id']
 }
 
 const emailRequest = {

@@ -37,9 +37,9 @@ sseWorker.on(ONLINE, () => { console.log('SSE Online') })
 
 
 
-moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } } )
+moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]) } } )
 
-tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]); console.log(msg) } })
+tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]) } })
 
 thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
 

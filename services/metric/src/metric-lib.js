@@ -30,7 +30,8 @@ export function onDataRequest(msg, dataStore) {
         topic: DATA_RESPONSE,
         metric: msg.metric,
         result,
-        time: new Date().toISOString()
+        time: new Date().toISOString(),
+        id: msg.id
     }
     
     if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }

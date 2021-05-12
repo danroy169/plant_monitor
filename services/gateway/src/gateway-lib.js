@@ -11,7 +11,8 @@ export function onAPIDataRequest(options){
         topic: DATA_REQUEST,
         metric: '',
         numberOfReadings: '',
-        time: new Date().toISOString()
+        time: new Date().toISOString(),
+        id: options.id
     }
 
     dataRequest.numberOfReadings = options.amount
