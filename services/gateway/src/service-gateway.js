@@ -17,12 +17,18 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
         amount: req.params.amount
     }))
 
-    // parentPort.on(MESSAGE, msg => { if(msg.topic === DATA_RESPONSE) { return res.json(msg) } })
-    // res.set({
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Credentials': true
-    // })
+    parentPort.on(MESSAGE, msg => { 
 
+        if(msg.topic === DATA_RESPONSE) { 
+
+            res.set({
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            })
+
+            return res.json(msg) 
+        } 
+    })
 })
 
 app.use((req, res, next) => {
@@ -31,7 +37,7 @@ app.use((req, res, next) => {
     next(new Error('No handler found'))
 })
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     if (res.statusCode === 200) { res.status(500) }
 
     res.json({ message: err.message })
