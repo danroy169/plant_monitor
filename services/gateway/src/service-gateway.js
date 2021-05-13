@@ -10,7 +10,6 @@ const resolveCacheMap = new Map()
 
 let nextValidID = 0
 
-
 parentPort.on(MESSAGE, msg => {
     // console.log('Gateway Service recieved', msg.topic, 'message\n')
     if (msg.topic === DATA_RESPONSE) {
@@ -24,34 +23,14 @@ parentPort.on(MESSAGE, msg => {
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
+    let timeoutID 
+
     const thisTransactionID = nextValidID
 
-    let tID
+    const p = apiGetToPromise(nextValidID, thisTransactionID, timeoutID)
 
-    nextValidID += 1
-
-    const p = new Promise((resolve, reject) => {
-
-        resolveCacheMap.set(thisTransactionID, resolve)
-
-        tID = setTimeout(() => reject(new Error('Timed out')), 1000)
-    })
-
-    p.then(result => {
-        clearTimeout(tID)
-
-        res.set({
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true
-        })
-
-        res.json(result)
-    })
-    .catch(e => {
-        resolveCacheMap.delete(thisTransactionID)
-        res.status(404)
-        res.json({pass: false})
-    })
+    p.then(result => { promiseSuccess(timeoutID, res, result) })
+    .catch(e => { promiseFail(e, res, resolveCacheMap, thisTransactionID) })
 
     parentPort.postMessage(
         onAPIDataRequest({
@@ -77,3 +56,34 @@ app.use((err, req, res) => {
 app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
 
 
+
+
+function apiGetToPromise(nextValidID, thisTransactionID, timeoutID) {
+
+    nextValidID += 1
+
+    return new Promise((resolve, reject) => {
+
+        resolveCacheMap.set(thisTransactionID, resolve)
+
+        timeoutID = setTimeout(() => reject(new Error('Timed out')), 1000)
+    })
+
+}
+
+function promiseSuccess(timeoutID, response, result) {
+    clearTimeout(timeoutID)
+
+    response.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+    })
+
+    response.json(result)
+}
+
+function promiseFail(err, response, resoveCacheMap, thisTransactionID) {
+    resolveCacheMap.delete(thisTransactionID)
+    response.status(404)
+    response.json({pass: false})
+}

@@ -17,7 +17,7 @@ parentPort.on(MESSAGE, msg => {
     if (msg.topic === DATA_REQUEST) { 
 
         const dataResponse = onDataRequest(msg, dataStore)
-        
+
         if(dataResponse) { parentPort.postMessage(dataResponse) }
     }
 })
