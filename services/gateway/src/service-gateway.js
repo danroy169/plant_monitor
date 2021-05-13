@@ -6,62 +6,61 @@ import { onAPIDataRequest } from './gateway-lib.js'
 const port = 3000
 const app = express()
 
-const resolveCache = {}
-let myID = 0
+const resolveCacheMap = new Map()
+
+let nextValidID = 0
+
 
 parentPort.on(MESSAGE, msg => {
     // console.log('Gateway Service recieved', msg.topic, 'message\n')
-
     if (msg.topic === DATA_RESPONSE) {
-        resolveCache[msg.id] = msg
-        console.log(resolveCache)
-    }
 
+        const resolver = resolveCacheMap.get(msg.id)
+        resolveCacheMap.delete(msg.id)
+
+        resolver(msg)
+    }
 })
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
-    const lastID = myID
+    const thisTransactionID = nextValidID
 
-    myID += 1
+    let tID
 
-    parentPort.postMessage(
-        onAPIDataRequest({
-            metricID: req.params.metricID,
-            amount: req.params.amount,
-            id: lastID
-        })
-    )
+    nextValidID += 1
 
-    function p() {
-        return new Promise((resolve, reject) => {
+    const p = new Promise((resolve, reject) => {
 
-            if(resolveCache[lastID]) { 
-                console.log('YO', resolveCache[lastID])
-                resolve(resolveCache[lastID]) 
-            }
+        resolveCacheMap.set(thisTransactionID, resolve)
 
-            reject('...')
-        })    
-    } 
+        tID = setTimeout(() => reject(new Error('Timed out')), 1000)
+    })
 
-    p().then(result => {
+    p.then(result => {
+        clearTimeout(tID)
+
         res.set({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true
         })
 
-        res.json(result) 
+        res.json(result)
     })
     .catch(e => {
+        resolveCacheMap.delete(thisTransactionID)
         res.status(404)
+        res.json({pass: false})
     })
 
+    parentPort.postMessage(
+        onAPIDataRequest({
+            metricID: req.params.metricID,
+            amount: req.params.amount,
+            id: thisTransactionID
+        })
+    )
 })
-
-
-
-
 
 app.use((req, res, next) => {
     res.status(404)
@@ -74,9 +73,6 @@ app.use((err, req, res) => {
 
     res.json({ message: err.message })
 })
-
-
-
 
 app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
 

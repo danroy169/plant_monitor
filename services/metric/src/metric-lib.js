@@ -3,48 +3,50 @@ import isValidMessage from '../../../util/validator.js'
 
 export function storeData(msg, dataStore) {
 
-    if (msg.sensorID === MOISTURE_SENSOR_1) { dataStore.moisture1Readings.push(msg) }
+    if (msg.sensorID === MOISTURE_SENSOR_1) { dataStore.moisture1Readings.splice(0, 0, msg) }
 
-    if (msg.sensorID === MOISTURE_SENSOR_2) { dataStore.moisture2Readings.push(msg) }
+    if (msg.sensorID === MOISTURE_SENSOR_2) { dataStore.moisture2Readings.splice(0, 0, msg) }
 
-    if (msg.type === TEMP) { dataStore.tempReadings.push(msg) }
+    if (msg.type === TEMP) { dataStore.tempReadings.splice(0, 0, msg) }
 
-    if (msg.type === HUMIDITY) { dataStore.humidReadings.push(msg) }
-
+    if (msg.type === HUMIDITY) { dataStore.humidReadings.splice(0, 0, msg) }
 }
 
 export function onDataRequest(msg, dataStore) {
-    let result
-
-    if(msg.numberOfReadings === ALL) { msg.numberOfReadings = convertAllToLength(msg, dataStore) }
-
-    if (msg.metric === MOISTURE_SENSOR_1) { result = dataStore.moisture1Readings.splice(dataStore.moisture1Readings.length - msg.numberOfReadings) }
-
-    if (msg.metric === MOISTURE_SENSOR_2) { result = dataStore.moisture2Readings.splice(dataStore.moisture2Readings.length - msg.numberOfReadings) }
-
-    if (msg.metric === TEMP) { result = dataStore.tempReadings.splice(dataStore.tempReadings.length - msg.numberOfReadings) }
-
-    if (msg.metric === HUMIDITY) { result = dataStore.humidReadings.splice(dataStore.humidReadings.length - msg.numberOfReadings) }
 
     const dataResponseMessage = {
         topic: DATA_RESPONSE,
         metric: msg.metric,
-        result,
         time: new Date().toISOString(),
         id: msg.id
     }
-    
+
+    if(msg.numberOfReadings === ALL) { 
+
+        dataResponseMessage.result = onAll(msg, dataStore)
+
+        if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
+    }
+
+    if (msg.metric === MOISTURE_SENSOR_1) { dataResponseMessage.result = dataStore.moisture1Readings.slice(0, msg.numberOfReadings) }
+
+    if (msg.metric === MOISTURE_SENSOR_2) { dataResponseMessage.result = dataStore.moisture2Readings.slice(0, msg.numberOfReadings) }
+
+    if (msg.metric === TEMP) { dataResponseMessage.result = dataStore.tempReadings.slice(0, msg.numberOfReadings) }
+
+    if (msg.metric === HUMIDITY) { dataResponseMessage.result = dataStore.humidReadings.slice(0, msg.numberOfReadings) }
+
     if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     
     return false
 }
 
-export function convertAllToLength(msg, dataStore) {
-    if (msg.metric === MOISTURE_SENSOR_1) { return dataStore.moisture1Readings.length }
+export function onAll(msg, dataStore) {
+    if (msg.metric === MOISTURE_SENSOR_1) { return dataStore.moisture1Readings }
 
-    if (msg.metric === MOISTURE_SENSOR_2) { return dataStore.moisture2Readings.length }
+    if (msg.metric === MOISTURE_SENSOR_2) { return dataStore.moisture2Readings }
 
-    if (msg.metric === TEMP) { return dataStore.tempReadings.length }
+    if (msg.metric === TEMP) { return dataStore.tempReadings }
 
-    if (msg.metric === HUMIDITY) { return dataStore.humidReadings.length }
+    if (msg.metric === HUMIDITY) { return dataStore.humidReadings }
 }

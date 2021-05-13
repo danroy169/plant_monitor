@@ -181,7 +181,7 @@ const dataResponse = {
             'type': 'integer'
         }
     },
-    'required': ['metric', 'result', 'time', 'id']
+    'required': ['topic', 'metric', 'result', 'time', 'id']
 }
 
 const emailRequest = {
