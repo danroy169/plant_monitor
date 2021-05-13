@@ -2,332 +2,329 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 import isValidMessage from '../util/validator.js'
-import { storeData, onDataRequest, convertAllToLength } from '../services/metric/src/metric-lib.js'
+import { storeData, onDataRequest, onAll } from '../services/metric/src/metric-lib.js'
 
-describe('storeData(msg, dataStore)', () => {
-    it('should push a moisture1 reading into the proper array in the dataStore', () => {
+describe('metric service lib', () => {
+    describe('storeData(msg, dataStore)', () => {
+        it('should push a moisture1 reading into the proper array in the dataStore', () => {
 
-        const dataStore = {
-            moisture1Readings: []
-        }
+            const dataStore = {
+                moisture1Readings: []
+            }
 
-        const msg = {
-            sensorID: MOISTURE_SENSOR_1
-        }
+            const msg = {
+                sensorID: MOISTURE_SENSOR_1
+            }
 
-        storeData(msg, dataStore)
+            storeData(msg, dataStore)
 
-        expect(dataStore.moisture1Readings).to.contain(msg)
-    })
+            expect(dataStore.moisture1Readings).to.contain(msg)
+        })
 
-    it('should push a moisture2 reading into the proper array in the dataStore', () => {
+        it('should push a moisture2 reading into the proper array in the dataStore', () => {
 
-        const dataStore = {
-            moisture2Readings: []
-        }
+            const dataStore = {
+                moisture2Readings: []
+            }
 
-        const msg = {
-            sensorID: MOISTURE_SENSOR_2
-        }
+            const msg = {
+                sensorID: MOISTURE_SENSOR_2
+            }
 
-        storeData(msg, dataStore)
+            storeData(msg, dataStore)
 
-        expect(dataStore.moisture2Readings).to.contain(msg)
-    })
+            expect(dataStore.moisture2Readings).to.contain(msg)
+        })
 
-    it('should push a temp reading into the proper array in the dataStore', () => {
+        it('should push a temp reading into the proper array in the dataStore', () => {
 
-        const dataStore = {
-            tempReadings: []
-        }
+            const dataStore = {
+                tempReadings: []
+            }
 
-        const msg = {
-            type: TEMP
-        }
+            const msg = {
+                type: TEMP
+            }
 
-        storeData(msg, dataStore)
+            storeData(msg, dataStore)
 
-        expect(dataStore.tempReadings).to.contain(msg)
-    })
+            expect(dataStore.tempReadings).to.contain(msg)
+        })
 
-    it('should push a humidity reading into the proper array in the dataStore', () => {
+        it('should push a humidity reading into the proper array in the dataStore', () => {
 
-        const dataStore = {
-            humidReadings: []
-        }
+            const dataStore = {
+                humidReadings: []
+            }
 
-        const msg = {
-            type: HUMIDITY
-        }
+            const msg = {
+                type: HUMIDITY
+            }
 
-        storeData(msg, dataStore)
+            storeData(msg, dataStore)
 
-        expect(dataStore.humidReadings).to.contain(msg)
-    })
+            expect(dataStore.humidReadings).to.contain(msg)
+        })
 
-    it('should do nothing when given an invalid message', () => {
-        const msg = {}
+        it('should do nothing when given an invalid message', () => {
+            const msg = {}
 
-        const dataStore = {
-            moisture1Readings: [],
-            moisture2Readings: [],
-            tempReadings: [],
-            humidReadings: []
-        }
+            const dataStore = {
+                moisture1Readings: [],
+                moisture2Readings: [],
+                tempReadings: [],
+                humidReadings: []
+            }
 
-        storeData(msg, dataStore)
+            storeData(msg, dataStore)
 
-        Object.values(dataStore).forEach(readingArray => {
-            expect(readingArray).to.be.empty
+            Object.values(dataStore).forEach(readingArray => {
+                expect(readingArray).to.be.empty
+            })
+        })
+
+        it('should throw an error when given an empty dataStore argument', () => {
+
+            const dataStore = {}
+
+            const msg = {
+                sensorID: MOISTURE_SENSOR_1
+            }
+
+            expect(function () { storeData(msg, dataStore) }).to.throw()
         })
     })
 
-    it('should throw an error when given an empty dataStore argument', () => {
+    describe('onDataRequest(msg, dataStore)', () => {
 
-        const dataStore = {}
+        it('should return a valid data-response message', () => {
+            const dataRequestMessage = {
+                numberOfReadings: 1,
+                metric: MOISTURE_SENSOR_1,
+                id: 1
+            }
 
-        const msg = {
-            sensorID: MOISTURE_SENSOR_1
-        }
+            const dataStore = {
+                moisture1Readings: [{
+                    time: new Date().toISOString(),
+                    topic: 'test',
+                    sensorID: 'test',
+                    type: 'test',
+                    currentPollInterval: 5
+                }]
+            }
 
-        expect(function(){ storeData(msg, dataStore) }).to.throw()
-    })
-})
+            const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
 
-describe('onDataRequest(msg, dataStore)', () => {
+            expect(isValidMessage(dataResponseMessage)).to.be.true
+        })
 
-    it('should return a valid data-response message', () => {
-        const dataRequestMessage = {
-            numberOfReadings: 1,
-            metric: MOISTURE_SENSOR_1
-        }
+        it('should return false when given an invalid message argument', () => {
+            const invalidMessage = {}
 
-        const dataStore = {
-            moisture1Readings: [{ 
+            const dataStore = {
+                moisture1Readings: [{
+                    time: new Date().toISOString(),
+                    topic: 'test',
+                    sensorID: 'test',
+                    type: 'test',
+                    currentPollInterval: 5
+                }]
+            }
+
+            const toTest = onDataRequest(invalidMessage, dataStore)
+
+            expect(toTest).to.be.false
+        })
+
+        it('should throw an error when given an invalid dataStore argument', () => {
+            const dataRequestMessage = {
+                numberOfReadings: 1,
+                metric: MOISTURE_SENSOR_1
+            }
+
+            const dataStore = {}
+
+            expect(function () { onDataRequest(dataRequestMessage, dataStore) }).to.throw()
+        })
+
+        it('should return a dataResponseMessage object with the proper result property for moisture1', () => {
+            const dataRequestMessage = {
+                numberOfReadings: 1,
+                metric: MOISTURE_SENSOR_1,
+                id: 1
+            }
+
+            const expected = {
                 time: new Date().toISOString(),
                 topic: 'test',
                 sensorID: 'test',
                 type: 'test',
                 currentPollInterval: 5
-             }]
-        }
+            }
 
-        const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+            const dataStore = {
+                moisture1Readings: [expected]
+            }
 
-        expect(isValidMessage(dataResponseMessage)).to.be.true
-    })
+            const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
 
-    it('should return false when given an invalid message argument', () => {
-        const invalidMessage = {}
+            expect(dataResponseMessage.result).to.contain(expected)
 
-        const dataStore = {
-            moisture1Readings: [{ 
+        })
+
+        it('should return a dataResponseMessage object with the proper result property for moisture2', () => {
+            const dataRequestMessage = {
+                numberOfReadings: 1,
+                metric: MOISTURE_SENSOR_2,
+                id: 1
+            }
+
+            const expected = {
                 time: new Date().toISOString(),
                 topic: 'test',
                 sensorID: 'test',
                 type: 'test',
                 currentPollInterval: 5
-             }]
-        }
+            }
 
-        const toTest = onDataRequest(invalidMessage, dataStore)
+            const dataStore = {
+                moisture2Readings: [expected]
+            }
 
-        expect(toTest).to.be.false
+            const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+
+            expect(dataResponseMessage.result).to.contain(expected)
+
+        })
+
+        it('should return a dataResponseMessage object with the proper result property for temp', () => {
+            const dataRequestMessage = {
+                numberOfReadings: 1,
+                metric: TEMP,
+                id: 1
+            }
+
+            const expected = {
+                time: new Date().toISOString(),
+                topic: 'test',
+                sensorID: 'test',
+                type: 'test',
+                currentPollInterval: 5
+            }
+
+            const dataStore = {
+                tempReadings: [expected]
+            }
+
+            const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+
+            expect(dataResponseMessage.result).to.contain(expected)
+
+        })
+
+        it('should return a dataResponseMessage object with the proper result property for humidity', () => {
+            const dataRequestMessage = {
+                numberOfReadings: 1,
+                metric: HUMIDITY,
+                id: 1
+            }
+
+            const expected = {
+                time: new Date().toISOString(),
+                topic: 'test',
+                sensorID: 'test',
+                type: 'test',
+                currentPollInterval: 5
+            }
+
+            const dataStore = {
+                humidReadings: [expected]
+            }
+
+            const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+
+            expect(dataResponseMessage.result).to.contain(expected)
+
+        })
     })
 
-    it('should throw an error when given an invalid dataStore argument', () => {
-        const dataRequestMessage = {
-            numberOfReadings: 1,
-            metric: MOISTURE_SENSOR_1
-        }
+    describe('onAll(msg, dataStore)', () => {
 
-        const dataStore = {}
+        it('should return the proper array moisture1', () => {
+            const dataRequestMessage = {
+                metric: MOISTURE_SENSOR_1
+            }
 
-        expect(function(){ onDataRequest(dataRequestMessage, dataStore) }).to.throw() 
-    })
+            const dataStore = {
+                moisture1Readings: []
+            }
 
-    it('should return a dataResponseMessage object with the proper result property for moisture1', () => {
-        const dataRequestMessage = {
-            numberOfReadings: 1,
-            metric: MOISTURE_SENSOR_1
-        }
+            const expected = dataStore.moisture1Readings
 
-        const expected = { 
-            time: new Date().toISOString(),
-            topic: 'test',
-            sensorID: 'test',
-            type: 'test',
-            currentPollInterval: 5
-         }
+            const toTest = onAll(dataRequestMessage, dataStore)
 
-        const dataStore = {
-            moisture1Readings: [expected]
-        }
+            expect(toTest).to.equal(expected)
+        })
 
-        const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+        it('should return the proper array for moisture2', () => {
+            const dataRequestMessage = {
+                metric: MOISTURE_SENSOR_2
+            }
 
-        expect(dataResponseMessage.result).to.contain(expected)
-        
-    })
+            const dataStore = {
+                moisture2Readings: [{}]
+            }
 
-    it('should return a dataResponseMessage object with the proper result property for moisture2', () => {
-        const dataRequestMessage = {
-            numberOfReadings: 1,
-            metric: MOISTURE_SENSOR_2
-        }
+            const expected = dataStore.moisture2Readings
 
-        const expected = { 
-            time: new Date().toISOString(),
-            topic: 'test',
-            sensorID: 'test',
-            type: 'test',
-            currentPollInterval: 5
-         }
+            const toTest = onAll(dataRequestMessage, dataStore)
 
-        const dataStore = {
-            moisture2Readings: [expected]
-        }
+            expect(toTest).to.equal(expected)
+        })
 
-        const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+        it('should return the proper array for temp', () => {
+            const dataRequestMessage = {
+                metric: TEMP
+            }
 
-        expect(dataResponseMessage.result).to.contain(expected)
-        
-    })
+            const dataStore = {
+                tempReadings: [{}, {}]
+            }
 
-    it('should return a dataResponseMessage object with the proper result property for temp', () => {
-        const dataRequestMessage = {
-            numberOfReadings: 1,
-            metric: TEMP
-        }
+            const expected = dataStore.tempReadings
 
-        const expected = { 
-            time: new Date().toISOString(),
-            topic: 'test',
-            sensorID: 'test',
-            type: 'test',
-            currentPollInterval: 5
-         }
+            const toTest = onAll(dataRequestMessage, dataStore)
 
-        const dataStore = {
-            tempReadings: [expected]
-        }
+            expect(toTest).to.equal(expected)
+        })
 
-        const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+        it('should return the proper array for humidity', () => {
+            const dataRequestMessage = {
+                metric: HUMIDITY
+            }
 
-        expect(dataResponseMessage.result).to.contain(expected)
-        
-    })
+            const dataStore = {
+                humidReadings: [{}, {}, {}]
+            }
 
-    it('should return a dataResponseMessage object with the proper result property for humidity', () => {
-        const dataRequestMessage = {
-            numberOfReadings: 1,
-            metric: HUMIDITY
-        }
+            const expected = dataStore.humidReadings
 
-        const expected = { 
-            time: new Date().toISOString(),
-            topic: 'test',
-            sensorID: 'test',
-            type: 'test',
-            currentPollInterval: 5
-         }
+            const toTest = onAll(dataRequestMessage, dataStore)
 
-        const dataStore = {
-            humidReadings: [expected]
-        }
+            expect(toTest).to.equal(expected)
+        })
 
-        const dataResponseMessage = onDataRequest(dataRequestMessage, dataStore)
+        it('should do nothing when given an invalid msg argument', () => {
+            const dataRequestMessage = {}
 
-        expect(dataResponseMessage.result).to.contain(expected)
-        
-    })
-})
+            const dataStore = {
+                humidReadings: [{}, {}, {}]
+            }
 
-describe('convertAllToLength(msg, dataStore', () => {
+            const toTest = onAll(dataRequestMessage, dataStore)
 
-    it('should return the proper array length for moisture1', () => {
-        const dataRequestMessage = {
-            metric: MOISTURE_SENSOR_1
-        }
-
-        const dataStore = {
-            moisture1Readings: []
-        }
-
-        const expected = 0
-
-        const toTest = convertAllToLength(dataRequestMessage, dataStore)
-
-        expect(toTest).to.equal(expected)
-    })
-
-    it('should return the proper array length for moisture2', () => {
-        const dataRequestMessage = {
-            metric: MOISTURE_SENSOR_2
-        }
-
-        const dataStore = {
-            moisture2Readings: [{}]
-        }
-
-        const expected = 1
-
-        const toTest = convertAllToLength(dataRequestMessage, dataStore)
-
-        expect(toTest).to.equal(expected)
-    })
-
-    it('should return the proper array length for temp', () => {
-        const dataRequestMessage = {
-            metric: TEMP
-        }
-
-        const dataStore = {
-            tempReadings: [{}, {}]
-        }
-
-        const expected = 2
-
-        const toTest = convertAllToLength(dataRequestMessage, dataStore)
-
-        expect(toTest).to.equal(expected)
-    })
-
-    it('should return the proper array length for humidity', () => {
-        const dataRequestMessage = {
-            metric: HUMIDITY
-        }
-
-        const dataStore = {
-            humidReadings: [{}, {}, {}]
-        }
-
-        const expected = 3
-
-        const toTest = convertAllToLength(dataRequestMessage, dataStore)
-
-        expect(toTest).to.equal(expected)
-    })
-
-    it('should do nothing when given an invalid msg argument', () => {
-        const dataRequestMessage = {}
-
-        const dataStore = {
-            humidReadings: [{}, {}, {}]
-        }
-
-        const toTest = convertAllToLength(dataRequestMessage, dataStore) 
-
-        expect(toTest).to.be.undefined
-    })
-
-    it('should throw when given an invalid dataStore argument', () => {
-        const dataRequestMessage = {
-            metric: HUMIDITY
-        }
-
-        const dataStore = {} 
-
-        expect(function(){ convertAllToLength(dataRequestMessage, dataStore) }).to.throw()
+            expect(toTest).to.be.undefined
+        })
     })
 })

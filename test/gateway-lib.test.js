@@ -4,134 +4,146 @@ import { onAPIDataRequest } from '../services/gateway/src/gateway-lib.js'
 import isValidMessage from '../util/validator.js'
 import { ALL, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 
-describe('onAPIDataRequest(options)', () => {
+describe('gateway service lib', () => {
+    describe('onAPIDataRequest(options)', () => {
 
-    it('should return an object when given the proper params', () => {
-        const options = {
-            metricID: 'moisture1',
-            amount: 'all'
-        }
-        
-        expect(onAPIDataRequest(options)).to.be.an.instanceOf(Object)
-    })
+        it('should return an object when given the proper params', () => {
+            const options = {
+                metricID: 'moisture1',
+                amount: 'all',
+                id: 1
+            }
 
-    it('should return a valid dataRequest message when given the proper params', () => {
-        const options = {
-            metricID: 'moisture1',
-            amount: 'all'
-        }
+            expect(onAPIDataRequest(options)).to.be.an.instanceOf(Object)
+        })
 
-        const expected = onAPIDataRequest(options)
+        it('should return a valid dataRequest message when given the proper params', () => {
+            const options = {
+                metricID: 'moisture1',
+                amount: 'all',
+                id: 1
+            }
 
-        expect(isValidMessage(expected)).to.be.true
-    })
+            const expected = onAPIDataRequest(options)
 
-    it('should return a dataRequest message with proper metric(moisture1)', () => {
-        const options = {
-            metricID: MOISTURE_SENSOR_1,
-            amount: 1
-        }
+            expect(isValidMessage(expected)).to.be.true
+        })
 
-        const toTest = onAPIDataRequest(options)
+        it('should return a dataRequest message with proper metric(moisture1)', () => {
+            const options = {
+                metricID: MOISTURE_SENSOR_1,
+                amount: 1,
+                id: 1
+            }
 
-        expect(toTest.metric).to.equal(MOISTURE_SENSOR_1)
-    })
+            const toTest = onAPIDataRequest(options)
 
-    it('should return a dataRequest message with proper metric(moisture2)', () => {
-        const options = {
-            metricID: MOISTURE_SENSOR_2,
-            amount: 1
-        }
+            expect(toTest.metric).to.equal(MOISTURE_SENSOR_1)
+        })
 
-        const toTest = onAPIDataRequest(options)
+        it('should return a dataRequest message with proper metric(moisture2)', () => {
+            const options = {
+                metricID: MOISTURE_SENSOR_2,
+                amount: 1,
+                id: 1
+            }
 
-        expect(toTest.metric).to.equal(MOISTURE_SENSOR_2)
-    })
+            const toTest = onAPIDataRequest(options)
 
-    it('should return a dataRequest message with proper metric(temp)', () => {
-        const options = {
-            metricID: TEMP,
-            amount: 1
-        }
+            expect(toTest.metric).to.equal(MOISTURE_SENSOR_2)
+        })
 
-        const toTest = onAPIDataRequest(options)
+        it('should return a dataRequest message with proper metric(temp)', () => {
+            const options = {
+                metricID: TEMP,
+                amount: 1,
+                id: 1
+            }
 
-        expect(toTest.metric).to.equal(TEMP)
-    })
+            const toTest = onAPIDataRequest(options)
 
-    it('should return a dataRequest message with proper metric(humidity)', () => {
-        const options = {
-            metricID: HUMIDITY,
-            amount: 1
-        }
+            expect(toTest.metric).to.equal(TEMP)
+        })
 
-        const toTest = onAPIDataRequest(options)
+        it('should return a dataRequest message with proper metric(humidity)', () => {
+            const options = {
+                metricID: HUMIDITY,
+                amount: 1,
+                id: 1
+            }
 
-        expect(toTest.metric).to.equal(HUMIDITY)
-    })
+            const toTest = onAPIDataRequest(options)
 
-    it('should return a dataRequest message with the proper numberOfReadings property when passed an options object with an integer amount property', () => {
-        const options = {
-            metricID: HUMIDITY,
-            amount: 1
-        }
+            expect(toTest.metric).to.equal(HUMIDITY)
+        })
 
-        const toTest = onAPIDataRequest(options)
+        it('should return a dataRequest message with the proper numberOfReadings property when passed an options object with an integer amount property', () => {
+            const options = {
+                metricID: HUMIDITY,
+                amount: 1,
+                id: 1
+            }
 
-        expect(toTest.numberOfReadings).to.equal(1)
-    })
+            const toTest = onAPIDataRequest(options)
 
-    it('should return a dataRequest message with the proper numberOfReadings property when passed an options object with an \'all\' amount property', () => {
-        const options = {
-            metricID: HUMIDITY,
-            amount: ALL
-        }
+            expect(toTest.numberOfReadings).to.equal(1)
+        })
 
-        const toTest = onAPIDataRequest(options)
+        it('should return a dataRequest message with the proper numberOfReadings property when passed an options object with an \'all\' amount property', () => {
+            const options = {
+                metricID: HUMIDITY,
+                amount: ALL,
+                id: 1
+            }
 
-        expect(toTest.numberOfReadings).to.equal(ALL)
-    })
+            const toTest = onAPIDataRequest(options)
 
-    it('should throw an error when given an options object without a metricID property', () => {
-        const options = {
-            amount: 1
-        }
+            expect(toTest.numberOfReadings).to.equal(ALL)
+        })
 
-        expect(function () { onAPIDataRequest(options) }).to.throw('Missing metricID parameter')
-    })
+        it('should throw an error when given an options object without a metricID property', () => {
+            const options = {
+                amount: 1
+            }
 
-    it('should throw an error when given an options object without an amount property', () => {
-        const options = {
-            metricID: TEMP
-        }
+            expect(function () { onAPIDataRequest(options) }).to.throw('Missing metricID parameter')
+        })
 
-        expect(function () { onAPIDataRequest(options) }).to.throw('Missing amount parameter')
-    })
+        it('should throw an error when given an options object without an amount property', () => {
+            const options = {
+                metricID: TEMP
+            }
 
-    it('should throw an error when given an argument with an invalid metricID property', () => {
-        const options = {
-            metricID: 'this should fail',
-            amount: 1
-        }
+            expect(function () { onAPIDataRequest(options) }).to.throw('Missing amount parameter')
+        })
 
-        expect(function () { onAPIDataRequest(options) }).to.throw('Invalid request')
-    })
+        it('should throw an error when given an argument with an invalid metricID property', () => {
+            const options = {
+                metricID: 'this should fail',
+                amount: 1
+            }
 
-    it('should throw an error when given an argument with an invalid amount property', () => {
-        const options = {
-            metricID: TEMP,
-            amount: 'this should fail'
-        }
+            expect(function () { onAPIDataRequest(options) }).to.throw('Invalid request')
+        })
 
-        expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
-    })
-    
-    it('should throw an error when given an argument with an float amount property', () => {
-        const options = {
-            metricID: TEMP,
-            amount: 1.5
-        }
+        it('should throw an error when given an argument with an invalid amount property', () => {
+            const options = {
+                metricID: TEMP,
+                amount: 'this should fail',
+                id: 1
+            }
 
-        expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
+            expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
+        })
+
+        it('should throw an error when given an argument with an float amount property', () => {
+            const options = {
+                metricID: TEMP,
+                amount: 1.5
+            }
+
+            expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
+        })
     })
 })
+
