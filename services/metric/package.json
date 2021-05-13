@@ -6,8 +6,12 @@
   "description": "metric service",
   "main": "./src/service-metric.js",
   "type": "module",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "eslintConfig": {
     "extends": "../../.esLint.json"

@@ -7,7 +7,8 @@
   "main": "./src/service-threshold.js",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "eslintConfig": {
     "extends": "../../.esLint.json"

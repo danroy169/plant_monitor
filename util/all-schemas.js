@@ -4,12 +4,18 @@ const configRequest = {
     'description': 'A configuration message sent to a sensor or service',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['config-request']
+        },
         'target': {
             'description': 'The unique identifier for the service that\'s being sent the message',
             'type': 'string',
             'enum': [
                 'service-threshold',
-                'service-sensor'
+                'service-sensor',
+                'service-temp-sensor'
             ]
         },
         'setting': {
@@ -40,7 +46,6 @@ const configRequest = {
                     'setting': {
                         'enum': [
                             'moisture-low',
-                            'moisture-high',
                             'temp-low',
                             'temp-high',
                             'humid-low',
@@ -78,6 +83,11 @@ const configResponse = {
     'description': 'A message sent after an attempt at configuration',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['config-response']
+        },
         'target': {
             'description': 'The unique identifier for the service',
             'type': 'string',
@@ -102,6 +112,11 @@ const dataRequest = {
     'description': 'A message sent to metric service requesting historical reading data',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['data-request']
+        },
         'metric': {
             'description': 'The metric being requested',
             'type': 'string',
@@ -109,15 +124,17 @@ const dataRequest = {
         },
         'numberOfReadings': {
             'description': 'The number of reading objects requested',
-            'type': 'integer'
         },
         'time': {
             'description': 'ISO 8601 format time stamp',
             'type': 'string',
             'format': 'date-time'
+        },
+        'id': {
+            'type': 'integer'
         }
     },
-    'required': ['metric', 'numberOfReadings', 'time']
+    'required': ['metric', 'numberOfReadings', 'time', 'id']
 }
 
 const dataResponse = {
@@ -126,6 +143,11 @@ const dataResponse = {
     'description': 'A message sent in response to lookup request, containing data asked for',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['data-response']
+        },
         'metric': {
             'description': 'The metric that was requested',
             'type': 'string',
@@ -137,12 +159,16 @@ const dataResponse = {
             'items': {
                 'type': 'object',
                 'properties': {
+                    'topic': {'type': 'string'},
+                    'sensorID': {'type': 'string'},
+                    'type': {'type': 'string'},
+                    'currentPollInterval': {'type': 'integer'},
                     'moistureLevel': { 'type': 'integer' },
                     'fahrenheit': { 'type': 'integer' },
                     'percentage': { 'type': 'integer' },
-                    'time': { 'type': 'string' }
+                    'time': { 'type': 'string', 'format': 'date-time'}
                 },
-                'required': ['time']
+                'required': ['time', 'topic', 'sensorID', 'type', 'currentPollInterval']
             },
             'uniqueItems': true
         },
@@ -150,9 +176,12 @@ const dataResponse = {
             'description': 'ISO 8601 format time stamp',
             'type': 'string',
             'format': 'date-time'
+        },
+        'id': {
+            'type': 'integer'
         }
     },
-    'required': ['metric', 'result', 'time']
+    'required': ['topic', 'metric', 'result', 'time', 'id']
 }
 
 const emailRequest = {
@@ -161,6 +190,11 @@ const emailRequest = {
     'description': 'A message sent to email service requesting an email be sent',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['email-request']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string'
@@ -193,6 +227,11 @@ const emailResponse = {
     'description': 'A message sent from email service indicating pass/fail',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['email-response']
+        },
         'result': {
             'description': 'The result of send email attempt',
             'type': 'boolean'
@@ -212,6 +251,11 @@ const sensorRequest = {
     'description': 'A request to a sensor to get a reading',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['sensor-request']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string',
@@ -237,6 +281,11 @@ const sensorResponse = {
     'description': 'A reading from a sensor',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['sensor-response']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string',
@@ -295,6 +344,11 @@ const thresholdViolation = {
     'description': 'A message sent to indicating that a threshold has been crossed',
     'type': 'object',
     'properties': {
+        'topic': {
+            'description': 'topic of the message',
+            'type': 'string',
+            'enum': ['threshold-violation']
+        },
         'sensorID': {
             'description': 'The unique identifier for a sensor',
             'type': 'string'

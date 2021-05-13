@@ -1,8 +1,9 @@
-// time stamps everywhere (json, utc)
 
 
-// sensor reading result
+
+
 {
+    "topic": "sensor-response",
     "sensorID": "moisture1",
     "time": "2012-01-26T13:51:50.417-07:00",
     "type": "moisture",
@@ -11,31 +12,34 @@
 
 }
 
-// sensor reading request
+
 {
-    "sensorID": "temp-humid",
+    "topic": "sensor-request",
+    "sensorID": "temp-humidity",
     "type": "temp",
     "time": "2012-01-26T13:51:50.417-07:00",
 }
 
 
-// change config request
 {
-    "target": "moisture1",
+    "topic": "config-request",
+    "target": "service-sensor",
     "setting": "pollInterval",
     "data": 30,
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 
-// config result
+
 {
+    "topic": "config-response",
     "target": "service-sensor",
     "result": true,
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 
-// threshold violation
+
 {
+    "topic": "threshold-violation",
     "sensorID": "moisture2",
     "violationType": "moisture",
     "threshold": 330,
@@ -43,8 +47,9 @@
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 
-// send email request
+
 {
+    "topic": "email-request",
     "sensorID": "temp-humid",
     "violationType": "humidity",
     "threshold": 75,
@@ -52,21 +57,24 @@
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 
-// send email result
+
 {
+    "topic": "email-response",
     "result": true,
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 
-// data lookup request
+
 {
+    "topic": "data-request",
     "metric": "moisture1",
     "numberOfReadings": 10,
     "time": "2012-01-26T13:51:50.417-07:00"
 }
 
-// data lookup response
+
 {
+    "topic": "data-response",
     "metric": "moisture1",
     "result":[ { "moistureLevel": 330, "time": "2012-01-26T13:51:50.417-07:00" } ],
     "time": "2012-01-26T13:51:50.417-07:00"

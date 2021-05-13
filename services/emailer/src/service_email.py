@@ -10,7 +10,7 @@ TOPIC = "email-request"
 def on_message(client, userdata, message):
     obj = json.loads(message.payload)
     print(obj)
-    #send_email(obj["sensorID"], obj["violationType"],obj["currentLevel"])
+    send_email(obj["sensorID"], obj["violationType"],obj["currentLevel"])
 
 def on_connect(client, userdata, flags, rc):
     print("Emailer connected")

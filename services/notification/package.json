@@ -10,7 +10,8 @@
     "import": "./src/service-notificaiton.js"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "eslintConfig": {
     "extends": "../../.esLint.json"

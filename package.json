@@ -1,0 +1,27 @@
+{
+  "name": "plant_monitor",
+  "version": "1.0.0",
+  "description": "An application designed to monitor the soil moisture of a potted plant as well as the ambient air temperature and ambient air humidity.",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danroy169/plant_monitor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danroy169/plant_monitor/issues"
+  },
+  "homepage": "https://github.com/danroy169/plant_monitor#readme",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0"
+  }
+}

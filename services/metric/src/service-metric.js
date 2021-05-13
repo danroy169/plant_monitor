@@ -1,35 +1,24 @@
-import { connect } from 'async-mqtt'
-import { DATA_REQUEST, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from '../../../src/consts.js'
-//import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, URL, MOISTURE, TEMP, HUMIDITY } from "/home/pi/Projects/Plant Monitor/js/consts.js"
-
-const client = connect(URL)
-
-const subscribesTo = [SENSOR_RESPONSE, DATA_REQUEST]
+import { parentPort } from 'worker_threads'
+import { SENSOR_RESPONSE, MESSAGE, DATA_REQUEST } from '../../../util/consts.js'
+import { storeData, onDataRequest } from './metric-lib.js'
 
 const dataStore = {
-    moistureReadings: [],
+    moisture1Readings: [],
+    moisture2Readings: [],
     tempReadings: [],
     humidReadings: []
 }
 
+parentPort.on(MESSAGE, msg => { 
+    // console.log('Metric service recieved', msg.topic, 'message\n')
 
-client.on('connect', init)
+    if (msg.topic === SENSOR_RESPONSE) { storeData(msg, dataStore) } 
 
-async function init(){
-    console.log('metric service connected')
+    if (msg.topic === DATA_REQUEST) { 
 
-    await client.subscribe(subscribesTo)
+        const dataResponse = onDataRequest(msg, dataStore)
 
-    client.on('message', (topic, message) => {
-        if(subscribesTo.includes(topic)) {console.log('Metric service recieved', topic, 'message')}
-
-        let obj = JSON.parse(message.toString())
-    
-        if(obj.type === MOISTURE)  {dataStore.moistureReadings.push(obj)}
-        if(obj.type === TEMP)  {dataStore.tempReadings.push(obj)}
-        if(obj.type === HUMIDITY)  {dataStore.humidReadings.push(obj)}
-    
-    })
-
-}
+        if(dataResponse) { parentPort.postMessage(dataResponse) }
+    }
+})
 

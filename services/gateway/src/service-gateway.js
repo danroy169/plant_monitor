@@ -1,38 +1,89 @@
-import { connect } from 'async-mqtt'
-import { DATA_RESPONSE, SENSOR_RESPONSE, CONFIG_RESPONSE, URL, SENSOR_REQUEST, CONFIG_REQUEST } from '../../../src/consts.js'
-// import { DATA_REQUEST, DATA_RESPONSE, SENSOR_RESPONSE, SENSOR_REQUEST, CONFIG_REQUEST, CONFIG_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
+import { parentPort } from 'worker_threads'
+import { DATA_RESPONSE, MESSAGE } from '../../../util/consts.js'
+import express from 'express'
+import { onAPIDataRequest } from './gateway-lib.js'
 
-const subscribesTo = [SENSOR_RESPONSE, CONFIG_RESPONSE, DATA_RESPONSE]
+const port = 3000
+const app = express()
 
-const client = connect(URL)
+const resolveCacheMap = new Map()
 
-const configRequest = {
-    target: 'service-sensor',
-    setting: 'pollInterval',
-    data: 1,
-    time: new Date().toISOString()
+let nextValidID = 0
+
+parentPort.on(MESSAGE, msg => {
+    // console.log('Gateway Service recieved', msg.topic, 'message\n')
+    if (msg.topic === DATA_RESPONSE) {
+
+        const resolver = resolveCacheMap.get(msg.id)
+        resolveCacheMap.delete(msg.id)
+
+        resolver(msg)
+    }
+})
+
+app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
+
+    let timeoutID 
+
+    const thisTransactionID = nextValidID
+
+    const p = apiGetToPromise(nextValidID, thisTransactionID, timeoutID)
+
+    p.then(result => { promiseSuccess(timeoutID, res, result) })
+    .catch(e => { promiseFail(e, res, resolveCacheMap, thisTransactionID) })
+
+    parentPort.postMessage(
+        onAPIDataRequest({
+            metricID: req.params.metricID,
+            amount: req.params.amount,
+            id: thisTransactionID
+        })
+    )
+})
+
+app.use((req, res, next) => {
+    res.status(404)
+
+    next(new Error('No handler found'))
+})
+
+app.use((err, req, res) => {
+    if (res.statusCode === 200) { res.status(500) }
+
+    res.json({ message: err.message })
+})
+
+app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
+
+
+
+
+function apiGetToPromise(nextValidID, thisTransactionID, timeoutID) {
+
+    nextValidID += 1
+
+    return new Promise((resolve, reject) => {
+
+        resolveCacheMap.set(thisTransactionID, resolve)
+
+        timeoutID = setTimeout(() => reject(new Error('Timed out')), 1000)
+    })
+
 }
 
-const sensorRequest = {
-    sensorID: 'moisture1',
-    type: 'moisture',
-    time: new Date().toISOString()
+function promiseSuccess(timeoutID, response, result) {
+    clearTimeout(timeoutID)
+
+    response.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+    })
+
+    response.json(result)
 }
 
-client.on('connect', init)
-
-async function init(){
-    console.log('gateway service connected')
-
-    await client.subscribe(subscribesTo)
-
-    client.on('message', (topic) => {if(subscribesTo.includes(topic)) { console.log('Gateway recieved', topic, 'message') } })
-
-    setTimeout(() => {
-        client.publish(SENSOR_REQUEST, JSON.stringify(sensorRequest))
-    }, 10000)
-
-    setTimeout(() => {
-        client.publish(CONFIG_REQUEST, JSON.stringify(configRequest))
-    }, 15000)
+function promiseFail(err, response, resoveCacheMap, thisTransactionID) {
+    resolveCacheMap.delete(thisTransactionID)
+    response.status(404)
+    response.json({pass: false})
 }

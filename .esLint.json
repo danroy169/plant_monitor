@@ -2,7 +2,8 @@
     "root": true,
     "extends": "eslint:recommended",
     "env": {
-        "node": true
+        "node": true,
+        "es6": true
     },
     "parserOptions": {
         "ecmaVersion": 2020,
@@ -17,6 +18,9 @@
             "warn",
             "single"
         ],
-        "no-console": "off"
+        "no-console": "off",
+        "no-multi-spaces": "error",
+        "block-spacing": "error",
+        "brace-style": ["error", "stroustrup", { "allowSingleLine": true }]
     }
 }

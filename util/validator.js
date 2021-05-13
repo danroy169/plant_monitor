@@ -3,11 +3,11 @@ import {schemas} from './all-schemas.js'
 
 
 
-export default function validateJSON(obj){
+export default function isValidMessage(msg){
     const v = new Validator()
     let result = false
     schemas.forEach(s => {
-        if(v.validate(obj, s).valid) {result = true}
+        if(v.validate(msg, s).valid) { result = true }
     })
     return result
 }

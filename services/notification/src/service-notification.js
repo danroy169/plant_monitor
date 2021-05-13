@@ -1,25 +1,23 @@
+import { THRESHOLD_VIOLATION, MESSAGE, URL, EMAIL_RESPONSE, EMAIL_REQUEST } from '../../../util/consts.js'
 import { connect } from 'async-mqtt'
-import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from '../../../src/consts.js'
-//import { THRESHOLD_VIOLATION, CONFIG_RESPONSE, EMAIL_REQUEST, EMAIL_RESPONSE, URL } from "/home/pi/Projects/Plant Monitor/js/consts.js"
-
+import { parentPort } from 'worker_threads'
+import getEmailRequestMessage from './notification-lib.js'
 
 const client = connect(URL)
 
-const subscribesTo = [THRESHOLD_VIOLATION, EMAIL_RESPONSE, CONFIG_RESPONSE]
+client.subscribe(EMAIL_RESPONSE)
 
-client.on('connect', init)
+parentPort.on(MESSAGE, msg => {
+    if(msg.topic === THRESHOLD_VIOLATION) {
+        // console.log('Notification service recieved threshold violation message\n')
 
+        const emailRequestMessage = getEmailRequestMessage(msg)
 
-
-async function init(){
-    console.log('notification service connected')
-
-    await client.subscribe(subscribesTo)
-
-    client.on('message', (topic, message) => {
-        if(subscribesTo.includes(topic)) {console.log('Notification service recieved', topic, 'message')}
-
-        if(topic === THRESHOLD_VIOLATION) {client.publish(EMAIL_REQUEST, message); console.log('EMAIL REQUEST SENT')}
-    })
-}
+        if(emailRequestMessage) { 
+            client.publish(EMAIL_REQUEST, emailRequestMessage, () => {
+                console.log('Email Request Sent')
+            }) 
+        }
+    }
+})
 
