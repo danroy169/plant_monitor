@@ -3,34 +3,36 @@ import { describe, it } from 'mocha'
 import { SENSOR_RESPONSE, TEMP, TEMP_HUMIDITY_SENSOR } from '../util/consts.js'
 import isAValidMessage from '../util/validator.js'
 
-describe('isAValidMessage(msg)', () => {
-    
-    it('should return true when given a valid message', () => {
+describe('validator', () => {
+    describe('isAValidMessage(msg)', () => {
 
-        const msg = { 
-            time: new Date().toISOString(),
-            topic: SENSOR_RESPONSE,
-            sensorID: TEMP_HUMIDITY_SENSOR,
-            type: TEMP,
-            fahrenheit: 350,
-            currentPollInterval: 5
-         }
+        it('should return true when given a valid message', () => {
 
-         expect(isAValidMessage(msg)).to.be.true
-    })
+            const msg = {
+                time: new Date().toISOString(),
+                topic: SENSOR_RESPONSE,
+                sensorID: TEMP_HUMIDITY_SENSOR,
+                type: TEMP,
+                fahrenheit: 350,
+                currentPollInterval: 5
+            }
 
-    it('should return false when given an invalid message', () => {
+            expect(isAValidMessage(msg)).to.be.true
+        })
 
-        // wront date format
-        const msg = { 
-            time: new Date(),
-            topic: SENSOR_RESPONSE,
-            sensorID: TEMP_HUMIDITY_SENSOR,
-            type: TEMP,
-            fahrenheit: 350,
-            currentPollInterval: 5
-         }
+        it('should return false when given an invalid message', () => {
 
-        expect(isAValidMessage(msg)).to.be.false
+            // wront date format
+            const msg = {
+                time: new Date(),
+                topic: SENSOR_RESPONSE,
+                sensorID: TEMP_HUMIDITY_SENSOR,
+                type: TEMP,
+                fahrenheit: 350,
+                currentPollInterval: 5
+            }
+
+            expect(isAValidMessage(msg)).to.be.false
+        })
     })
 })

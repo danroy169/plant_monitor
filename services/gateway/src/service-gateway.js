@@ -6,29 +6,39 @@ import { onAPIDataRequest } from './gateway-lib.js'
 const port = 3000
 const app = express()
 
+const resolveCacheMap = new Map()
+
+let nextValidID = 0
+
 parentPort.on(MESSAGE, msg => {
-    console.log('Gateway Service recieved', msg.topic, 'message\n')
+    // console.log('Gateway Service recieved', msg.topic, 'message\n')
+    if (msg.topic === DATA_RESPONSE) {
+
+        const resolver = resolveCacheMap.get(msg.id)
+        resolveCacheMap.delete(msg.id)
+
+        resolver(msg)
+    }
 })
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
-    parentPort.postMessage(onAPIDataRequest({
-        metricID: req.params.metricID,
-        amount: req.params.amount
-    }))
+    let timeoutID 
 
-    parentPort.on(MESSAGE, msg => { 
+    const thisTransactionID = nextValidID
 
-        if(msg.topic === DATA_RESPONSE) { 
+    const p = apiGetToPromise(nextValidID, thisTransactionID, timeoutID)
 
-            res.set({
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': true
-            })
+    p.then(result => { promiseSuccess(timeoutID, res, result) })
+    .catch(e => { promiseFail(e, res, resolveCacheMap, thisTransactionID) })
 
-            return res.json(msg) 
-        } 
-    })
+    parentPort.postMessage(
+        onAPIDataRequest({
+            metricID: req.params.metricID,
+            amount: req.params.amount,
+            id: thisTransactionID
+        })
+    )
 })
 
 app.use((req, res, next) => {
@@ -43,9 +53,37 @@ app.use((err, req, res) => {
     res.json({ message: err.message })
 })
 
-
-
-
 app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
 
 
+
+
+function apiGetToPromise(nextValidID, thisTransactionID, timeoutID) {
+
+    nextValidID += 1
+
+    return new Promise((resolve, reject) => {
+
+        resolveCacheMap.set(thisTransactionID, resolve)
+
+        timeoutID = setTimeout(() => reject(new Error('Timed out')), 1000)
+    })
+
+}
+
+function promiseSuccess(timeoutID, response, result) {
+    clearTimeout(timeoutID)
+
+    response.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+    })
+
+    response.json(result)
+}
+
+function promiseFail(err, response, resoveCacheMap, thisTransactionID) {
+    resolveCacheMap.delete(thisTransactionID)
+    response.status(404)
+    response.json({pass: false})
+}

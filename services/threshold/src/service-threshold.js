@@ -6,7 +6,7 @@ import { onSensorResponse, onConfigRequest } from './threshold-lib.js'
 parentPort.on('message', msg => {
     
     if(msg.topic === SENSOR_RESPONSE) { 
-        console.log('threshold service recieved', msg.topic, 'message\n') 
+        // console.log('threshold service recieved', msg.topic, 'message\n') 
 
         const violation = onSensorResponse(msg, workerData)
 
@@ -15,7 +15,7 @@ parentPort.on('message', msg => {
     }
 
     if(msg.topic === CONFIG_REQUEST) { 
-        console.log('threshold service recieved', msg.topic, 'message\n')
+        // console.log('threshold service recieved', msg.topic, 'message\n')
         onConfigRequest(msg, workerData) 
     }
 })
