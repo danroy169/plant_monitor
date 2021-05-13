@@ -8,7 +8,7 @@ let pollIntervalSeconds = workerData.interval
 let intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
 
 parentPort.on('message', msg => {
-    console.log('Moisture Sensor Service message recieved. Topic:', msg.topic)
+    // console.log('Moisture Sensor Service message recieved. Topic:', msg.topic)
 
     if(msg.topic === SENSOR_REQUEST) { publishMoisture() }
 

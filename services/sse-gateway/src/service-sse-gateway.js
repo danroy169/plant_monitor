@@ -24,7 +24,7 @@ app.get('/sse', (req, res) => {
     var id = 0
 
     parentPort.on(MESSAGE, msg => {
-        console.log('SSE Service recieved', msg.topic, 'message\n')
+        // console.log('SSE Service recieved', msg.topic, 'message\n')
         
         console.log('sending event')
         id += 1

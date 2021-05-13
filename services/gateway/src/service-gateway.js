@@ -10,10 +10,11 @@ const resolveCache = {}
 let myID = 0
 
 parentPort.on(MESSAGE, msg => {
-    console.log('Gateway Service recieved', msg.topic, 'message\n')
+    // console.log('Gateway Service recieved', msg.topic, 'message\n')
 
     if (msg.topic === DATA_RESPONSE) {
-        resolveCache[myID] = msg
+        resolveCache[msg.id] = msg
+        console.log(resolveCache)
     }
 
 })
@@ -24,22 +25,27 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
     myID += 1
 
-    parentPort.postMessage(onAPIDataRequest({
-        metricID: req.params.metricID,
-        amount: req.params.amount,
-        id: lastID
-    }))
+    parentPort.postMessage(
+        onAPIDataRequest({
+            metricID: req.params.metricID,
+            amount: req.params.amount,
+            id: lastID
+        })
+    )
 
-    let captureResolve = undefined
+    function p() {
+        return new Promise((resolve, reject) => {
 
-    const p = new Promise((resolve, reject) => {
-        captureResolve = resolveCache[lastID]
+            if(resolveCache[lastID]) { 
+                console.log('YO', resolveCache[lastID])
+                resolve(resolveCache[lastID]) 
+            }
 
-        if (captureResolve != undefined) { resolve(captureResolve) }
-        else { reject('wtf') }
-    })
+            reject('...')
+        })    
+    } 
 
-    p.then(result => {
+    p().then(result => {
         res.set({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true

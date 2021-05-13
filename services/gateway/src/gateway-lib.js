@@ -14,7 +14,7 @@ export function onAPIDataRequest(options){
         time: new Date().toISOString(),
         id: options.id
     }
-
+    console.log(dataRequest)
     if(options.metricID === MOISTURE_SENSOR_1){
 
         dataRequest.metric = MOISTURE_SENSOR_1
