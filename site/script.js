@@ -37,7 +37,7 @@ async function displayMoisture1(){
     const todaysAverage = todaysReadings.reduce(reducer) / todaysReadings.length
     
     const div = document.getElementById('moistureDiv')
-
+    div.removeChild('p')
     const p = document.createElement('p')
 
     p.innerText = todaysAverage
