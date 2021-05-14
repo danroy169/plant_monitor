@@ -11,7 +11,7 @@ const resolveCacheMap = new Map()
 let nextValidID = 0
 
 parentPort.on(MESSAGE, msg => {
-    // console.log('Gateway Service recieved', msg.topic, 'message\n')
+
     if (msg.topic === DATA_RESPONSE) {
 
         const resolver = resolveCacheMap.get(msg.id)
@@ -27,7 +27,7 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
     const thisTransactionID = nextValidID
 
-    const p = apiGetToPromise(nextValidID, thisTransactionID, timeoutID)
+    const p = apiGetToPromise(nextValidID, thisTransactionID, timeoutID, resolveCacheMap)
 
     p.then(result => { promiseSuccess(timeoutID, res, result) })
     .catch(e => { promiseFail(e, res, resolveCacheMap, thisTransactionID) })
@@ -58,7 +58,7 @@ app.listen(port, () => { console.log('Example app listening at http://localhost:
 
 
 
-function apiGetToPromise(nextValidID, thisTransactionID, timeoutID) {
+function apiGetToPromise(nextValidID, thisTransactionID, timeoutID, resolveCacheMap) {
 
     nextValidID += 1
 

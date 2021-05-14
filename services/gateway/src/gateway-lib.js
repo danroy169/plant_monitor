@@ -5,7 +5,7 @@ export function onAPIDataRequest(options){
 
     if(!options.metricID) { throw new Error('Missing metricID parameter') }
     if(!options.amount) { throw new Error('Missing amount parameter') }
-    if(options.amount !== ALL && !Number.isInteger(options.amount)) { throw new Error('Invalid amount parameter') }
+    if(options.amount !== ALL && isNaN(parseInt(options.amount))) { throw new Error('Invalid amount parameter') }
     if(options.amount !== ALL) { options.amount = Number.parseInt(options.amount) }
 
     const dataRequest = {
