@@ -1,14 +1,12 @@
 import { parentPort } from 'worker_threads'
-import { DATA_RESPONSE, MESSAGE } from '../../../util/consts.js'
+import { DATA_RESPONSE, MESSAGE, resolveCacheMap} from '../../../util/consts.js'
 import express from 'express'
 import { onAPIDataRequest } from './gateway-lib.js'
+import { createTransaction } from './transaction.js'
 
 const port = 3000
 const app = express()
-const DEFAULT_GLOBAL_TIMEOUT_MS = 1000
-const resolveCacheMap = new Map()
 
-let nextValidID = 0
 
 parentPort.on(MESSAGE, msg => {
 
@@ -26,10 +24,15 @@ parentPort.on(MESSAGE, msg => {
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
-    const transaction = createTransaction(req, onAPIDataRequest({
-        metricID: req.params.metricID,
-        amount: req.params.amount
-    }))
+    const transaction = 
+        createTransaction(
+            req, 
+            onAPIDataRequest({
+                metricID: req.params.metricID,
+                amount: req.params.amount
+            }),
+            parentPort
+        )
 
     transaction.then(resultMessage => { promiseSuccess(res, resultMessage) })
         .catch(e => { promiseFail(e, res) })
@@ -49,27 +52,6 @@ app.use((err, req, res) => {
 })
 
 app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
-
-
-function createTransaction(req, msgToBeSent, timeoutMS = DEFAULT_GLOBAL_TIMEOUT_MS) {
-
-    const thisTransactionID = nextValidID
-
-    nextValidID += 1
-
-    return new Promise((resolve, reject) => {
-
-        const timeoutID = setTimeout(() => {
-            resolveCacheMap.delete(thisTransactionID)
-
-            reject(new Error('Timed out'))
-        }, timeoutMS)
-
-        resolveCacheMap.set(thisTransactionID, { resolve, reject, timeoutID })
-
-        parentPort.postMessage({ ...msgToBeSent, id: thisTransactionID })
-    })
-}
 
 function promiseSuccess(res, result) {
 
