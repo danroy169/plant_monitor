@@ -1,6 +1,12 @@
 import express from 'express'
 import { parentPort } from 'worker_threads'
 import { MESSAGE } from '../../../util/consts.js'
+import helmet from 'helmet'
+import hpp from 'hpp'
+import csurf from 'csurf'
+import cookieParser from 'cookie-parser'
+
+
 
 const app = express()
 
@@ -31,6 +37,12 @@ app.get('/sse', (req, res) => {
     })
 
 })
+
+app.use(helmet())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(csurf({ cookie: true }))
+app.use(hpp())
 
 app.listen(PORT, () => { console.log('Example app listening at http://localhost:' + PORT) })
 

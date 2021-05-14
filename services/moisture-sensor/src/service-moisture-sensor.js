@@ -1,4 +1,4 @@
-// import { getMoisture } from './read-moisture-sensor.js'
+import { getMoisture } from './read-moisture-sensor.js'
 import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER, SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER, MOISTURE_SENSOR_2 } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 import { getMoisture } from './read-moisture-sensor.js'

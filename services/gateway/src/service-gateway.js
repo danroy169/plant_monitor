@@ -1,7 +1,11 @@
 import { parentPort } from 'worker_threads'
 import { DATA_RESPONSE, MESSAGE } from '../../../util/consts.js'
 import express from 'express'
+import helmet from 'helmet'
+import hpp from 'hpp'
+import cookieParser from 'cookie-parser'
 import { onAPIDataRequest } from './gateway-lib.js'
+import csurf from 'csurf'
 
 const port = 3000
 const app = express()
@@ -40,6 +44,12 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
         })
     )
 })
+
+app.use(helmet())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(csurf({ cookie: true }))
+app.use(hpp())
 
 app.use((req, res, next) => {
     res.status(404)
