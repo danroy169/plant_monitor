@@ -50,3 +50,26 @@ export function onAll(msg, dataStore) {
 
     if (msg.metric === HUMIDITY) { return dataStore.humidReadings }
 }
+
+export function getDailyAverageReading(msg, dataStore){
+    
+    const allReadings = onAll(msg, dataStore)
+
+    const todaysTotal = allReadings
+        .filter(checkDate)
+        .map(reading => {
+            if (reading.metric === MOISTURE_SENSOR_1 || msg.metric === MOISTURE_SENSOR_2) { return reading.moistureLevel }
+
+            if (reading.metric === TEMP) { return reading.fahrenheit }
+        
+            if (reading.metric === HUMIDITY) { return reading.percent }
+        })
+        .reduce((accum, curr) => accum + curr)
+
+    return todaysTotal / allReadings.filter(checkDate).length
+}
+
+export function checkDate(reading) {
+    const today = new Date().toDateString()
+    return today === new Date(reading.time).toDateString()
+}

@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 import isValidMessage from '../util/validator.js'
-import { storeData, onDataRequest, onAll } from '../services/metric/src/metric-lib.js'
+import { storeData, onDataRequest, onAll, checkDate, getDailyAverageReading } from '../services/metric/src/metric-lib.js'
 
 describe('metric service lib', () => {
     describe('storeData(msg, dataStore)', () => {
@@ -327,4 +327,64 @@ describe('metric service lib', () => {
             expect(toTest).to.be.undefined
         })
     })
+
+    describe('checkDate(reading)', () => {
+
+        it('should return true given a reading with todays date', () => {
+
+            const reading = {
+                time: new Date().toISOString()
+            }
+
+            expect(checkDate(reading)).to.be.true
+        })
+    })
+
+    it('should return false given a reading with not todays date', () => {
+
+        const reading = {
+            time: new Date('11/20/1923').toISOString()
+        }
+
+        expect(checkDate(reading)).to.be.false
+    })
+
+    describe('getDailyAverageReading(msg, dataStore', () => {
+
+        it('should return a number', () => {
+            const msg = {
+                numberOfReadings: 1,
+                metric: MOISTURE_SENSOR_1,
+                id: 1
+            }
+
+            const dataStore = {
+                moisture1Readings: [{
+                    time: new Date().toISOString(),
+                    metric: MOISTURE_SENSOR_1,
+                    sensorID: 'sensor-response',
+                    moistureLevel: 200,
+                    currentPollInterval: 5
+                },
+                {
+                    time: new Date().toISOString(),
+                    metric: MOISTURE_SENSOR_1,
+                    sensorID: 'sensor-response',
+                    moistureLevel: 200,
+                    currentPollInterval: 5
+                },
+                {
+                    time: new Date().toISOString(),
+                    metric: MOISTURE_SENSOR_1,
+                    sensorID: 'sensor-response',
+                    moistureLevel: 200,
+                    currentPollInterval: 5
+                }]
+            }
+
+            expect(getDailyAverageReading(msg, dataStore)).to.equal(200)
+        })
+
+    })
 })
+
