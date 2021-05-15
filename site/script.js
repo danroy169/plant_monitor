@@ -24,39 +24,79 @@ async function getMetrics(metricID, amount){
     return response
 }
 
-async function displayMoisture1(){
-    const readings = await getMetrics('moisture1', 'all')
-    console.log(readings)
+async function displayMoisture1Average(){
+    const response = await getMetrics('moisture1', 'average')
 
-    const todaysReadings = readings.result
-        .filter(checkDate)
-        .map(reading => reading.moistureLevel)
+    const average = Math.round(response.result[0])
 
-    console.log(todaysReadings)
-
-    const todaysAverage = todaysReadings.reduce(reducer) / todaysReadings.length
-    
-    const div = document.getElementById('moistureDiv')
+    const div = document.getElementById('moisture1Div')
     
     const p = document.createElement('p')
 
-    p.innerText = todaysAverage
+    p.innerText = average
 
     div.appendChild(p)
 }
 
-const reducer = (accumulator, currentValue) => accumulator + currentValue
+async function displayMoisture2Average(){
+    const response = await getMetrics('moisture2', 'average')
 
-function checkDate(reading) {
+    const average = Math.round(response.result[0])
+
+    const div = document.getElementById('moisture2Div')
     
-    const today = new Date().toDateString()
-    return today === new Date(reading.time).toDateString()
+    const p = document.createElement('p')
+
+    p.innerText = average
+
+    div.appendChild(p)
 }
 
+async function displayTempAverage(){
+    const response = await getMetrics('temp', 'average')
+
+    const average = Math.round(response.result[0])
+
+    const div = document.getElementById('tempDiv')
+    
+    const p = document.createElement('p')
+
+    p.innerText = average
+
+    div.appendChild(p)
+}
+
+async function displayHumidAverage(){
+    const response = await getMetrics('humidity', 'average')
+
+    const average = Math.round(response.result[0])
+
+    const div = document.getElementById('humidDiv')
+    
+    const p = document.createElement('p')
+
+    p.innerText = average
+
+    div.appendChild(p)
+}
+
+
+
 async function init() { 
+
     await setupSSE() 
-    const button = document.getElementById('getAverageMoisture')
-    button.addEventListener('click', displayMoisture1)
+
+    const moisture1Button = document.getElementById('getAverageMoisture1')
+    moisture1Button.addEventListener('click', displayMoisture1Average)
+
+    const moisture2Button = document.getElementById('getAverageMoisture2')
+    moisture2Button.addEventListener('click', displayMoisture2Average)
+
+    const tempButton = document.getElementById('getAverageTemp')
+    tempButton.addEventListener('click', displayTempAverage)
+
+    const humidButton = document.getElementById('getAverageHumid')
+    humidButton.addEventListener('click', displayHumidAverage)
 }
 
 if(document.readyState === 'loading') { 
