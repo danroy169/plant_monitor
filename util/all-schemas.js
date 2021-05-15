@@ -312,7 +312,7 @@ const sensorResponse = {
                 'properties': { 'type': { 'const': 'moisture' } }
             },
             'then': {
-                'properties': { 'moistureLevel': { 'type': 'integer' } },
+                'properties': { 'moistureLevel': { 'type': 'integer', 'maximum': 2000 } },
                 'required': ['moistureLevel']
             }
         },
