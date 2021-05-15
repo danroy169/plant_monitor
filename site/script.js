@@ -26,24 +26,36 @@ async function getMetrics(metricID, amount){
 
 async function displayMoisture1(){
     const readings = await getMetrics('moisture1', 'all')
+    console.log(readings)
 
+    const todaysReadings = readings.result
+        .filter(checkDate)
+        .map(reading => reading.moistureLevel)
+
+    console.log(todaysReadings)
+
+    const todaysAverage = todaysReadings.reduce(reducer) / todaysReadings.length
+    
     const div = document.getElementById('moistureDiv')
+    
+    const p = document.createElement('p')
 
-    const list = document.createElement('ul')
+    p.innerText = todaysAverage
 
-    div.appendChild(list)
-
-    readings.result.forEach(obj => {
-        let li = document.createElement('li')
-        li.innerText = obj.moistureLevel
-        list.appendChild(li)
-    })
+    div.appendChild(p)
 }
 
+const reducer = (accumulator, currentValue) => accumulator + currentValue
+
+function checkDate(reading) {
+    
+    const today = new Date().toDateString()
+    return today === new Date(reading.time).toDateString()
+}
 
 async function init() { 
     await setupSSE() 
-    const button = document.getElementById('getAllMoistureReadings')
+    const button = document.getElementById('getAverageMoisture')
     button.addEventListener('click', displayMoisture1)
 }
 
