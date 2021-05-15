@@ -154,22 +154,8 @@ const dataResponse = {
             'enum': ['moisture1', 'moisture2', 'temp', 'humidity']
         },
         'result': {
-            'description': 'An array of reading objects',
+            'description': 'An array of data results',
             'type': 'array',
-            'items': {
-                'type': 'object',
-                'properties': {
-                    'topic': {'type': 'string'},
-                    'sensorID': {'type': 'string'},
-                    'type': {'type': 'string'},
-                    'currentPollInterval': {'type': 'integer'},
-                    'moistureLevel': { 'type': 'integer' },
-                    'fahrenheit': { 'type': 'integer' },
-                    'percentage': { 'type': 'integer' },
-                    'time': { 'type': 'string', 'format': 'date-time'}
-                },
-                'required': ['time', 'topic', 'sensorID', 'type', 'currentPollInterval']
-            },
             'uniqueItems': true
         },
         'time': {

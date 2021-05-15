@@ -1,4 +1,4 @@
-import { TEMP, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, DATA_RESPONSE, ALL } from '../../../util/consts.js'
+import { TEMP, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, DATA_RESPONSE, ALL, AVERAGE, MOISTURE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 
 export function storeData(msg, dataStore) {
@@ -24,6 +24,14 @@ export function onDataRequest(msg, dataStore) {
     if(msg.numberOfReadings === ALL) { 
 
         dataResponseMessage.result = onAll(msg, dataStore)
+
+        if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
+    }
+
+    if(msg.numberOfReadings === AVERAGE) {
+        dataResponseMessage.result = [getDailyAverageReading(msg, dataStore)]
+
+        console.log(dataResponseMessage)
 
         if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     }
@@ -55,14 +63,16 @@ export function getDailyAverageReading(msg, dataStore){
     
     const allReadings = onAll(msg, dataStore)
 
+    console.log(allReadings)
+
     const todaysTotal = allReadings
         .filter(checkDate)
         .map(reading => {
-            if (reading.metric === MOISTURE_SENSOR_1 || msg.metric === MOISTURE_SENSOR_2) { return reading.moistureLevel }
+            if (reading.type === MOISTURE) { return reading.moistureLevel }
 
-            if (reading.metric === TEMP) { return reading.fahrenheit }
+            if (reading.type === TEMP) { return reading.fahrenheit }
         
-            if (reading.metric === HUMIDITY) { return reading.percent }
+            if (reading.type === HUMIDITY) { return reading.percent }
         })
         .reduce((accum, curr) => accum + curr)
 
