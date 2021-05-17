@@ -51,7 +51,7 @@ app.use((err, req, res) => {
     res.json({ message: err.message })
 })
 
-app.listen(port, () => { console.log('Example app listening at http://localhost:' + port) })
+app.listen(port, () => { console.log('Gateway Service listening at http://localhost:' + port) })
 
 function promiseSuccess(res, result) {
 
