@@ -31,8 +31,6 @@ export function onDataRequest(msg, dataStore) {
     if(msg.numberOfReadings === AVERAGE) {
         dataResponseMessage.result = [getDailyAverageReading(msg, dataStore)]
 
-        console.log(dataResponseMessage)
-
         if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     }
 
@@ -62,8 +60,6 @@ export function onAll(msg, dataStore) {
 export function getDailyAverageReading(msg, dataStore){
     
     const allReadings = onAll(msg, dataStore)
-
-    console.log(allReadings)
 
     const todaysTotal = allReadings
         .filter(checkDate)
