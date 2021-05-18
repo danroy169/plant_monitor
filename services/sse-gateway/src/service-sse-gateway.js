@@ -17,7 +17,7 @@ app.get('/sse', (req, res) => {
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*'
     })
 
     var id = 0
