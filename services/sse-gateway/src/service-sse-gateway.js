@@ -20,7 +20,7 @@ app.get('/sse', (req, res) => {
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*'
     })
 
     var id = 0
@@ -35,6 +35,6 @@ app.get('/sse', (req, res) => {
 
 })
 
-app.listen(PORT, () => { console.log('Example app listening at http://localhost:' + PORT) })
+app.listen(PORT, () => { console.log('SSE service listening at http://localhost:' + PORT) })
 
 
