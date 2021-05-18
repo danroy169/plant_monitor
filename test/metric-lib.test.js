@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
+import { HUMIDITY, MOISTURE, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 import isValidMessage from '../util/validator.js'
 import { storeData, onDataRequest, onAll, checkDate, getDailyAverageReading } from '../services/metric/src/metric-lib.js'
 
@@ -362,6 +362,7 @@ describe('metric service lib', () => {
                 moisture1Readings: [{
                     time: new Date().toISOString(),
                     metric: MOISTURE_SENSOR_1,
+                    type: MOISTURE,
                     sensorID: 'sensor-response',
                     moistureLevel: 200,
                     currentPollInterval: 5
@@ -369,6 +370,7 @@ describe('metric service lib', () => {
                 {
                     time: new Date().toISOString(),
                     metric: MOISTURE_SENSOR_1,
+                    type: MOISTURE,
                     sensorID: 'sensor-response',
                     moistureLevel: 200,
                     currentPollInterval: 5
@@ -376,12 +378,13 @@ describe('metric service lib', () => {
                 {
                     time: new Date().toISOString(),
                     metric: MOISTURE_SENSOR_1,
+                    type: MOISTURE,
                     sensorID: 'sensor-response',
                     moistureLevel: 200,
                     currentPollInterval: 5
                 }]
             }
-
+            
             expect(getDailyAverageReading(msg, dataStore)).to.equal(200)
         })
 
