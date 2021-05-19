@@ -131,7 +131,8 @@ const dataRequest = {
             'format': 'date-time'
         },
         'id': {
-            'type': 'integer'
+            'type': 'string',
+            'format': 'uuid'
         }
     },
     'required': ['metric', 'numberOfReadings', 'time']
@@ -164,7 +165,8 @@ const dataResponse = {
             'format': 'date-time'
         },
         'id': {
-            'type': 'integer'
+            'type': 'string',
+            'format': 'uuid'
         }
     },
     'required': ['topic', 'metric', 'result', 'time']

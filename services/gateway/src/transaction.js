@@ -1,12 +1,12 @@
+import { v4 as uuidv4 } from 'uuid'
 import { DEFAULT_GLOBAL_TIMEOUT_MS, resolveCacheMap } from '../../../util/consts.js'
 
-let nextValidID = 0
+
+
 
 export function createTransaction(req, msgToBeSent, parentPort, timeoutMS = DEFAULT_GLOBAL_TIMEOUT_MS) {
 
-    const thisTransactionID = nextValidID
-
-    nextValidID += 1
+    const thisTransactionID = uuidv4()
 
     return new Promise((resolve, reject) => {
 
