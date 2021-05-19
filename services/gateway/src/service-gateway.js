@@ -40,6 +40,23 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
 })
 
+app.get('/api/metric/:metricID/minMax', (req, res) => {
+
+    const transaction = 
+        createTransaction(
+            req, 
+            onAPIDataRequest({
+                metricID: req.params.metricID,
+                amount: 'minMax'
+            }),
+            parentPort
+        )
+
+    transaction.then(resultMessage => { promiseSuccess(res, resultMessage) })
+        .catch(e => { promiseFail(e, res) })
+
+})
+
 
 app.use((req, res, next) => {
     res.status(404)

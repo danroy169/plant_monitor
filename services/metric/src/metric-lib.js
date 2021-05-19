@@ -21,15 +21,22 @@ export function onDataRequest(msg, dataStore) {
         id: msg.id
     }
 
-    if(msg.numberOfReadings === ALL) { 
+    if (msg.numberOfReadings === ALL) {
 
         dataResponseMessage.result = onAll(msg, dataStore)
 
         if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     }
 
-    if(msg.numberOfReadings === AVERAGE) {
+    if (msg.numberOfReadings === AVERAGE) {
         dataResponseMessage.result = [getDailyAverageReading(msg, dataStore)]
+
+        if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
+    }
+
+    if (msg.numberOfReadings === 'minMax') {
+
+        dataResponseMessage.result = [getMinMax(msg, dataStore)]
 
         if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     }
@@ -43,7 +50,7 @@ export function onDataRequest(msg, dataStore) {
     if (msg.metric === HUMIDITY) { dataResponseMessage.result = dataStore.humidReadings.slice(0, msg.numberOfReadings) }
 
     if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
-    
+
     return false
 }
 
@@ -57,25 +64,40 @@ export function onAll(msg, dataStore) {
     if (msg.metric === HUMIDITY) { return dataStore.humidReadings }
 }
 
-export function getDailyAverageReading(msg, dataStore){
-    
-    const allReadings = onAll(msg, dataStore)
+export function getDailyAverageReading(msg, dataStore) {
 
-    const todaysTotal = allReadings
-        .filter(checkDate)
-        .map(reading => {
-            if (reading.type === MOISTURE) { return reading.moistureLevel }
+    const todayReadings = onAll(msg, dataStore).filter(checkDate)
 
-            if (reading.type === TEMP) { return reading.fahrenheit }
-        
-            if (reading.type === HUMIDITY) { return reading.percent }
-        })
-        .reduce((accum, curr) => accum + curr)
+    const todayTotal = readingsToJustNums(todayReadings).reduce((prev, curr) => prev + curr)
 
-    return todaysTotal / allReadings.filter(checkDate).length
+    return todayTotal / todayReadings.length
 }
 
 export function checkDate(reading) {
     const today = new Date().toDateString()
     return today === new Date(reading.time).toDateString()
+}
+
+export function getMinMax(msg, dataStore) {
+
+    const allReadings = onAll(msg, dataStore)
+
+    const justNums = readingsToJustNums(allReadings)
+
+    const max = Math.max(...justNums)
+
+    const min = Math.min(...justNums)
+
+    return { min, max }
+}
+
+
+function readingsToJustNums(allReadings) {
+    return allReadings.map(reading => {
+        if (reading.type === MOISTURE) { return reading.moistureLevel }
+
+        if (reading.type === TEMP) { return reading.fahrenheit }
+
+        if (reading.type === HUMIDITY) { return reading.percent }
+    })
 }

@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP, MOISTURE } from '../util/consts.js'
+import { HUMIDITY, MOISTURE, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 import isValidMessage from '../util/validator.js'
-import { storeData, onDataRequest, onAll, checkDate, getDailyAverageReading } from '../services/metric/src/metric-lib.js'
+import { storeData, onDataRequest, onAll, checkDate, getDailyAverageReading, getMinMax } from '../services/metric/src/metric-lib.js'
 
 describe('metric service lib', () => {
     describe('storeData(msg, dataStore)', () => {
@@ -364,6 +364,7 @@ describe('metric service lib', () => {
                     metric: MOISTURE_SENSOR_1,
                     type: MOISTURE,
                     sensorID: 'sensor-response',
+                    type: MOISTURE,
                     moistureLevel: 200,
                     currentPollInterval: 5
                 },
@@ -373,6 +374,7 @@ describe('metric service lib', () => {
                     type: MOISTURE,
                     sensorID: 'sensor-response',
                     moistureLevel: 200,
+                    type: MOISTURE,
                     currentPollInterval: 5
                 },
                 {
@@ -381,6 +383,7 @@ describe('metric service lib', () => {
                     type: MOISTURE,
                     sensorID: 'sensor-response',
                     moistureLevel: 200,
+                    type: MOISTURE,
                     currentPollInterval: 5
                 }]
             }
@@ -389,5 +392,62 @@ describe('metric service lib', () => {
         })
 
     })
+
+    describe('getMinMax(dataStore)', () => {
+
+        const msg = {
+            numberOfReadings: 1,
+            metric: MOISTURE_SENSOR_1,
+            id: 1
+        }
+
+        const dataStore = {
+            moisture1Readings: [{
+                time: new Date().toISOString(),
+                metric: MOISTURE_SENSOR_1,
+                sensorID: 'sensor-response',
+                moistureLevel: 200,
+                type: MOISTURE,
+                currentPollInterval: 5
+            },
+            {
+                time: new Date().toISOString(),
+                metric: MOISTURE_SENSOR_1,
+                sensorID: 'sensor-response',
+                moistureLevel: 200,
+                type: MOISTURE,
+                currentPollInterval: 5
+            },
+            {
+                time: new Date().toISOString(),
+                metric: MOISTURE_SENSOR_1,
+                sensorID: 'sensor-response',
+                moistureLevel: 0,
+                type: MOISTURE,
+                currentPollInterval: 5
+            }]
+        }
+
+        it('should return an object with min property', () => {
+            expect(getMinMax(msg, dataStore)).to.have.property('min')
+        })
+
+        it('should return an object with max property', () => {
+            expect(getMinMax(msg, dataStore)).to.have.property('max')
+        })
+
+        it('should return an object with correct min', () => {
+            const result = getMinMax(msg, dataStore)
+
+            expect(result.min).to.equal(0)
+        })
+
+        it('should return an object with correct max', () => {
+            const result = getMinMax(msg, dataStore)
+
+            expect(result.max).to.equal(200)
+        })
+    })
+
 })
 
