@@ -5,6 +5,7 @@ import isValidMessage from '../util/validator.js'
 import { ALL, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 
 describe('gateway service lib', () => {
+
     describe('onAPIDataRequest(options)', () => {
 
         it('should return an object when given the proper params', () => {
