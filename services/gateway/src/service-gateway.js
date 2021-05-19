@@ -1,4 +1,5 @@
 import { parentPort } from 'worker_threads'
+import rateLimit from 'express-rate-limit'
 import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX } from '../../../util/consts.js'
 import express from 'express'
 import { onAPIDataRequest } from './gateway-lib.js'
@@ -8,6 +9,10 @@ import { createTransaction } from './transaction.js'
 const port = 3000
 const app = express()
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+  })
 
 parentPort.on(MESSAGE, msg => {
 
@@ -57,6 +62,7 @@ app.get('/api/metric/:metricID/minMax', (req, res) => {
 
 })
 
+app.use(limiter)
 
 app.use((req, res, next) => {
     res.status(404)
