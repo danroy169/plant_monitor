@@ -136,12 +136,5 @@ describe('gateway service lib', () => {
             expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
         })
 
-        it('should throw an error when given an argument with an float amount property', () => {
-            const options = {
-                metricID: TEMP,
-                amount: 1.5
-            }
-            expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')
-        })
     })
 })
