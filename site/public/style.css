@@ -2,6 +2,7 @@
   main {
       display: flex;
       height: 75%;
+      
   }
 
   html, body {
@@ -13,6 +14,7 @@
       text-align: center;
       color:lightcyan;
       font-weight: bold;
+      font-size: 1vw;
   }
 
 
@@ -26,4 +28,14 @@
     display: flex;
     flex-direction: column;
     background: #34b382;
+  }
+
+  @media screen and (max-width: 600px){
+    .circle-with-text{
+      width: 20%;
+      height: 25%;
+    }
+    .circle-text{
+      font-size: 1.5vw
+    }
   }
