@@ -22,21 +22,21 @@ function onMessage(event, elements){
 
     if(message.fahrenheit) { 
         elements.tempReading.innerText = message.fahrenheit
-        elements.tempTime.innerText = new Date(message.time).toLocaleTimeString()
+        elements.tempTime.innerText = message.time
     }
 
     if(message.percent) { 
         elements.humidReading.innerText = message.percent
-        elements.humidTime.innerText = new Date(message.time).toLocaleTimeString()
+        elements.humidTime.innerText = message.time
     }
 
     if(message.sensorID === 'moisture1') { 
         elements.moisture1Reading.innerText = message.moistureLevel
-        elements.moisture1Time.innerText = new Date(message.time).toLocaleTimeString()
+        elements.moisture1Time.innerText = message.time
     }
 
     if(message.sensorID === 'moisture2') { 
         elements.moisture2Reading.innerText = message.moistureLevel
-        elements.moisture2Time.innerText = new Date(message.time).toLocaleTimeString()
+        elements.moisture2Time.innerText = message.time
     }
 }

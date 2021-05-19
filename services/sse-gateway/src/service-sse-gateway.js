@@ -1,6 +1,7 @@
 import express from 'express'
+import { v4 as uuidv4 } from 'uuid'
 import { parentPort } from 'worker_threads'
-import { MESSAGE } from '../../../util/consts.js'
+import { MESSAGE, MOISTURE, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2 } from '../../../util/consts.js'
 
 
 
@@ -23,13 +24,14 @@ app.get('/sse', (req, res) => {
         'Access-Control-Allow-Origin': '*'
     })
 
-    var id = 0
-
     parentPort.on(MESSAGE, msg => {
-        id += 1
+        let id = uuidv4()
+
+        const scrubbedMsg = messageScrubber(msg)
+
         res.write('id: ' + id + '\n')
         res.write('event: ' + 'message' + '\n')
-        res.write('data: ' + JSON.stringify(msg) + '\n')
+        res.write('data: ' + JSON.stringify(scrubbedMsg) + '\n')
         res.write('\n')
     })
 
@@ -38,3 +40,14 @@ app.get('/sse', (req, res) => {
 app.listen(PORT, () => { console.log('SSE service listening at http://localhost:' + PORT) })
 
 
+function messageScrubber(msg){
+    const result = { 
+        sensorID: msg.sensorID,
+        time: new Date(msg.time).toLocaleTimeString()
+    }
+    if(msg.sensorID === MOISTURE_SENSOR_1 || msg.sensorID === MOISTURE_SENSOR_2) { result.moistureLevel = msg.moistureLevel }
+    if(msg.fahrenheit) { result.fahrenheit = msg.fahrenheit }
+    if(msg.percent) { result.percent = msg.percent }
+
+    return result
+}
