@@ -79,7 +79,7 @@ function promiseSuccess(res, result) {
         'Access-Control-Allow-Credentials': true
     })
 
-    res.json(result)
+    res.json(result.result)
 }
 
 function promiseFail(e, response) {

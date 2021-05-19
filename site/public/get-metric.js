@@ -10,7 +10,7 @@ export async function getMetrics(metricID, amount){
 export async function getAverage(metricID) {
     const response = await getMetrics(metricID, 'average')
 
-    const average = Math.round(response.result[0])
+    const average = Math.round(response[0])
 
     return average
 }
