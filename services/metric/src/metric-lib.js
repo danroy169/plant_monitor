@@ -1,4 +1,4 @@
-import { TEMP, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, DATA_RESPONSE, ALL, AVERAGE, MOISTURE } from '../../../util/consts.js'
+import { TEMP, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, DATA_RESPONSE, ALL, AVERAGE, MOISTURE, MIN_MAX } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 
 export function storeData(msg, dataStore) {
@@ -34,7 +34,7 @@ export function onDataRequest(msg, dataStore) {
         if (isValidMessage(dataResponseMessage)) { return dataResponseMessage }
     }
 
-    if (msg.numberOfReadings === 'minMax') {
+    if (msg.numberOfReadings === MIN_MAX) {
 
         dataResponseMessage.result = [getMinMax(msg, dataStore)]
 

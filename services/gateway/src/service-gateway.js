@@ -1,5 +1,5 @@
 import { parentPort } from 'worker_threads'
-import { DATA_RESPONSE, MESSAGE, resolveCacheMap} from '../../../util/consts.js'
+import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX } from '../../../util/consts.js'
 import express from 'express'
 import { onAPIDataRequest } from './gateway-lib.js'
 import { createTransaction } from './transaction.js'
@@ -25,9 +25,9 @@ parentPort.on(MESSAGE, msg => {
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
-    const transaction = 
+    const transaction =
         createTransaction(
-            req, 
+            req,
             onAPIDataRequest({
                 metricID: req.params.metricID,
                 amount: req.params.amount
@@ -42,12 +42,12 @@ app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
 
 app.get('/api/metric/:metricID/minMax', (req, res) => {
 
-    const transaction = 
+    const transaction =
         createTransaction(
-            req, 
+            req,
             onAPIDataRequest({
                 metricID: req.params.metricID,
-                amount: 'minMax'
+                amount: MIN_MAX
             }),
             parentPort
         )
