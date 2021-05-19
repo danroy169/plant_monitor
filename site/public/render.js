@@ -1,15 +1,18 @@
 import { getAverage, getMetrics } from './get-metric.js'
 import setupSSE from './sse-setup.js'
 
-async function init() { 
+export async function init() { 
 
     await setupSSE() 
 
     populateAverages()
     populateMinMaxTable()
 
+    document.getElementById('averageRefresh').addEventListener('click', populateAverages)
+    document.getElementById('minMaxRefresh').addEventListener('click', populateMinMaxTable)
+
 }
-async function  populateAverages(){
+export async function  populateAverages(){
     const moisture1Average = await getAverage('moisture1')
     const moisture2Average = await getAverage('moisture2')
     const tempAverage = await getAverage('temp')
@@ -22,7 +25,7 @@ async function  populateAverages(){
 }
 
 
-async function populateMinMaxTable(){
+export async function populateMinMaxTable(){
     const moisture1 = await getMetrics('moisture1', 'minMax')
     const moisture2 = await getMetrics('moisture2', 'minMax')
     const temp = await getMetrics('temp', 'minMax')
@@ -38,5 +41,3 @@ async function populateMinMaxTable(){
     document.getElementById('humidMax').innerText = humidity.result[0].max
 }
 
-
-export { init }
