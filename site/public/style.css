@@ -1,0 +1,30 @@
+
+  main {
+      display: flex;
+      height: 75%;
+  }
+
+  html, body {
+    height:100%;
+    background-color: #221e1e;
+  }
+  
+  header{
+      text-align: center;
+      color:lightcyan;
+      font-weight: bold;
+  }
+
+  .circle-with-text {
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 15%;
+    height: 35%;
+    margin:auto;
+    text-align: center;
+    display: flex;
+    background: #34b382;
+  }
+
+
