@@ -6,10 +6,10 @@ export async function init() {
     await setupSSE() 
 
     populateAverages()
-    populateMinMaxTable()
+    // populateMinMaxTable()
 
-    document.getElementById('averageRefresh').addEventListener('click', populateAverages)
-    document.getElementById('minMaxRefresh').addEventListener('click', populateMinMaxTable)
+    // document.getElementById('averageRefresh').addEventListener('click', populateAverages)
+    // document.getElementById('minMaxRefresh').addEventListener('click', populateMinMaxTable)
 
 }
 export async function  populateAverages(){
@@ -18,8 +18,8 @@ export async function  populateAverages(){
     const tempAverage = await getAverage('temp')
     const humidAverage = await getAverage('humidity')
 
-    document.getElementById('humidAvg').innerText = humidAverage
-    document.getElementById('tempAvg').innerText = tempAverage
+    document.getElementById('humidAvg').innerText = humidAverage + "%"
+    document.getElementById('tempAvg').innerHTML= tempAverage + "&#8457;"
     document.getElementById('moisture2Avg').innerText = moisture2Average
     document.getElementById('moisture1Avg').innerText = moisture1Average
 }

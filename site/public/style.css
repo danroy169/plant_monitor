@@ -9,11 +9,12 @@
     background-color: #221e1e;
   }
   
-  header{
+  header, .circle-text{
       text-align: center;
       color:lightcyan;
       font-weight: bold;
   }
+
 
   .circle-with-text {
     justify-content: center;
@@ -22,9 +23,7 @@
     width: 15%;
     height: 35%;
     margin:auto;
-    text-align: center;
     display: flex;
+    flex-direction: column;
     background: #34b382;
   }
-
-
