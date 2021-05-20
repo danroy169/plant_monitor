@@ -1,12 +1,21 @@
+main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  main {
-      display: flex;
-      height: 75%;
-      
+}
+
+  #flex-container{
+    display: flex;    
+    flex-flow: row wrap;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 2%;
+    padding: 1%;
   }
-
-  html, body {
-    height:100%;
+  body {
     background-color: #221e1e;
   }
   
@@ -14,28 +23,22 @@
       text-align: center;
       color:lightcyan;
       font-weight: bold;
-      font-size: 1vw;
+ 
   }
 
+
+.circle-text{
+  font-size: 1rem;
+}
 
   .circle-with-text {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    width: 15%;
-    height: 35%;
+    width: 200px;
+    height: 200px;
     margin:auto;
     display: flex;
     flex-direction: column;
     background: #34b382;
-  }
-
-  @media screen and (max-width: 600px){
-    .circle-with-text{
-      width: 20%;
-      height: 25%;
-    }
-    .circle-text{
-      font-size: 1.5vw
-    }
   }
