@@ -1,7 +1,7 @@
-import { parentPort } from 'worker_threads'
 import rateLimit from 'express-rate-limit'
-import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX } from '../../../util/consts.js'
 import express from 'express'
+import { parentPort } from 'worker_threads'
+import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX } from '../../../util/consts.js'
 import { onAPIDataRequest } from './gateway-lib.js'
 import { createTransaction } from './transaction.js'
 
@@ -57,7 +57,8 @@ app.get('/api/metric/:metricID/minMax', (req, res) => {
             parentPort
         )
 
-    transaction.then(resultMessage => { promiseSuccess(res, resultMessage) })
+    transaction
+        .then(resultMessage => { promiseSuccess(res, resultMessage) })
         .catch(e => { promiseFail(e, res) })
 
 })
