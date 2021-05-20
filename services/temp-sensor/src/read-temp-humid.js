@@ -8,8 +8,8 @@ export async function getTempAndHumid() {
     //const res = await promises.read(DHT_SENSOR_VERSION, DATA_OUT_PIN)
 
     return {
-        temp: Math.floor(Math.random() * 100) , //celToFar(res.temperature),
-        humidity: Math.floor(Math.random() * 100) // Math.round(res.humidity)
+        temp: Math.floor(Math.random() * 100), //celToFar(res.temperature),
+        humidity: Math.floor(Math.random() * 100), //Math.round(res.humidity)
     }
   } 
   catch (err) {

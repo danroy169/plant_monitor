@@ -28,7 +28,7 @@ async function publishMoisture() {
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
-    const moistureLevel = Math.floor(Math.random() * 1000) //await getMoisture(SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER)
+    const moistureLevel = Math.floor(Math.random() * 1000)//await getMoisture(SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER)
     const moistureLevel2 = Math.floor(Math.random() * 1000) //await getMoisture(SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER) 
     const currentPollInterval = pollIntervalSeconds
 

@@ -1,5 +1,5 @@
 export default async function setupSSE() {
-    // const evtSource = new EventSource('http://192.168.0.117:3030/sse');
+    //const evtSource = new EventSource('http://192.168.0.117:3030/sse');
     const evtSource = new EventSource('http://localhost:3030/sse');
 
     const elements = {
