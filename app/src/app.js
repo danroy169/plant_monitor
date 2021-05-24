@@ -42,10 +42,10 @@ function curryWorkerRequest(workerInstance, workersArray, bindings){
 
 function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
     
-
     const targetUrns = bindings.find((binding) => {
         return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
     })['target-urn']
+
 
     const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map((obj) => {
         return obj.worker
@@ -56,14 +56,6 @@ function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings
     broadcastMessage(msg, serviceWorkers)
 
 }
-
-// moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]) } } )
-
-// tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]) } })
-
-// thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
-
-// metricWorker.on(MESSAGE, msg => { gatewayWorker.postMessage(msg) })
 
 // gatewayWorker.on(MESSAGE, msg => { 
 //     if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) }
@@ -77,25 +69,3 @@ function broadcastMessage(msg, workersArray){
     workersArray.forEach(worker => worker.postMessage(msg))
 }
 
-
-
-
-
-
-
-
-// const moistureSensorWorker = new Worker('../../services/moisture-sensor/src/service-moisture-sensor.js', { workerData: { interval:3 } })
-
-// const tempHumidSensorWorker = new Worker('../../services/temp-sensor/src/service-temp-sensor.js', { workerData: { interval: 5 } })
-
-// const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', { workerData: THRESHOLDS })
-
-// const notificationWorker = new Worker('../../services/notification/src/service-notification.js')
-
-// const metricWorker = new Worker('../../services/metric/src/service-metric.js')
-
-// const gatewayWorker = new Worker('../../services/gateway/src/service-gateway.js')
-
-// const brokerWorker = new Worker('../../services/broker/src/broker.js')
-
-// const sseWorker = new Worker('../../services/sse-gateway/src/service-sse-gateway.js')
