@@ -6,7 +6,7 @@ import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, 
 
 async function setUp(){
 
-    const configFile = await readFile('./config.json',{ encoding: 'utf-8', flag: 'r' })
+    const configFile = await readFile('./config.json', { encoding: 'utf-8', flag: 'r' })
 
     const config = JSON.parse(configFile)
 
@@ -24,38 +24,36 @@ async function setUp(){
             worker
         }
     })
-    .map((workerInstance, index, workersArray) => {
-        const handleWorkerRequest = curryWorkerRequest(workerInstance, workersArray)
+        .map((workerInstance, index, workersArray) => {
+            const handleWorkerRequest = curryWorkerRequest(workerInstance, workersArray, config.bindings)
 
-        workerInstance.worker.on(MESSAGE, handleWorkerRequest)
+            workerInstance.worker.on(MESSAGE, handleWorkerRequest)
 
-    })
+        })
 }
 
 setUp()
 
-function curryWorkerRequest(workerInstance, workersArray){
+function curryWorkerRequest(workerInstance, workersArray, bindings){
 
-    return (msg) => handleWorkerRequestInternal(msg, workerInstance, workersArray)
+    return (msg) => handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings)
 }
 
 
-function handleWorkerRequestInternal(msg, workerInstance, workersArray){
-    console.log(msg)
-    const serviceBinding = [
-        {
-            topic: 'threshold-violation',
-            targetUrn: [
-                'urn:Notification-Worker'
-            ]
-        }
-    ]
+function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
+    
 
-    const targetUrns = serviceBinding[0].targetUrn
+    const targetUrns = bindings.find((binding) => {
+        return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
+    })['target-urn']
 
-    const serviceWorker = workersArray.filter(wi => targetUrns.includes(wi.urn))
+    const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map((obj) => {
+        return obj.worker
+    })
 
-    broadcastMessage(msg, serviceWorker)
+    console.log(workerInstance.urn, 'sending', msg.topic, 'to', targetUrns)
+
+    broadcastMessage(msg, serviceWorkers)
 
 }
 

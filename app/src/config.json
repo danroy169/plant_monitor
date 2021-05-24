@@ -10,14 +10,14 @@
         },
         {
             "url": "../../services/temp-sensor/src/service-temp-sensor.js",
-            "urn": "urn:Temp-Sensor-Service",
+            "urn": "urn:Temp-Sensor-Worker",
             "workerData": {
                 "interval": 5
             }
         },
         {
             "url": "../../services/threshold/src/service-threshold.js",
-            "urn": "urn:Threshold-Service",
+            "urn": "urn:Threshold-Worker",
             "workerData": {
                 "moistureLow": 275,
                 "tempLow": 60,
@@ -28,23 +28,23 @@
         },
         {
             "url": "../../services/notification/src/service-notification.js",
-            "urn": "urn:Notification-Service"
+            "urn": "urn:Notification-Worker"
         },
         {
             "url": "../../services/metric/src/service-metric.js",
-            "urn": "urn:Metric-Service"
+            "urn": "urn:Metric-Worker"
         },
         {
             "url": "../../services/gateway/src/service-gateway.js",
-            "urn": "urn:Gateway-Service"
+            "urn": "urn:Gateway-Worker"
         },
         {
             "url": "../../services/broker/src/broker.js",
-            "urn": "urn:Broker-Service"
+            "urn": "urn:Broker-Worker"
         },
         {
             "url": "../../services/sse-gateway/src/service-sse-gateway.js",
-            "urn": "urn:SSE-Gateway-Service"
+            "urn": "urn:SSE-Gateway-Worker"
         }
     ],
     "bindings": [
@@ -76,7 +76,7 @@
             ]
         },
         {
-            "topic": "*",
+            "topic": "data-response",
             "source-urn": "urn:Metric-Worker",
             "target-urn": ["urn:Gateway-Worker"]
         },
