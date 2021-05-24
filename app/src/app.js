@@ -42,11 +42,15 @@ function curryWorkerRequest(workerInstance, workersArray, bindings){
 
 function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
     
-    let targetUrns = bindings.find(binding => {
-        return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
-    })['target-urn']
+    const targetUrns = (msg.target ? 
+        [msg.target] 
+        : 
+        bindings.find(binding => {
+            return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
+        })['target-urn']
+    )
 
-    if(msg.target !== undefined) { targetUrns = targetUrns.find(target => target === msg.target) }
+    //if(msg.target !== undefined) { targetUrns = targetUrns.find(target => target === msg.target) }
 
     const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map(obj => {
         return obj.worker
