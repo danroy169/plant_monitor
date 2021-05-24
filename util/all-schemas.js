@@ -13,9 +13,9 @@ const configRequest = {
             'description': 'The unique identifier for the service that\'s being sent the message',
             'type': 'string',
             'enum': [
-                'service-threshold',
-                'service-sensor',
-                'service-temp-sensor'
+                'urn:Temp-Sensor-Worker',
+                'urn:Threshold-Worker',
+                'urn:Moisture-Sensor-Worker'
             ]
         },
         'setting': {
@@ -37,7 +37,7 @@ const configRequest = {
             'if': {
                 'properties': {
                     'target': {
-                        'const': 'service-threshold'
+                        'const': 'urn:Threshold-Worker'
                     }
                 }
             },
@@ -59,7 +59,10 @@ const configRequest = {
             'if': {
                 'properties': {
                     'target': {
-                        'const': 'service-sensor'
+                        'enum': [
+                            'urn:Temp-Sensor-Worker',
+                            'urn:Moisture-Sensor-Worker'
+                        ]
                     }
                 }
             },
@@ -91,7 +94,9 @@ const configResponse = {
         'target': {
             'description': 'The unique identifier for the service',
             'type': 'string',
-            'enum': ['service-threshold', 'service-sensor']
+            'enum': ['urn:Temp-Sensor-Worker',
+                'urn:Threshold-Worker',
+                'urn:Moisture-Sensor-Worker']
         },
         'result': {
             'description': 'The result of the configuration attempt',

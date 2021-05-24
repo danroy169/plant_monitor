@@ -12,7 +12,7 @@ async function setUp(){
 
     console.log(config.name)
 
-    return config.workers.map((workerConfig) => {
+    return config.workers.map(workerConfig => {
 
         const options = { workerData: workerConfig.workerData }
         const worker = new Worker(workerConfig.url, options)
@@ -42,12 +42,13 @@ function curryWorkerRequest(workerInstance, workersArray, bindings){
 
 function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
     
-    const targetUrns = bindings.find((binding) => {
+    let targetUrns = bindings.find(binding => {
         return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
     })['target-urn']
 
+    if(msg.target !== undefined) { targetUrns = targetUrns.find(target => target === msg.target) }
 
-    const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map((obj) => {
+    const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map(obj => {
         return obj.worker
     })
 

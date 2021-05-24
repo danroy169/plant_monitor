@@ -86,7 +86,7 @@
             "target-urn": [
                 "urn:Temp-Sensor-Worker",
                 "urn:Threshold-Worker",
-                "urn:Moisutre-Sensor-Worker"
+                "urn:Moisture-Sensor-Worker"
                 ],
             "target-individual": true
         },
