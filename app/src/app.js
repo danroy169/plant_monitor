@@ -17,7 +17,7 @@ async function setUp(){
         const options = { workerData: workerConfig.workerData }
         const worker = new Worker(workerConfig.url, options)
 
-        worker.on(ONLINE, () => { console.log(workerConfig.urn, 'online') })
+        worker.on(ONLINE, () => { console.log(workerConfig.urn, ONLINE) })
 
         return { 
             ...workerConfig, 
@@ -50,8 +50,6 @@ function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings
         })['target-urn']
     )
 
-    //if(msg.target !== undefined) { targetUrns = targetUrns.find(target => target === msg.target) }
-
     const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map(obj => {
         return obj.worker
     })
@@ -61,14 +59,6 @@ function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings
     broadcastMessage(msg, serviceWorkers)
 
 }
-
-// gatewayWorker.on(MESSAGE, msg => { 
-//     if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) }
-//     if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) }
-//     if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
-    
-//     if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
-// })
 
 function broadcastMessage(msg, workersArray){
     workersArray.forEach(worker => worker.postMessage(msg))

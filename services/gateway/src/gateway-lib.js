@@ -1,4 +1,5 @@
-import { ALL, DATA_REQUEST, AVERAGE, MIN_MAX } from '../../../util/consts.js'
+import { config } from 'chai'
+import { ALL, DATA_REQUEST, AVERAGE, MIN_MAX, CONFIG_REQUEST } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 
 
@@ -22,4 +23,31 @@ export function onAPIDataRequest(options) {
     if (isValidMessage(dataRequest)) { return dataRequest }
 
     throw new Error('Invalid request')
+}
+
+export function onAPIConfigRequest(options) {
+
+    if (!options.worker) { throw new Error('Missing worker parameter') }
+    if(options.worker === 'Moisture-Sensor-Worker' && options.pollInterval < 1) { throw new Error('Poll Interval must be greater than 1 for temp/humid worker') }
+
+    const configRequest = {
+        topic: CONFIG_REQUEST,
+        target: 'urn:' + options.worker,
+        time: new Date().toISOString(),
+    }
+
+    if(options.pollInterval) {
+        configRequest.setting = 'pollInterval'
+        configRequest.data = Number.parseInt(options.pollInterval)
+    }
+
+    if(options.moistureLow) {
+        configRequest.setting = 'moisture-low'
+        configRequest.data = options.moistureLow
+    }
+    
+    if (isValidMessage(configRequest)) { return configRequest }
+
+    throw new Error('Invalid Request')
+
 }

@@ -1,8 +1,8 @@
 import rateLimit from 'express-rate-limit'
 import express from 'express'
 import { parentPort } from 'worker_threads'
-import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX } from '../../../util/consts.js'
-import { onAPIDataRequest } from './gateway-lib.js'
+import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX, CONFIG_RESPONSE } from '../../../util/consts.js'
+import { onAPIDataRequest, onAPIConfigRequest } from './gateway-lib.js'
 import { createTransaction } from './transaction.js'
 
 
@@ -16,7 +16,7 @@ const limiter = rateLimit({
 
 parentPort.on(MESSAGE, msg => {
 
-    if (msg.topic === DATA_RESPONSE) {
+    if (msg.topic === DATA_RESPONSE || msg.topic === CONFIG_RESPONSE) {
         if (!resolveCacheMap.has(msg.id)) { console.log('unreferenced transaction'); return }
 
         const { resolve, timeoutID } = resolveCacheMap.get(msg.id)
@@ -26,6 +26,7 @@ parentPort.on(MESSAGE, msg => {
         clearTimeout(timeoutID)
         resolve(msg)
     }
+
 })
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
@@ -61,6 +62,22 @@ app.get('/api/metric/:metricID/minMax', (req, res) => {
         .then(resultMessage => { promiseSuccess(res, resultMessage) })
         .catch(e => { promiseFail(e, res) })
 
+})
+
+app.get('/api/config/worker/:worker/pollInterval/:pollInterval', (req, res) => {
+
+    const transaction = 
+        createTransaction(
+            req,
+            onAPIConfigRequest({
+                worker: req.params.worker,
+                pollInterval: req.params.pollInterval
+            }),
+            parentPort
+        )
+    transaction
+        .then(resultMessage => { promiseSuccess(res, resultMessage) })
+        .catch(e => { promiseFail(e, res) })
 })
 
 app.use(limiter)
