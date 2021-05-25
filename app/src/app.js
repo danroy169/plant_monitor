@@ -1,6 +1,6 @@
 import { Worker } from 'worker_threads'
 import { readFile } from 'fs/promises'
-import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, TEMP_SENSOR_SERVICE, THRESHOLDS, MOISTURE_SENSOR_SERVICE, THRESHOLD_SERVICE, DATA_REQUEST } from '../../util/consts.js'
+import { ONLINE, MESSAGE } from '../../util/consts.js'
 
 
 
@@ -42,13 +42,16 @@ function curryWorkerRequest(workerInstance, workersArray, bindings){
 
 function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
     
-    const targetUrns = (msg.target ? 
-        [msg.target] 
-        : 
+    const binding = 
         bindings.find(binding => {
             return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
-        })['target-urn']
-    )
+        })
+    
+    // function here
+    const targetUrns = binding['target-individual'] && binding['target-urn'].includes(msg.target) ?
+        [msg.target]
+        :
+        binding['target-urn']
 
     const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map(obj => {
         return obj.worker
