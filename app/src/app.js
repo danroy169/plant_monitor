@@ -1,58 +1,69 @@
 import { Worker } from 'worker_threads'
-import { THRESHOLD_VIOLATION, SENSOR_RESPONSE, ONLINE, MESSAGE, CONFIG_REQUEST, TEMP_SENSOR_SERVICE, THRESHOLDS, MOISTURE_SENSOR_SERVICE, THRESHOLD_SERVICE, DATA_REQUEST } from '../../util/consts.js'
-
-
-const moistureSensorWorker = new Worker('../../services/moisture-sensor/src/service-moisture-sensor.js', { workerData: { interval:3 } })
-
-const tempHumidSensorWorker = new Worker('../../services/temp-sensor/src/service-temp-sensor.js', { workerData: { interval: 5 } })
-
-const thresholdWorker = new Worker('../../services/threshold/src/service-threshold.js', { workerData: THRESHOLDS })
-
-const notificationWorker = new Worker('../../services/notification/src/service-notification.js')
-
-const metricWorker = new Worker('../../services/metric/src/service-metric.js')
-
-const gatewayWorker = new Worker('../../services/gateway/src/service-gateway.js')
-
-const brokerWorker = new Worker('../../services/broker/src/broker.js')
-
-const sseWorker = new Worker('../../services/sse-gateway/src/service-sse-gateway.js')
-
-
-moistureSensorWorker.on(ONLINE, () => { console.log('Moisture Sensor online') })
-
-thresholdWorker.on(ONLINE, () => { console.log('Threshold online') })
-
-notificationWorker.on(ONLINE, () => { console.log('Notification online') })
-
-metricWorker.on(ONLINE, () => { console.log('Metric service online') })
-
-gatewayWorker.on(ONLINE, () => { console.log('Gateway service online') })
-
-brokerWorker.on(ONLINE, () => { console.log('Broker online') })
-
-tempHumidSensorWorker.on(ONLINE, () => { console.log('Temp/Humid Sensor online') })
-
-sseWorker.on(ONLINE, () => { console.log('SSE Online') })
+import { readFile } from 'fs/promises'
+import { ONLINE, MESSAGE } from '../../util/consts.js'
 
 
 
-moistureSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]) } } )
+async function setUp(){
 
-tempHumidSensorWorker.on(MESSAGE, msg => { if (msg.topic === SENSOR_RESPONSE) { broadcastMessage(msg, [thresholdWorker, metricWorker, gatewayWorker, sseWorker]) } })
+    const configFile = await readFile('./config.json', { encoding: 'utf-8', flag: 'r' })
 
-thresholdWorker.on(MESSAGE, msg => { if (msg.topic === THRESHOLD_VIOLATION) { notificationWorker.postMessage(msg) } } )
+    const config = JSON.parse(configFile)
 
-metricWorker.on(MESSAGE, msg => { gatewayWorker.postMessage(msg) })
+    console.log(config.name)
 
-gatewayWorker.on(MESSAGE, msg => { 
-    if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { tempHumidSensorWorker.postMessage(msg) }
-    if (msg.topic === CONFIG_REQUEST && msg.target === MOISTURE_SENSOR_SERVICE) { moistureSensorWorker.postMessage(msg) }
-    if (msg.topic === CONFIG_REQUEST && msg.target === THRESHOLD_SERVICE) { thresholdWorker.postMessage(msg) }
+    return config.workers.map(workerConfig => {
+
+        const options = { workerData: workerConfig.workerData }
+        const worker = new Worker(workerConfig.url, options)
+
+        worker.on(ONLINE, () => { console.log(workerConfig.urn, ONLINE) })
+
+        return { 
+            ...workerConfig, 
+            worker
+        }
+    })
+        .map((workerInstance, index, workersArray) => {
+            const handleWorkerRequest = curryWorkerRequest(workerInstance, workersArray, config.bindings)
+
+            workerInstance.worker.on(MESSAGE, handleWorkerRequest)
+
+        })
+}
+
+setUp()
+
+function curryWorkerRequest(workerInstance, workersArray, bindings){
+
+    return (msg) => handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings)
+}
+
+
+function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
     
-    if(msg.topic === DATA_REQUEST) { metricWorker.postMessage(msg) }
-})
+    const binding = 
+        bindings.find(binding => {
+            return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
+        })
+    
+    // function here
+    const targetUrns = binding['target-individual'] && binding['target-urn'].includes(msg.target) ?
+        [msg.target]
+        :
+        binding['target-urn']
+
+    const serviceWorkers = workersArray.filter(wi => targetUrns.includes(wi.urn)).map(obj => {
+        return obj.worker
+    })
+
+    console.log(workerInstance.urn, 'sending', msg.topic, 'to', targetUrns)
+
+    broadcastMessage(msg, serviceWorkers)
+
+}
 
 function broadcastMessage(msg, workersArray){
     workersArray.forEach(worker => worker.postMessage(msg))
 }
+

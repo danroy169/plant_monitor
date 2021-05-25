@@ -1,65 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js" type="module" async defer></script>
     <title>Plant Monitor</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" media="screen" />
+    <script src="script.js" type="module" async defer></script>
 </head>
+
 <body>
     <header>
         <h1>Plant Monitor</h1>
     </header>
-    <h3>Live Readings</h3>
-    <div id='moisture1Div'>
-        Moisture (plant 1): <span id="moisture1"></span> @ <span id="moisture1Time"></span>
-    </div>
-    <div id='moisture2Div'>
-        Moisture (plant 2): <span id="moisture2"></span> @ <span id="moisture2Time"></span>
-    </div>
-    <div id='tempDiv'>
-        Temp: <span id="temp"></span> @ <span id="tempTime"></span>
-    </div>
-    <div id='humidDiv'>
-        Humidity: <span id="humid"></span> @ <span id="humidTime"></span>
-    </div>
-    <h3>Daily Averages</h3>
-    <ul>
-        <li>Moisture (plant 1): <span id="moisture1Avg"></span></li>
-        <li>Moisture (plant 2): <span id="moisture2Avg"></span></li>
-        <li>Temperature: <span id="tempAvg"></span></li>
-        <li>Humidity: <span id="humidAvg"></span></li>
-    </ul>
-    <button id="averageRefresh">Refresh</button>
-    <h3>Total Min Max</h3>
-    <table>
-        <tr>
-            <td></td>
-            <td>Min</td>
-            <td>Max</td>
-        </tr>
-        <tr>
-            <td>Moisture 1</td>
-            <td id="moist1Min"></td>
-            <td id="moist1Max"></td>
-        </tr>
-        <tr>
-            <td>Moisture 2</td>
-            <td id="moist2Min"></td>
-            <td id="moist2Max"></td>
-        </tr>
-        <tr>
-            <td>Temp</td>
-            <td id="tempMin"></td>
-            <td id="tempMax"></td>
-        </tr>
-        <tr>
-            <td>Humidity</td>
-            <td id="humidMin"></td>
-            <td id="humidMax"></td>
-        </tr>
-    </table>
-    <button id="minMaxRefresh">Refresh</button>
+    <main>
+        <div id="flex-container">
+            <div class="circle-with-text">
+                <div class="circle-text"><h2>Moisture 1</h2></div>
+                <div class="circle-text" id="moisture1"></div>
+                <div class="circle-text">Today's Average: <span id="moisture1Avg"></span></div>
+            </div>
+            <div class="circle-with-text">
+                <div class="circle-text"><h2>Moisture 2</h2></div>
+                <div class="circle-text" id="moisture2"></div>
+                <div class="circle-text">Today's Average: <span id="moisture2Avg"></span></div>
+            </div>
+            <div class="circle-with-text">
+                <div class="circle-text"><h2>Temperature</h2></div>
+                <div class="circle-text" id="temp"></div>
+                <div class="circle-text">Today's Average: <span id="tempAvg"></span></div>
+            </div>
+            <div class="circle-with-text">
+                <div class="circle-text"><h2>Humidity</h2></div>
+                <div class="circle-text" id="humid"></div>
+                <div class="circle-text">Today's Average: <span id="humidAvg"></span></div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

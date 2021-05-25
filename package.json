@@ -22,6 +22,7 @@
   "homepage": "https://github.com/danroy169/plant_monitor#readme",
   "dependencies": {
     "chai": "^4.3.4",
-    "mocha": "^8.4.0"
+    "mocha": "^8.4.0",
+    "uuid": "^8.3.2"
   }
 }

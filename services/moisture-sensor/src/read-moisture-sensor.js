@@ -1,8 +1,8 @@
 import i2c from 'i2c-bus'
 import sleep from 'sleep'
 
-const TOUCH_BASE = 0x0F
-const TOUCH_CHANNEL_OFFSET = 0x10
+import { TOUCH_BASE, TOUCH_CHANNEL_OFFSET } from '../../../util/consts.js'
+
 
 export async function getMoisture(i2cAddress, busNumber) {
 

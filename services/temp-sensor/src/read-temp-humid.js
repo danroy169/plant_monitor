@@ -1,7 +1,5 @@
 //import promises from 'node-dht-sensor'
-
-const DHT_SENSOR_VERSION = 22
-const DATA_OUT_PIN = 4
+import { DHT_SENSOR_VERSION, DATA_OUT_PIN } from '../../../util/consts.js'
 
 export async function getTempAndHumid() {
   try {

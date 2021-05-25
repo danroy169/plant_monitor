@@ -1,12 +1,11 @@
 import { parentPort } from 'worker_threads'
 import rateLimit from 'express-rate-limit'
-import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX } from '../../../util/consts.js'
 import express from 'express'
-import { onAPIDataRequest } from './gateway-lib.js'
+import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX, CONFIG_RESPONSE, GATEWAY_API_PORT } from '../../../util/consts.js'
+import { onAPIDataRequest, onAPIConfigRequest } from './gateway-lib.js'
 import { createTransaction } from './transaction.js'
 
 
-const port = 3000
 const app = express()
 
 const limiter = rateLimit({
@@ -16,7 +15,7 @@ const limiter = rateLimit({
 
 parentPort.on(MESSAGE, msg => {
 
-    if (msg.topic === DATA_RESPONSE) {
+    if (msg.topic === DATA_RESPONSE || msg.topic === CONFIG_RESPONSE) {
         if (!resolveCacheMap.has(msg.id)) { console.log('unreferenced transaction'); return }
 
         const { resolve, timeoutID } = resolveCacheMap.get(msg.id)
@@ -26,6 +25,7 @@ parentPort.on(MESSAGE, msg => {
         clearTimeout(timeoutID)
         resolve(msg)
     }
+
 })
 
 app.get('/api/metric/:metricID/amount/:amount', (req, res) => {
@@ -62,6 +62,22 @@ app.get('/api/metric/:metricID/minMax', (req, res) => {
 
 })
 
+app.get('/api/config/worker/:worker/pollInterval/:pollInterval', (req, res) => {
+
+    const transaction = 
+        createTransaction(
+            req,
+            onAPIConfigRequest({
+                worker: req.params.worker,
+                pollInterval: req.params.pollInterval
+            }),
+            parentPort
+        )
+    transaction
+        .then(resultMessage => { promiseSuccess(res, resultMessage) })
+        .catch(e => { promiseFail(e, res) })
+})
+
 app.use(limiter)
 
 app.use((req, res, next) => {
@@ -76,7 +92,7 @@ app.use((err, req, res) => {
     res.json({ message: err.message })
 })
 
-app.listen(port, () => { console.log('Gateway Service listening at http://localhost:' + port) })
+app.listen(GATEWAY_API_PORT, () => { console.log('Gateway Service listening at http://localhost:' + GATEWAY_API_PORT) })
 
 function promiseSuccess(res, result) {
 

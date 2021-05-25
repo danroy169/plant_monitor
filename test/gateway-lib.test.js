@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
+import { v4 as uuidv4 } from 'uuid'
 import { onAPIDataRequest } from '../services/gateway/src/gateway-lib.js'
 import isValidMessage from '../util/validator.js'
 import { ALL, HUMIDITY, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
@@ -12,7 +13,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: 'moisture1',
                 amount: 'all',
-                id: 1
+                id: uuidv4()
             }
 
             expect(onAPIDataRequest(options)).to.be.an.instanceOf(Object)
@@ -22,7 +23,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: 'moisture1',
                 amount: 'all',
-                id: 1
+                id: uuidv4()
             }
 
             const expected = onAPIDataRequest(options)
@@ -34,7 +35,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: MOISTURE_SENSOR_1,
                 amount: 1,
-                id: 1
+                id: uuidv4()
             }
 
             const toTest = onAPIDataRequest(options)
@@ -46,7 +47,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: MOISTURE_SENSOR_2,
                 amount: 1,
-                id: 1
+                id: uuidv4()
             }
 
             const toTest = onAPIDataRequest(options)
@@ -58,7 +59,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: TEMP,
                 amount: 1,
-                id: 1
+                id: uuidv4()
             }
 
             const toTest = onAPIDataRequest(options)
@@ -70,7 +71,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: HUMIDITY,
                 amount: 1,
-                id: 1
+                id: uuidv4()
             }
 
             const toTest = onAPIDataRequest(options)
@@ -82,7 +83,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: HUMIDITY,
                 amount: 1,
-                id: 1
+                id: uuidv4()
             }
 
             const toTest = onAPIDataRequest(options)
@@ -94,7 +95,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: HUMIDITY,
                 amount: ALL,
-                id: 1
+                id: uuidv4()
             }
 
             const toTest = onAPIDataRequest(options)
@@ -131,7 +132,7 @@ describe('gateway service lib', () => {
             const options = {
                 metricID: TEMP,
                 amount: 'this should fail',
-                id: 1
+                id: uuidv4()
             }
 
             expect(function () { onAPIDataRequest(options) }).to.throw('Invalid amount parameter')

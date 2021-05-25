@@ -13,9 +13,9 @@ const configRequest = {
             'description': 'The unique identifier for the service that\'s being sent the message',
             'type': 'string',
             'enum': [
-                'service-threshold',
-                'service-sensor',
-                'service-temp-sensor'
+                'urn:Temp-Sensor-Worker',
+                'urn:Threshold-Worker',
+                'urn:Moisture-Sensor-Worker'
             ]
         },
         'setting': {
@@ -37,7 +37,7 @@ const configRequest = {
             'if': {
                 'properties': {
                     'target': {
-                        'const': 'service-threshold'
+                        'const': 'urn:Threshold-Worker'
                     }
                 }
             },
@@ -59,7 +59,10 @@ const configRequest = {
             'if': {
                 'properties': {
                     'target': {
-                        'const': 'service-sensor'
+                        'enum': [
+                            'urn:Temp-Sensor-Worker',
+                            'urn:Moisture-Sensor-Worker'
+                        ]
                     }
                 }
             },
@@ -88,11 +91,6 @@ const configResponse = {
             'type': 'string',
             'enum': ['config-response']
         },
-        'target': {
-            'description': 'The unique identifier for the service',
-            'type': 'string',
-            'enum': ['service-threshold', 'service-sensor']
-        },
         'result': {
             'description': 'The result of the configuration attempt',
             'type': 'boolean'
@@ -101,9 +99,13 @@ const configResponse = {
             'description': 'ISO 8601 format time stamp',
             'type': 'string',
             'format': 'date-time'
+        },
+        'id': {
+            'type': 'string',
+            'format': 'uuid'
         }
     },
-    'required': ['target', 'result', 'time']
+    'required': ['result', 'time']
 }
 
 const dataRequest = {

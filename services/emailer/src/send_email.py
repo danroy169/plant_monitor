@@ -1,14 +1,21 @@
 import smtplib
+import os
+from dotenv import load_dotenv  
+
+load_dotenv() 
+
+
 
 PORT = 465  # For SSL
 SMTP_SERVER_NAME = "smtp.gmail.com"
-PASSWORD = "thisisapassword"
-SEND_EMAIL = "royplantmonitor@gmail.com"
-RECIEVE_EMAIL = "danielwroy90@gmail.com"
+PASSWORD = os.environ.get('PASSWORD')
+SEND_EMAIL = os.environ.get('SEND_EMAIL')
+RECIEVE_EMAIL = os.environ.get('RECIEVE_EMAIL')
 MOISTURE = "moisture"
 TEMP = "temp"
 HUMIDITY = "humidity"
 
+print(PASSWORD)
 
 def send_email(sensor_id, violation_type, currentLevel, time):
     message = """\
