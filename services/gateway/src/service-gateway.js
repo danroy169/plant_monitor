@@ -1,12 +1,11 @@
 import rateLimit from 'express-rate-limit'
 import express from 'express'
 import { parentPort } from 'worker_threads'
-import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX, CONFIG_RESPONSE } from '../../../util/consts.js'
+import { DATA_RESPONSE, MESSAGE, resolveCacheMap, MIN_MAX, CONFIG_RESPONSE, GATEWAY_API_PORT } from '../../../util/consts.js'
 import { onAPIDataRequest, onAPIConfigRequest } from './gateway-lib.js'
 import { createTransaction } from './transaction.js'
 
 
-const port = 3000
 const app = express()
 
 const limiter = rateLimit({
@@ -94,7 +93,7 @@ app.use((err, req, res) => {
     res.json({ message: err.message })
 })
 
-app.listen(port, () => { console.log('Gateway Service listening at http://localhost:' + port) })
+app.listen(GATEWAY_API_PORT, () => { console.log('Gateway Service listening at http://localhost:' + GATEWAY_API_PORT) })
 
 function promiseSuccess(res, result) {
 

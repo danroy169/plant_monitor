@@ -14,13 +14,13 @@ export function onConfigRequest(msg, workerData){
 
 export function onSensorResponse(msg, workerData){
     if(isAThresholdViolation(msg, workerData)) {
-        //console.log('Threshold violation detected!\n')
 
         const threshold = isAThresholdViolation(msg, workerData)
         const thresholdViolationMessage = convertToThresholdViolationMessage(msg, threshold)
 
         if(isValidMessage(thresholdViolationMessage)) { return thresholdViolationMessage }
     }
+    
     return false
 }
 

@@ -1,5 +1,5 @@
 import { getTempAndHumid } from './read-temp-humid.js'
-import { CONFIG_REQUEST, SECONDS_TO_MILLI, SENSOR_RESPONSE, TEMP_HUMIDITY_SENSOR, TEMP, HUMIDITY, TEMP_SENSOR_SERVICE } from '../../../util/consts.js'
+import { CONFIG_REQUEST, SECONDS_TO_MILLI, SENSOR_RESPONSE, TEMP_HUMIDITY_SENSOR, TEMP, HUMIDITY, TEMP_SENSOR_SERVICE, MESSAGE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
 
@@ -7,7 +7,7 @@ let pollIntervalSeconds = workerData.interval
 
 let intervalID = setInterval(publishTempAndHumid, pollIntervalSeconds * SECONDS_TO_MILLI)
 
-parentPort.on('message', msg => {
+parentPort.on(MESSAGE, msg => {
     console.log('Temp-Sensor Service message recieved. Topic:', msg.topic)
 
     if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { setPollInterval(intervalID, msg.data) }

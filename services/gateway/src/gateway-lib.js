@@ -1,8 +1,5 @@
-import { config } from 'chai'
-import { ALL, DATA_REQUEST, AVERAGE, MIN_MAX, CONFIG_REQUEST } from '../../../util/consts.js'
+import { ALL, DATA_REQUEST, AVERAGE, MIN_MAX, CONFIG_REQUEST, URN, POLL_INTERVAL, MOISTURE_LOW } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
-
-
 
 export function onAPIDataRequest(options) {
 
@@ -32,17 +29,17 @@ export function onAPIConfigRequest(options) {
 
     const configRequest = {
         topic: CONFIG_REQUEST,
-        target: 'urn:' + options.worker,
+        target: URN + options.worker,
         time: new Date().toISOString(),
     }
 
     if(options.pollInterval) {
-        configRequest.setting = 'pollInterval'
+        configRequest.setting = POLL_INTERVAL
         configRequest.data = Number.parseInt(options.pollInterval)
     }
 
     if(options.moistureLow) {
-        configRequest.setting = 'moisture-low'
+        configRequest.setting = MOISTURE_LOW
         configRequest.data = options.moistureLow
     }
     

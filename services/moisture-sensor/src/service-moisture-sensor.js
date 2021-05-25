@@ -1,5 +1,5 @@
 //import { getMoisture } from './read-moisture-sensor.js'
-import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER, SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER, MOISTURE_SENSOR_2, CONFIG_RESPONSE } from '../../../util/consts.js'
+import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER, SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER, MOISTURE_SENSOR_2, CONFIG_RESPONSE, MESSAGE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
 
@@ -8,7 +8,7 @@ let pollIntervalSeconds = workerData.interval
 
 let intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
 
-parentPort.on('message', msg => {
+parentPort.on(MESSAGE, msg => {
 
     if(msg.topic === SENSOR_REQUEST) { publishMoisture() }
 

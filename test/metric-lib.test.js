@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
+import { v4 as uuidv4 } from 'uuid'
 import { HUMIDITY, MOISTURE, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, TEMP } from '../util/consts.js'
 import isValidMessage from '../util/validator.js'
 import { storeData, onDataRequest, onAll, checkDate, getDailyAverageReading, getMinMax } from '../services/metric/src/metric-lib.js'
@@ -101,7 +102,7 @@ describe('metric service lib', () => {
             const dataRequestMessage = {
                 numberOfReadings: 1,
                 metric: MOISTURE_SENSOR_1,
-                id: 1
+                id: uuidv4()
             }
 
             const dataStore = {
@@ -152,7 +153,7 @@ describe('metric service lib', () => {
             const dataRequestMessage = {
                 numberOfReadings: 1,
                 metric: MOISTURE_SENSOR_1,
-                id: 1
+                id: uuidv4()
             }
 
             const expected = {
@@ -177,7 +178,7 @@ describe('metric service lib', () => {
             const dataRequestMessage = {
                 numberOfReadings: 1,
                 metric: MOISTURE_SENSOR_2,
-                id: 1
+                id: uuidv4()
             }
 
             const expected = {
@@ -202,7 +203,7 @@ describe('metric service lib', () => {
             const dataRequestMessage = {
                 numberOfReadings: 1,
                 metric: TEMP,
-                id: 1
+                id: uuidv4()
             }
 
             const expected = {
@@ -227,7 +228,7 @@ describe('metric service lib', () => {
             const dataRequestMessage = {
                 numberOfReadings: 1,
                 metric: HUMIDITY,
-                id: 1
+                id: uuidv4()
             }
 
             const expected = {
@@ -355,7 +356,7 @@ describe('metric service lib', () => {
             const msg = {
                 numberOfReadings: 1,
                 metric: MOISTURE_SENSOR_1,
-                id: 1
+                id: uuidv4()
             }
 
             const dataStore = {
@@ -398,7 +399,7 @@ describe('metric service lib', () => {
         const msg = {
             numberOfReadings: 1,
             metric: MOISTURE_SENSOR_1,
-            id: 1
+            id: uuidv4()
         }
 
         const dataStore = {
