@@ -2,8 +2,8 @@
 
 An application designed to monitor the soil moisture of a potted plant(s) as well as the ambient air temperature and ambient air humidity. 
 
-Features include a email notification system, and a interactive web UI. The web UI allows the user to see current and historical data, and also
-allows the user to set configurations.
+Features include a email notification system, and an interactive web UI. The web UI allows the user to see live data and will eventually allow for historical data
+and configuration settings.
 
 Microservices include:  
     - MQTT Broker  
