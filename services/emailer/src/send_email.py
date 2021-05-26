@@ -1,6 +1,6 @@
 import smtplib
 import os
-from dotenv import load_dotenv  
+from dotenv import load_dotenv
 
 load_dotenv() 
 
@@ -15,7 +15,7 @@ MOISTURE = "moisture"
 TEMP = "temp"
 HUMIDITY = "humidity"
 
-print(PASSWORD)
+
 
 def send_email(sensor_id, violation_type, currentLevel, time):
     message = """\
