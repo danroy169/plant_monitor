@@ -10,9 +10,9 @@ async function init(){
 
     const env = JSON.parse(file)
 
-    const port = env.port
+    const port = env.site_port
 
-    const host = env.host
+    const host = env.localhost
 
     app.listen(port, () => { console.log('App listening at ' + host + port) })
 }

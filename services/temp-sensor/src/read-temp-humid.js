@@ -1,13 +1,22 @@
-//import promises from 'node-dht-sensor'
+import promises from 'node-dht-sensor'
 import { DHT_SENSOR_VERSION, DATA_OUT_PIN } from '../../../util/consts.js'
 
-export async function getTempAndHumid() {
+export async function getTempAndHumid(home) {
   try {
-    //const res = await promises.read(DHT_SENSOR_VERSION, DATA_OUT_PIN)
+    if(home) { 
+      const res = await promises.read(DHT_SENSOR_VERSION, DATA_OUT_PIN) 
 
-    return {
-        temp: Math.floor(Math.random() * 100), //celToFar(res.temperature),
-        humidity: Math.floor(Math.random() * 100), //Math.round(res.humidity)
+      return {
+        temp: celToFar(res.temperature),
+        humidity: Math.round(res.humidity)
+      }
+    }
+    else {
+
+      return {
+        temp: Math.floor(Math.random() * 100),
+        humidity: Math.floor(Math.random() * 100)
+      }
     }
   } 
   catch (err) {
