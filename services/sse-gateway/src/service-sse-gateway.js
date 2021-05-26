@@ -4,9 +4,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { parentPort } from 'worker_threads'
 import { MESSAGE, MOISTURE_SENSOR_1, MOISTURE_SENSOR_2, SSE_PORT } from '../../../util/consts.js'
 
-
-
-
 const app = express()
 
 const timeout = 0
@@ -17,7 +14,6 @@ const limiter = rateLimit({
   })
 
 app.get('/sse', (req, res) => {
-
     req.socket.setNoDelay(true)
     req.socket.setKeepAlive(true)
     req.socket.setTimeout(timeout)
@@ -38,13 +34,11 @@ app.get('/sse', (req, res) => {
         res.write('data: ' + JSON.stringify(scrubbedMsg) + '\n')
         res.write('\n')
     })
-
 })
 
 app.use(limiter)
 
 app.listen(SSE_PORT, () => { console.log('SSE service listening at http://localhost:' + SSE_PORT) })
-
 
 function messageScrubber(msg){
     const result = { 

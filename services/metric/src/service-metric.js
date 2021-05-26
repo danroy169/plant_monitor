@@ -11,9 +11,9 @@ const dataStore = {
 
 parentPort.on(MESSAGE, msg => { 
 
-    if (msg.topic === SENSOR_RESPONSE) { storeData(msg, dataStore) } 
+    if (msg.topic === SENSOR_RESPONSE) { storeData(msg, dataStore) }
 
-    if (msg.topic === DATA_REQUEST) { 
+    if (msg.topic === DATA_REQUEST) {
 
         const dataResponse = onDataRequest(msg, dataStore)
 

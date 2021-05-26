@@ -15,8 +15,6 @@ MOISTURE = "moisture"
 TEMP = "temp"
 HUMIDITY = "humidity"
 
-
-
 def send_email(sensor_id, violation_type, currentLevel, time):
     message = """\
         Subject: Plant Alert

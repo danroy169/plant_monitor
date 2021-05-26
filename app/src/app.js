@@ -57,6 +57,8 @@ function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings
         return obj.worker
     })
 
+    // console.log(workerInstance.urn, 'sending', msg.topic, 'to', targetUrns)
+
     broadcastMessage(msg, serviceWorkers)
 }
 

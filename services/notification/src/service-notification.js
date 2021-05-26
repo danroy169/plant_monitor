@@ -12,11 +12,7 @@ parentPort.on(MESSAGE, msg => {
 
         const emailRequestMessage = getEmailRequestMessage(msg)
 
-        if(emailRequestMessage) { 
-            client.publish(EMAIL_REQUEST, emailRequestMessage, () => {
-                console.log('Email Request Sent')
-            }) 
-        }
+        if(emailRequestMessage) { client.publish(EMAIL_REQUEST, emailRequestMessage, () => {}) }
     }
 })
 

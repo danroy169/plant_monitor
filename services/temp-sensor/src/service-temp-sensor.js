@@ -15,7 +15,7 @@ parentPort.on(MESSAGE, msg => {
 
 
 async function publishTempAndHumid() {
-    const reading = await getTempAndHumid()
+    const reading = await getTempAndHumid(workerData.home)
     const topic = SENSOR_RESPONSE
     const sensorID = TEMP_HUMIDITY_SENSOR
     const time = new Date().toISOString()

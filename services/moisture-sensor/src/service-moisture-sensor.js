@@ -3,7 +3,6 @@ import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_R
 import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
 
-
 let pollIntervalSeconds = workerData.interval
 
 let intervalID = setInterval(publishMoisture, pollIntervalSeconds * SECONDS_TO_MILLI)
@@ -43,8 +42,8 @@ async function publishMoisture() {
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
-    const moistureLevel = await getMoisture(SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER) // Math.floor(Math.random() * 1000)//
-    const moistureLevel2 = await getMoisture(SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER) // Math.floor(Math.random() * 1000)
+    const moistureLevel = workerData.home ? await getMoisture(SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER) : Math.floor(Math.random() * 1000)
+    const moistureLevel2 = workerData.home ? await getMoisture(SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER) : Math.floor(Math.random() * 1000)
     const currentPollInterval = pollIntervalSeconds
 
     const reading1 = {
