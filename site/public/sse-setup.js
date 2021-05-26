@@ -10,8 +10,8 @@ export default async function setupSSE() {
     }
 
     evtSource.onmessage = event => { onMessage(event, elements) }
-}
 
+}
 
 function onMessage(event, elements){
     const message = JSON.parse(event.data)
