@@ -1,25 +1,25 @@
 {
-    "name": "Plant Monitor Service - WORK",
+    "name": "Plant Monitor Service - HOME",
     "workers": [
         {
             "url": "../../services/moisture-sensor/src/service-moisture-sensor.js",
             "urn": "urn:Moisture-Sensor-Worker",
             "workerData": {
-                "interval": 1
+                "interval": 3
             }
         },
         {
             "url": "../../services/temp-sensor/src/service-temp-sensor.js",
             "urn": "urn:Temp-Sensor-Worker",
             "workerData": {
-                "interval": 1
+                "interval": 3
             }
         },
         {
             "url": "../../services/threshold/src/service-threshold.js",
             "urn": "urn:Threshold-Worker",
             "workerData": {
-                "moistureLow": 275,
+                "moistureLow": 300,
                 "tempLow": 60,
                 "tempHigh": 85,
                 "humidLow": 20,

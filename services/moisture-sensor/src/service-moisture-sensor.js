@@ -1,4 +1,4 @@
-//import { getMoisture } from './read-moisture-sensor.js'
+import { getMoisture } from './read-moisture-sensor.js'
 import { CONFIG_REQUEST, MOISTURE, MOISTURE_SENSOR_1, SECONDS_TO_MILLI, SENSOR_REQUEST, SENSOR_RESPONSE, SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER, SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER, MOISTURE_SENSOR_2, CONFIG_RESPONSE, MESSAGE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
@@ -43,8 +43,8 @@ async function publishMoisture() {
     const sensorID = MOISTURE_SENSOR_1
     const time = new Date().toISOString()
     const type = MOISTURE
-    const moistureLevel = Math.floor(Math.random() * 1000)//await getMoisture(SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER)
-    const moistureLevel2 = Math.floor(Math.random() * 1000) //await getMoisture(SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER) 
+    const moistureLevel = await getMoisture(SENSOR1_I2C_ADDRESS, SENSOR1_I2C_BUS_NUMBER) // Math.floor(Math.random() * 1000)//
+    const moistureLevel2 = await getMoisture(SENSOR2_I2C_ADDRESS, SENSOR2_I2C_BUS_NUMBER) // Math.floor(Math.random() * 1000)
     const currentPollInterval = pollIntervalSeconds
 
     const reading1 = {
