@@ -14,15 +14,21 @@ Microservices include:
     - Notification  
     - Moisture Sensor  
     - Temp/Humid Sensor  
+    - Mock Moisture Sensor  
+    - Mock Temp/Humid Sensor  
     - Threshold  
 
 Right now it's setup as one big mono-repo, but eventually the goal is to seperate all the services and the website out into their own. Mono-repo was chosen to start
 just to make things easier on me during development. 
 
 To run:  
-
-Run .\app\src\app.js in node  
-Run .\site\host.js in node  
+  
+If on a PI with the sensors hooked up  
+node ./app/src/app.js live  
+  
+Otherwise  
+node .\app\src\app.js mock  
+  
 Emailer won't connect at work, but usually ran in it's own process as well at .\services\emailer\src\service_email.py  
 
 
