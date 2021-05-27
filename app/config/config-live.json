@@ -1,20 +1,18 @@
 {
-    "name": "Plant Monitor Service",
+    "name": "Plant Monitor Service - LIVE",
     "workers": [
         {
             "url": "../../services/moisture-sensor/src/service-moisture-sensor.js",
             "urn": "urn:Moisture-Sensor-Worker",
             "workerData": {
-                "interval": 1,
-                "home": true
+                "interval": 3
             }
         },
         {
             "url": "../../services/temp-sensor/src/service-temp-sensor.js",
             "urn": "urn:Temp-Sensor-Worker",
             "workerData": {
-                "interval": 1,
-                "home": true
+                "interval": 3
             }
         },
         {

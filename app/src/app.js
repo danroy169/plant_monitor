@@ -2,51 +2,55 @@ import { Worker } from 'worker_threads'
 import { readFile } from 'fs/promises'
 import { ONLINE, MESSAGE } from '../../util/consts.js'
 
+const configType = process.argv[2] ? '-' + process.argv[2] : '-mock'
 
+async function setUp() {
 
-async function setUp(){
+    try {
+        const configFile = await readFile('../config/config' + configType + '.json', { encoding: 'utf-8', flag: 'r' })
 
-    const configFile = await readFile('./config.json', { encoding: 'utf-8', flag: 'r' })
+        const config = JSON.parse(configFile)
 
-    const config = JSON.parse(configFile)
+        console.log(config.name)
 
-    console.log(config.name)
+        return config.workers.map(workerConfig => {
 
-    return config.workers.map(workerConfig => {
+            const options = { workerData: workerConfig.workerData }
+            const worker = new Worker(workerConfig.url, options)
 
-        const options = { workerData: workerConfig.workerData }
-        const worker = new Worker(workerConfig.url, options)
+            worker.on(ONLINE, () => { console.log(workerConfig.urn, ONLINE) })
 
-        worker.on(ONLINE, () => { console.log(workerConfig.urn, ONLINE) })
-
-        return { 
-            ...workerConfig, 
-            worker
-        }
-    })
-        .map((workerInstance, index, workersArray) => {
-            const handleWorkerRequest = curryWorkerRequest(workerInstance, workersArray, config.bindings)
-
-            workerInstance.worker.on(MESSAGE, handleWorkerRequest)
-
+            return {
+                ...workerConfig,
+                worker
+            }
         })
+            .map((workerInstance, index, workersArray) => {
+                const handleWorkerRequest = curryWorkerRequest(workerInstance, workersArray, config.bindings)
+
+                workerInstance.worker.on(MESSAGE, handleWorkerRequest)
+            })
+    }
+    catch (err) {
+        console.log(err)
+    }
+
 }
 
 setUp()
 
-function curryWorkerRequest(workerInstance, workersArray, bindings){
-
+function curryWorkerRequest(workerInstance, workersArray, bindings) {
     return (msg) => handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings)
 }
 
 
-function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings){
-    
-    const binding = 
+function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings) {
+
+    const binding =
         bindings.find(binding => {
             return binding['source-urn'] === workerInstance.urn && msg.topic === binding.topic
         })
-    
+
     // function here
     const targetUrns = binding['target-individual'] && binding['target-urn'].includes(msg.target) ?
         [msg.target]
@@ -62,7 +66,7 @@ function handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings
     broadcastMessage(msg, serviceWorkers)
 }
 
-function broadcastMessage(msg, workersArray){
+function broadcastMessage(msg, workersArray) {
     workersArray.forEach(worker => worker.postMessage(msg))
 }
 

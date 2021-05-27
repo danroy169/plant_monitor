@@ -1,4 +1,3 @@
-import { getTempAndHumid } from './read-temp-humid.js'
 import { CONFIG_REQUEST, SECONDS_TO_MILLI, SENSOR_RESPONSE, TEMP_HUMIDITY_SENSOR, TEMP, HUMIDITY, TEMP_SENSOR_SERVICE, MESSAGE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
@@ -15,7 +14,7 @@ parentPort.on(MESSAGE, msg => {
 
 
 async function publishTempAndHumid() {
-    const reading = await getTempAndHumid()
+    const reading = {temp: Math.floor(Math.random() * 100), humidity: Math.floor(Math.random() * 100)}
     const topic = SENSOR_RESPONSE
     const sensorID = TEMP_HUMIDITY_SENSOR
     const time = new Date().toISOString()

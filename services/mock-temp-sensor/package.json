@@ -1,0 +1,19 @@
+{
+  "name": "mock-temp",
+  "version": "1.0.0",
+  "description": "Subs in fake data, used for non-pi",
+  "main": "service-temp-sensor.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha"
+  },
+  "eslintConfig": {
+    "extends": "../../.esLint.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^7.27.0"
+  }
+}
