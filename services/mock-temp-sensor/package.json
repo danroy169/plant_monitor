@@ -12,5 +12,8 @@
     "extends": "../../.esLint.json"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^7.27.0"
+  }
 }

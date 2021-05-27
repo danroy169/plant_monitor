@@ -17,11 +17,6 @@
       "../../.esLint.json"
     ]
   },
-  "dependencies": {
-    "async-mqtt": "^2.6.1",
-    "i2c-bus": "^5.2.1",
-    "sleep": "^6.3.0"
-  },
   "devDependencies": {
     "eslint": "^7.25.0",
     "eslint-plugin-node": "^11.1.0"
