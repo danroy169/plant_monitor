@@ -1,0 +1,29 @@
+{
+  "name": "sensor",
+  "version": "1.0.0",
+  "author": "Mr.Roy",
+  "license": "ISC",
+  "description": "mock sensor service",
+  "type": "module",
+  "exports": {
+    "import": "./src/service-sensor.js"
+  },
+  "main": "./src/service-sensor.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "../../.esLint.json"
+    ]
+  },
+  "dependencies": {
+    "async-mqtt": "^2.6.1",
+    "i2c-bus": "^5.2.1",
+    "sleep": "^6.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0",
+    "eslint-plugin-node": "^11.1.0"
+  }
+}

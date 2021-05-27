@@ -6,7 +6,7 @@ import { ONLINE, MESSAGE } from '../../util/consts.js'
 
 async function setUp(){
 
-    const configFile = await readFile('./config.json', { encoding: 'utf-8', flag: 'r' })
+    const configFile = await readFile('./config-mock.json', { encoding: 'utf-8', flag: 'r' })
 
     const config = JSON.parse(configFile)
 
@@ -28,14 +28,12 @@ async function setUp(){
             const handleWorkerRequest = curryWorkerRequest(workerInstance, workersArray, config.bindings)
 
             workerInstance.worker.on(MESSAGE, handleWorkerRequest)
-
         })
 }
 
 setUp()
 
 function curryWorkerRequest(workerInstance, workersArray, bindings){
-
     return (msg) => handleWorkerRequestInternal(msg, workerInstance, workersArray, bindings)
 }
 

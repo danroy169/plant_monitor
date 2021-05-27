@@ -2,14 +2,14 @@
     "name": "Plant Monitor Service",
     "workers": [
         {
-            "url": "../../services/moisture-sensor/src/service-moisture-sensor.js",
+            "url": "../../services/mock-moisture-sensor/src/service-moisture-sensor.js",
             "urn": "urn:Moisture-Sensor-Worker",
             "workerData": {
                 "interval": 3
             }
         },
         {
-            "url": "../../services/temp-sensor/src/service-temp-sensor.js",
+            "url": "../../services/mock-temp-sensor/src/service-temp-sensor.js",
             "urn": "urn:Temp-Sensor-Worker",
             "workerData": {
                 "interval": 3
