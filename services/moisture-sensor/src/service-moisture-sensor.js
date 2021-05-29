@@ -14,8 +14,8 @@ parentPort.on(MESSAGE, msg => {
     if(msg.topic === CONFIG_REQUEST) { onConfigRequest(msg, intervalID) }
 })
 
-function onConfigRequest(msg, intervalID){
-    setPollInterval(intervalID, msg.data)
+function onConfigRequest(msg){
+    intervalID = setPollInterval(msg.data)
 
     const configResponse = {
         topic: CONFIG_RESPONSE,
@@ -23,18 +23,16 @@ function onConfigRequest(msg, intervalID){
         id: msg.id
     }
 
-    if(pollIntervalSeconds === msg.data) { configResponse.result = true }
+    if(intervalID._idleTimeout === msg.data * SECONDS_TO_MILLI) { configResponse.result = true }
     else { configResponse.result = false }
 
     parentPort.postMessage(configResponse)
 }
 
-function setPollInterval(intervalID, newInterval) {
+function setPollInterval(newInterval) {
     clearInterval(intervalID)
 
-    pollIntervalSeconds = newInterval
-
-    intervalID = setInterval(publishMoisture, newInterval * SECONDS_TO_MILLI)
+    return setInterval(publishMoisture, newInterval * SECONDS_TO_MILLI)
 }
 
 async function publishMoisture() {
