@@ -25,7 +25,7 @@ export function onAPIDataRequest(options) {
 export function onAPIConfigRequest(options) {
 
     if (!options.worker) { throw new Error('Missing worker parameter') }
-    if(options.worker === 'Moisture-Sensor-Worker' && options.pollInterval < 1) { throw new Error('Poll Interval must be greater than 1 for temp/humid worker') }
+    if(options.worker === 'Temp-Sensor-Worker' && options.pollInterval <= 1) { throw new Error('Poll Interval must be greater than 1 for temp/humid worker') }
 
     const configRequest = {
         topic: CONFIG_REQUEST,

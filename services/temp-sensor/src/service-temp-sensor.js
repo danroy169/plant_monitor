@@ -1,5 +1,5 @@
 import { getTempAndHumid } from './read-temp-humid.js'
-import { CONFIG_REQUEST, SECONDS_TO_MILLI, SENSOR_RESPONSE, TEMP_HUMIDITY_SENSOR, TEMP, HUMIDITY, TEMP_SENSOR_SERVICE, MESSAGE } from '../../../util/consts.js'
+import { CONFIG_REQUEST, CONFIG_RESPONSE, SECONDS_TO_MILLI, SENSOR_RESPONSE, TEMP_HUMIDITY_SENSOR, TEMP, HUMIDITY, MESSAGE } from '../../../util/consts.js'
 import isValidMessage from '../../../util/validator.js'
 import { parentPort, workerData } from 'worker_threads'
 
@@ -7,12 +7,30 @@ let pollIntervalSeconds = workerData.interval
 
 let intervalID = setInterval(publishTempAndHumid, pollIntervalSeconds * SECONDS_TO_MILLI)
 
-parentPort.on(MESSAGE, msg => {
-    console.log('Temp-Sensor Service message recieved. Topic:', msg.topic)
+parentPort.on(MESSAGE, msg => { if (msg.topic === CONFIG_REQUEST) { onConfigRequest(msg) } })
 
-    if (msg.topic === CONFIG_REQUEST && msg.target === TEMP_SENSOR_SERVICE) { setPollInterval(intervalID, msg.data) }
-})
+function onConfigRequest(msg){
+    intervalID = setPollInterval(msg.data)
 
+    const configResponse = {
+        topic: CONFIG_RESPONSE,
+        time: new Date().toISOString(),
+        id: msg.id
+    }
+
+    if(intervalID._idleTimeout === msg.data * SECONDS_TO_MILLI) { configResponse.result = true }
+    else { configResponse.result = false }
+
+    parentPort.postMessage(configResponse)
+}
+
+function setPollInterval(newInterval) {
+    clearInterval(intervalID)
+
+    pollIntervalSeconds = newInterval
+
+    return setInterval(publishTempAndHumid, newInterval * SECONDS_TO_MILLI)
+}
 
 async function publishTempAndHumid() {
     const reading = await getTempAndHumid()
@@ -47,10 +65,3 @@ async function publishTempAndHumid() {
 
 }
 
-function setPollInterval(intervalID, newInterval) {
-    clearInterval(intervalID)
-
-    pollIntervalSeconds = newInterval
-
-    intervalID = setInterval(publishTempAndHumid, newInterval * SECONDS_TO_MILLI)
-}

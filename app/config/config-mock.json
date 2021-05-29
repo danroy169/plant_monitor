@@ -96,6 +96,11 @@
             "target-urn": ["urn:Gateway-Worker"]
         },
         {
+            "topic": "config-response",
+            "source-urn": "urn:Temp-Sensor-Worker",
+            "target-urn": ["urn:Gateway-Worker"]
+        },
+        {
             "topic": "data-request",
             "source-urn": "urn:Gateway-Worker",
             "target-urn": ["urn:Metric-Worker"]
