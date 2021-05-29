@@ -11,7 +11,7 @@ parentPort.on(MESSAGE, msg => {
 
     if(msg.topic === SENSOR_REQUEST) { publishMoisture() }
 
-    if(msg.topic === CONFIG_REQUEST) { onConfigRequest(msg, intervalID) }
+    if(msg.topic === CONFIG_REQUEST) { onConfigRequest(msg) }
 })
 
 function onConfigRequest(msg){
@@ -31,6 +31,8 @@ function onConfigRequest(msg){
 
 function setPollInterval(newInterval) {
     clearInterval(intervalID)
+
+    pollIntervalSeconds = newInterval
 
     return setInterval(publishMoisture, newInterval * SECONDS_TO_MILLI)
 }
