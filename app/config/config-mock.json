@@ -5,14 +5,14 @@
             "url": "../../services/mock-moisture-sensor/src/service-moisture-sensor.js",
             "urn": "urn:Moisture-Sensor-Worker",
             "workerData": {
-                "interval": 3
+                "interval": 1
             }
         },
         {
             "url": "../../services/mock-temp-sensor/src/service-temp-sensor.js",
             "urn": "urn:Temp-Sensor-Worker",
             "workerData": {
-                "interval": 3
+                "interval": 1
             }
         },
         {
