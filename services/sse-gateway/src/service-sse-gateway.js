@@ -34,6 +34,11 @@ app.get('/sse', (req, res) => {
         res.write('data: ' + JSON.stringify(scrubbedMsg) + '\n')
         res.write('\n')
     })
+
+    req.on('close', () => { parentPort.removeAllListeners(MESSAGE) })
+
+    req.on('abort', () => { parentPort.removeAllListeners(MESSAGE) })
+    
 })
 
 app.use(limiter)
