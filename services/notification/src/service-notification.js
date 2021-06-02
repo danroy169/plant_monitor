@@ -1,18 +1,23 @@
 import { THRESHOLD_VIOLATION, MESSAGE, URL, EMAIL_RESPONSE, EMAIL_REQUEST } from '../../../util/consts.js'
-import { connect } from 'async-mqtt'
+import mqtt from 'async-mqtt'
 import { parentPort } from 'worker_threads'
 import getEmailRequestMessage from './notification-lib.js'
 
-const client = connect(URL)
+const { connectAsync } = mqtt
 
-client.subscribe(EMAIL_RESPONSE)
+async function run() {
+    const client = await connectAsync(URL)
 
-parentPort.on(MESSAGE, msg => {
-    if(msg.topic === THRESHOLD_VIOLATION) {
+    await client.subscribe(EMAIL_RESPONSE)
 
-        const emailRequestMessage = getEmailRequestMessage(msg)
+    parentPort.on(MESSAGE, msg => {
+        if (msg.topic === THRESHOLD_VIOLATION) {
 
-        if(emailRequestMessage) { client.publish(EMAIL_REQUEST, emailRequestMessage, () => {}) }
-    }
-})
+            const emailRequestMessage = getEmailRequestMessage(msg)
 
+            if (emailRequestMessage) { client.publish(EMAIL_REQUEST, emailRequestMessage, () => { }) }
+        }
+    })
+}
+
+run()

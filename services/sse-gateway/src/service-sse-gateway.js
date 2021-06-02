@@ -37,7 +37,11 @@ app.get('/sse', (req, res) => {
 
     req.on('close', () => { parentPort.removeAllListeners(MESSAGE) })
 
+    req.on('timeout', () => { parentPort.removeAllListeners(MESSAGE) })
+
     req.on('abort', () => { parentPort.removeAllListeners(MESSAGE) })
+
+    req.on('end', () => { parentPort.removeAllListeners(MESSAGE) })
     
 })
 
@@ -50,6 +54,7 @@ function messageScrubber(msg){
         sensorID: msg.sensorID,
         time: new Date(msg.time).toLocaleTimeString()
     }
+
     if(msg.sensorID === MOISTURE_SENSOR_1 || msg.sensorID === MOISTURE_SENSOR_2) { result.moistureLevel = msg.moistureLevel }
     if(msg.fahrenheit) { result.fahrenheit = msg.fahrenheit }
     if(msg.percent) { result.percent = msg.percent }
